@@ -146,26 +146,38 @@ def _classify_pair(cw: dict, cur: dict, leg: dict) -> tuple[str, str, int, list[
         return ("REVIEW_REQUIRED", "missing_date_and_uncertain", 30, ev, extras)
 
     if not evaluator_ok:
-        return ("REVIEW_REQUIRED", "evaluator_mismatch_cross_source", 25, ev, extras)
+        # Bulk policy AUTO_LINK_EVALUATOR_REASSIGNMENT: evaluator differing
+        # across the two sources is NOT a review trigger on its own — it is a
+        # re-assignment of arbiter over time. The Lovable evaluator is the
+        # current operational assignment; the legacy evaluator is preserved in
+        # the timeline as "المحكم السابق". We downgrade the gate to a soft
+        # signal that flavors the reason string in every downstream branch.
+        evaluator_tag = "_evaluator_reassigned"
+    else:
+        evaluator_tag = ""
 
     # Version pattern (regardless of date-gap size) — resubmission after a
     # negative outcome, or completion→arbitration transition.
     if diff > 3 and trans in ("version_resubmit", "completion_then_result"):
-        return ("VERSION_LINKED", f"resubmission_{trans}", 90, ev, extras)
+        return ("VERSION_LINKED", f"resubmission_{trans}{evaluator_tag}", 90, ev, extras)
 
-    if diff == 0 and trans == "same_decision":
+    if diff == 0 and trans == "same_decision" and evaluator_ok:
         return ("EXACT_CROSS_SOURCE_MATCH", "composite_path_same_date_same_decision", 100, ev, extras)
 
     if 1 <= diff <= 3 and trans in ("same_decision", "version_resubmit", "completion_then_result"):
-        return ("PROBABLE_CROSS_SOURCE_MATCH", "close_dates_compatible_decisions", 70, ev, extras)
+        return ("PROBABLE_CROSS_SOURCE_MATCH", f"close_dates_compatible_decisions{evaluator_tag}", 70, ev, extras)
 
     if diff > 3 and trans == "conflict":
+        # Wide-gap conflicting decisions remain review-worthy — the disagreement
+        # itself is the problem, not the evaluator assignment.
         return ("REVIEW_REQUIRED", "wide_gap_conflicting_decisions", 40, ev, extras)
     if diff > 3 and trans == "same_decision":
-        # Bulk policy AUTO_APPROVE_WIDE_GAP_IDENTICAL: same org + model + evaluator
-        # + normalized decision → one journey across two linked versions. Wide
-        # date gap alone is NOT a review trigger when everything else agrees.
-        return ("VERSION_LINKED", "auto_approved_identical_after_wide_gap", 85, ev, extras)
+        # Bulk policies applied here:
+        #   AUTO_APPROVE_WIDE_GAP_IDENTICAL (same evaluator + same decision)
+        #   AUTO_LINK_EVALUATOR_REASSIGNMENT (different evaluator + same decision)
+        if evaluator_ok:
+            return ("VERSION_LINKED", "auto_approved_identical_after_wide_gap", 85, ev, extras)
+        return ("VERSION_LINKED", "auto_linked_evaluator_reassignment", 80, ev, extras)
     if trans == "unknown":
         return ("REVIEW_REQUIRED", "unknown_decision_state", 35, ev, extras)
 
@@ -769,6 +781,18 @@ async def build():  # noqa: C901
         "previous_status": "REVIEW_REQUIRED",
         "new_status": "VERSION_LINKED",
         "new_reason": "auto_approved_identical_after_wide_gap",
+        "actor_email": "SYSTEM",
+        "actor_id": None,
+    })
+    await coll("review_audit_log").insert_one({
+        "at": datetime.now(timezone.utc).isoformat(),
+        "kind": "bulk_policy_applied",
+        "action": "AUTO_LINK_EVALUATOR_REASSIGNMENT",
+        "policy_reason": "lovable_evaluator_is_current_assignment — evaluator differing alone is not a review trigger",
+        "previous_reason": "evaluator_mismatch_cross_source",
+        "previous_status": "REVIEW_REQUIRED",
+        "new_status": "VERSION_LINKED",
+        "new_reason": "auto_linked_evaluator_reassignment (+ _evaluator_reassigned suffix on version_resubmit/completion_then_result)",
         "actor_email": "SYSTEM",
         "actor_id": None,
     })

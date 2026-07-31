@@ -1,6 +1,6 @@
 # تقرير Canonical Deduplication — الإصدار الرابع (v4)
 
-_مُنشأ في: 2026-07-31T20:56:16.206102+00:00 — logic_version: v4_families_and_decisions_
+_مُنشأ في: 2026-07-31T21:01:58.914316+00:00 — logic_version: v4_families_and_decisions_
 
 
 ## 1) الإضافات الجوهرية على v3
@@ -28,7 +28,7 @@ _مُنشأ في: 2026-07-31T20:56:16.206102+00:00 — logic_version: v4_familie
 | Full lifecycle (legacy → current) | 1019 | 28.9% |
 | Current only (لم يسبقها تحكيم تاريخي) | 724 | 20.6% |
 | Legacy only (لا يوجد استلام حالي) | 1778 | 50.5% |
-| Rows including at least one REVIEW_REQUIRED | 476 | 13.5% |
+| Rows including at least one REVIEW_REQUIRED | 364 | 10.3% |
 
 ### توزيع آخر قرار مطبّع (على مستوى الرحلة)
 
@@ -52,8 +52,8 @@ _مُنشأ في: 2026-07-31T20:56:16.206102+00:00 — logic_version: v4_familie
 
 | match_status | v3 (both sides) | v4 (both sides) | التغيير |
 | --- | --- | --- | --- |
-| VERSION_LINKED | 2201 | 1949 | -252 |
-| REVIEW_REQUIRED | 560 | 812 | 252 |
+| VERSION_LINKED | 2201 | 2254 | 53 |
+| REVIEW_REQUIRED | 560 | 507 | -53 |
 | EXACT_CROSS_SOURCE_MATCH | 0 | 0 | 0 |
 | PROBABLE_CROSS_SOURCE_MATCH | 0 | 0 | 0 |
 | CURRENT_ONLY | 499 | 499 | 0 |
@@ -71,9 +71,8 @@ _مُنشأ في: 2026-07-31T20:56:16.206102+00:00 — logic_version: v4_familie
 | السبب | العدد | ملاحظة |
 | --- | --- | --- |
 | no_direct_model_match_only_org | 226 | crosswalk = NO_DIRECT_MODEL_MATCH — تطابق جهة فقط |
-| wide_gap_conflicting_decisions | 126 | قراران متعارضان دون نمط نسخة واضح |
-| evaluator_mismatch_cross_source | 124 | اختلاف المحكم بين المصدرين |
-| **الإجمالي (current-side)** | 476 |  |
+| wide_gap_conflicting_decisions | 138 | قراران متعارضان دون نمط نسخة واضح |
+| **الإجمالي (current-side)** | 364 |  |
 
 ## 4) الساعات — لا تُجمع أبدًا كرقم واحد
 
@@ -359,47 +358,7 @@ _مُنشأ في: 2026-07-31T20:56:16.206102+00:00 — logic_version: v4_familie
 | 1 | CANON-003085 | legacy | 2025-08-16 | غير مجاز | REJECTED | COMPLETE | VERSION_LINKED | resubmission_version_resubmit |
 | 2 | CANON-000008 | current | 2026-01-21 | مقبول | APPROVED | COMPLETE | VERSION_LINKED | resubmission_version_resubmit |
 
-### رحلة 14 — مراجعة — evaluator_mismatch_cross_source
-
-| الحقل | قيمة |
-| --- | --- |
-| Family ID | FAM-000493 |
-| الجهة | جمعية أفق لتطوير العمل الخيري والتطوعي |
-| النموذج | نموذج المقابلة الشخصية |
-| Model definition ID | MODEL-021 |
-| عدد النسخ | 2 |
-| الرحلة | legacy + current |
-| آخر قرار مطبّع | APPROVED |
-| آخر حالة اكتمال | COMPLETE |
-| آخر تاريخ | 2026-01-26 |
-| يحتاج مراجعة؟ | نعم |
-
-| # | canonical_id | source | التاريخ | raw decision | decision (normalized) | completion | match_status | match_reason |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | CANON-001945 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | REVIEW_REQUIRED | evaluator_mismatch_cross_source |
-| 2 | CANON-000493 | current | 2026-01-26 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | evaluator_mismatch_cross_source |
-
-### رحلة 15 — مراجعة — evaluator_mismatch_cross_source
-
-| الحقل | قيمة |
-| --- | --- |
-| Family ID | FAM-000487 |
-| الجهة | جمعية أفق لتطوير العمل الخيري والتطوعي |
-| النموذج | دليل السياسات والإجراءات |
-| Model definition ID | MODEL-015 |
-| عدد النسخ | 2 |
-| الرحلة | legacy + current |
-| آخر قرار مطبّع | APPROVED |
-| آخر حالة اكتمال | COMPLETE |
-| آخر تاريخ | 2026-01-26 |
-| يحتاج مراجعة؟ | نعم |
-
-| # | canonical_id | source | التاريخ | raw decision | decision (normalized) | completion | match_status | match_reason |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | CANON-001940 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | REVIEW_REQUIRED | evaluator_mismatch_cross_source |
-| 2 | CANON-000487 | current | 2026-01-26 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | evaluator_mismatch_cross_source |
-
-### رحلة 16 — Current only — لا نسخة تاريخية
+### رحلة 14 — Current only — لا نسخة تاريخية
 
 | الحقل | قيمة |
 | --- | --- |
@@ -418,7 +377,7 @@ _مُنشأ في: 2026-07-31T20:56:16.206102+00:00 — logic_version: v4_familie
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | CANON-000010 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | no_direct_model_match_only_org |
 
-### رحلة 17 — Current only — لا نسخة تاريخية
+### رحلة 15 — Current only — لا نسخة تاريخية
 
 | الحقل | قيمة |
 | --- | --- |
@@ -437,7 +396,7 @@ _مُنشأ في: 2026-07-31T20:56:16.206102+00:00 — logic_version: v4_familie
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | CANON-000014 | current | 2026-01-21 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | no_direct_model_match_only_org |
 
-### رحلة 18 — Legacy only — لا استلام حالي
+### رحلة 16 — Legacy only — لا استلام حالي
 
 | الحقل | قيمة |
 | --- | --- |
@@ -463,7 +422,7 @@ _مُنشأ في: 2026-07-31T20:56:16.206102+00:00 — logic_version: v4_familie
 - **عدد النسخ (Canonicals):** 5,038
 - **عدد أحدث المخرجات التشغيلية:** 3,521
 - **رحلات كاملة (تاريخية + حالية):** 1,019
-- **رحلات في المراجعة:** 476
+- **رحلات في المراجعة:** 364
 - **الساعات:** 1,203 س Lovable per_model | 1,605 س Legacy per_org_cohort — لا جمع.
 
 **البنود المفتوحة قبل UI Cutover:**
