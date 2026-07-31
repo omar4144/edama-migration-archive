@@ -1,16 +1,19 @@
 """
-Build a single Excel workbook for human review of the 175 Participating Orgs audit.
-READ-ONLY with respect to the database. Only reads existing CSV/MD reports under /app/memory/
-and writes /app/memory/PARTICIPATING_ORGANIZATIONS_REVIEW.xlsx.
+Build a single Excel workbook for human review of the audit deliverables.
+READ-ONLY: only reads CSV/MD reports under /app/memory/ and writes the .xlsx.
 
-Sheets (Arabic RTL headers):
+Sheets (Arabic RTL headers) — updated in Iteration 13.1:
   1. الملخص
-  2. عناصر الـ175
-  3. مجموعات التطابق
-  4. المشاركات حسب الدفعة
-  5. الجمعيات متعددة الدفعات
-  6. جودة سجلات Lovable
-  7. الحالات التي تحتاج قرارًا بشريًا
+  2. السجل الموحد ١١٨
+  3. المشاركات الموحدة ١١٨
+  4. مرشحو عبر الدفعات
+  5. جودة Lovable 57
+  6. سجل تدقيق مقترح
+  7. صفوف المصادر ١٧٥
+  8. مجموعات التطابق
+  9. سجل ١٧٥ الخام
+ 10. الجمعيات متعددة الدفعات
+ 11. قرارات بشرية مطلوبة
 """
 import csv
 from collections import defaultdict
@@ -23,12 +26,13 @@ from openpyxl.utils import get_column_letter
 MEMORY = Path("/app/memory")
 OUT = MEMORY / "PARTICIPATING_ORGANIZATIONS_REVIEW.xlsx"
 
-HEADER_FILL = PatternFill("solid", fgColor="0F3D3E")   # navy
+HEADER_FILL = PatternFill("solid", fgColor="0F3D3E")
 HEADER_FONT = Font(bold=True, color="FFFFFF", name="Tahoma", size=11)
 BODY_FONT = Font(name="Tahoma", size=10)
-WARN_FILL = PatternFill("solid", fgColor="FFF2CC")     # soft yellow
-HUMAN_FILL = PatternFill("solid", fgColor="FCE4D6")    # soft orange
-GOOD_FILL = PatternFill("solid", fgColor="E2EFDA")     # soft green
+WARN_FILL = PatternFill("solid", fgColor="FFF2CC")
+HUMAN_FILL = PatternFill("solid", fgColor="FCE4D6")
+GOOD_FILL = PatternFill("solid", fgColor="E2EFDA")
+INFO_FILL = PatternFill("solid", fgColor="DDEBF7")
 
 
 def _read_csv(path: Path):
@@ -58,12 +62,9 @@ def _write_sheet(ws, headers, rows, *, row_fill=None, freeze=True):
             if fill:
                 for c_idx in range(1, len(headers) + 1):
                     ws.cell(row=r_idx, column=c_idx).fill = fill
-    # column widths
     for c_idx, h in enumerate(headers, start=1):
         max_len = min(60, max(12, len(str(h)) + 2))
-        # scan first 200 rows
-        sample = rows[:200]
-        for row in sample:
+        for row in rows[:200]:
             v = row.get(h, "") if isinstance(row, dict) else row[c_idx - 1]
             L = len(str(v).splitlines()[0]) if v else 0
             if L > max_len:
@@ -74,52 +75,49 @@ def _write_sheet(ws, headers, rows, *, row_fill=None, freeze=True):
         ws.freeze_panes = "A2"
 
 
-def build_summary(wb, headers175, rows175, groups_rows, part_rows):
+def build_summary(wb, counts):
     ws = wb.create_sheet("الملخص", 0)
     ws.sheet_view.rightToLeft = True
 
     lines = [
-        ("تدقيق سجل الجمعيات المشاركة — لماذا 175؟", True),
-        ("تدقيق قراءة فقط. لا تعديل ولا دمج ولا حذف.", False),
+        ("التدقيق الموحد — Iteration 13.1", True),
+        ("قراءة فقط. لا تعديل ولا دمج ولا حذف في قاعدة البيانات.", False),
         ("", False),
-        ("1) معادلة الرقم 175", True),
-        ("عدد صفوف جهات Legacy الخام: 118", False),
-        ("عدد صفوف جهات Lovable الخام: 57", False),
-        ("175 = 57 + 118 (جمع مباشر لكلا المصدرين، بدون تطبيق crosswalk)", False),
+        ("القرارات المُعتمَدة (بناءً على مراجعة المالك)", True),
+        ("• 118 جمعية موحدة هي العدد الرسمي.", False),
+        ("• الـ175 صف مصدر داخلي فقط، لا تُعرض في المنصة كعدد جمعيات أو مشاركات.", False),
+        ("• دمج «صندوق الشهداء» ↔ «صندوق الشهداء والمصابين والأسرى والمفقودين» تمّت الموافقة عليه.", False),
+        ("• «مقبول» في Lovable = LINK_EXISTS_CONTENT_NOT_VERIFIED (ليس دليل تخرّج).", False),
         ("", False),
-        ("2) الأرقام الثلاثة المنفصلة", True),
-        ("صفوف المصادر الخام للجهات: 175", False),
-        ("مشاركات (organization × cohort): 175", False),
-        ("الجمعيات الفريدة عبر البرنامج: 118 (بعد EXACT+PROBABLE) — 119 (بـEXACT فقط)", False),
+        ("المؤشرات الرئيسية", True),
+        (f"• صفوف مصادر الجهات: {counts['source_records']}", False),
+        (f"• جمعيات موحدة: {counts['unified_orgs']}", False),
+        (f"• مشاركات موحدة (org × cohort): {counts['unified_parts']}", False),
+        (f"• UNIFIED_EXACT: {counts['n_exact']}", False),
+        (f"• UNIFIED_PROBABLE_HUMAN_APPROVED: {counts['n_probable']}", False),
+        (f"• LEGACY_ONLY: {counts['n_legacy_only']}", False),
+        (f"• LOVABLE_ONLY: {counts['n_lovable_only']}", False),
         ("", False),
-        ("3) توزيع Crosswalk", True),
-        ("EXACT_NORMALIZED: 56", False),
-        ("PROBABLE_NAME_VARIANT: 1", False),
-        ("LEGACY_ONLY: 61", False),
-        ("LOVABLE_ONLY: 0", False),
+        ("توزيع الدفعات بعد التوحيد", True),
+        (f"• الدفعة الأولى: {counts['coh1']}", False),
+        (f"• الدفعة الثانية: {counts['coh2']}", False),
+        (f"• الدفعة الثالثة: {counts['coh3']}", False),
+        (f"• الدفعة الرابعة: {counts['coh4']}", False),
+        (f"• الإجمالي: {counts['coh1']+counts['coh2']+counts['coh3']+counts['coh4']}", False),
         ("", False),
-        ("4) تعدد الدفعات", True),
-        ("جمعيات ظهرت في أكثر من دفعة: 0", False),
-        ("جمعيات بدون دفعة معروفة: 0", False),
+        ("مرشحو التطابق عبر الدفعات", True),
+        (f"• عدد الأزواج فوق العتبة: {counts['xc']}", False),
+        ("• لن تُدمج تلقائيًا — قرار بشري فقط.", False),
+        ("• حالة تستحق تحققًا: «جمعية حوائج لحفظ النعمة» (دفعة 2) ↔ «جمعية حفظ النعمة» (دفعة 3).", False),
         ("", False),
-        ("5) جودة Lovable", True),
-        ("كل الـ2,565 صف Lovable يحمل evaluation='مقبول' بلا استثناء.", False),
-        ("يجب معاملتها كـ LINK_EXISTS_CONTENT_NOT_VERIFIED حتى يتم فحص محتوى الملف.", False),
+        ("جودة الـ57 جهة Lovable", True),
+        (f"• الجهات: {counts['lov_q']} — كلها LINK_EXISTS_CONTENT_NOT_VERIFIED.", False),
+        ("• لم يُفحص محتوى أي ملف Google. لا يوجد ادعاء تخرّج.", False),
         ("", False),
-        ("6) Family Key", True),
-        ("عدد الرحلات بالمفتاح الحالي org × model_definition: 3,521", False),
-        ("عدد الرحلات بالمفتاح المقترح org × cohort × model_definition: 3,521 (لا تغيّر)", False),
-        ("لا حاجة لتغيير المفتاح حاليًا. أبقِ حقل cohort_participation_id احتياطيًا.", False),
-        ("", False),
-        ("7) عدّادات هذا الملف", True),
-        (f"عناصر الـ175: {len(rows175)}", False),
-        (f"مجموعات التطابق: {len(groups_rows)}", False),
-        (f"صفوف المشاركات حسب الدفعة: {len(part_rows)}", False),
-        ("", False),
-        ("8) تأكيد عدم لمس البيانات", True),
-        ("لا تعديل على source_records أو canonical_submissions أو organizations_current.", False),
-        ("لا تنفيذ لأي Bulk confirm.", False),
-        ("فقط قراءة + كتابة إلى /app/memory/.", False),
+        ("تأكيد سلامة البيانات", True),
+        ("• لم تُعدَّل أي مجموعة في قاعدة البيانات.", False),
+        ("• الـ175 صف الأصلية محفوظة في ORGANIZATION_PARTICIPATION_SOURCE_RECORDS.csv كطبقة أدلة.", False),
+        ("• لا يبدأ Iteration 12 حتى تعتمد المخرجات.", False),
     ]
 
     for i, (txt, is_h) in enumerate(lines, start=1):
@@ -135,21 +133,13 @@ def build_summary(wb, headers175, rows175, groups_rows, part_rows):
 
 def build_multi_cohort(wb, part_rows):
     ws = wb.create_sheet("الجمعيات متعددة الدفعات")
-    # group by proposed_canonical_org_id
     by_org = defaultdict(list)
     for r in part_rows:
         by_org[r.get("proposed_canonical_org_id", "")].append(r)
 
     headers = [
-        "proposed_canonical_org_id",
-        "canonical_org_name",
-        "cohorts_present",
-        "cohort_count",
-        "participation_ids",
-        "sources",
-        "requires_review",
-        "possible_previous_participation",
-        "possible_next_participation",
+        "proposed_canonical_org_id", "canonical_org_name", "cohorts_present",
+        "cohort_count", "participation_ids", "sources", "requires_review",
     ]
     rows = []
     for oid, group in by_org.items():
@@ -164,84 +154,59 @@ def build_multi_cohort(wb, part_rows):
             "participation_ids": " | ".join(g.get("participation_id", "") for g in group),
             "sources": " | ".join(sorted({g.get("source", "") for g in group})),
             "requires_review": " | ".join(g.get("requires_review", "") for g in group),
-            "possible_previous_participation": " | ".join(g.get("possible_previous_participation", "") for g in group if g.get("possible_previous_participation")),
-            "possible_next_participation": " | ".join(g.get("possible_next_participation", "") for g in group if g.get("possible_next_participation")),
         })
     if not rows:
-        # Add a note row so the sheet isn't empty
-        _write_sheet(ws, headers, [{"proposed_canonical_org_id": "—", "canonical_org_name": "لا توجد جمعيات متعددة الدفعات في البيانات الحالية", "cohorts_present": "", "cohort_count": 0, "participation_ids": "", "sources": "", "requires_review": "", "possible_previous_participation": "", "possible_next_participation": ""}], row_fill=GOOD_FILL)
+        _write_sheet(ws, headers, [{
+            "proposed_canonical_org_id": "—",
+            "canonical_org_name": "لا توجد جمعيات موحدة ظهرت في أكثر من دفعة.",
+            "cohorts_present": "",
+            "cohort_count": 0,
+            "participation_ids": "",
+            "sources": "",
+            "requires_review": "",
+        }], row_fill=GOOD_FILL)
     else:
         _write_sheet(ws, headers, rows, row_fill=WARN_FILL)
 
 
-def build_lovable_quality(wb, rows175):
-    ws = wb.create_sheet("جودة سجلات Lovable")
-    headers = [
-        "lovable_org_id",
-        "display_name",
-        "cohort",
-        "lovable_model_rows",
-        "current_links_count",
-        "canonical_version_count",
-        "model_family_count",
-        "roster_status",
-        "consultant_names",
-        "evaluator_names",
-        "notes",
-    ]
-    rows = []
-    for r in rows175:
-        lov_id = r.get("lovable_org_id", "").strip()
-        if not lov_id:
-            continue
-        note = "LINK_EXISTS_CONTENT_NOT_VERIFIED — كل «مقبول» يحتاج فحص محتوى الملف."
-        rows.append({
-            "lovable_org_id": lov_id,
-            "display_name": r.get("display_name", ""),
-            "cohort": r.get("cohorts", ""),
-            "lovable_model_rows": r.get("lovable_model_rows", ""),
-            "current_links_count": r.get("current_links_count", ""),
-            "canonical_version_count": r.get("canonical_version_count", ""),
-            "model_family_count": r.get("model_family_count", ""),
-            "roster_status": r.get("roster_status", ""),
-            "consultant_names": r.get("consultant_names", ""),
-            "evaluator_names": r.get("evaluator_names", ""),
-            "notes": note,
-        })
-    _write_sheet(ws, headers, rows, row_fill=WARN_FILL)
-
-
-def build_human_decisions(wb, rows175, groups_rows, part_rows):
+def build_human_decisions(wb, rows175, groups_rows, xc_rows, audit_rows):
     ws = wb.create_sheet("قرارات بشرية مطلوبة")
     headers = [
-        "case_type",
-        "candidate_or_group_id",
-        "display_name",
-        "match_status",
-        "match_reason",
-        "confidence",
-        "why_needs_human",
-        "recommended_action",
-        "linked_records",
+        "case_type", "candidate_or_group_id", "display_name",
+        "match_status", "match_reason", "confidence",
+        "why_needs_human", "recommended_action", "linked_records",
     ]
     rows = []
 
-    # 1) PROBABLE_NAME_VARIANT groups
-    for g in groups_rows:
-        if g.get("match_status") == "PROBABLE_NAME_VARIANT" or (str(g.get("requires_human_review", "")).lower() == "true"):
-            rows.append({
-                "case_type": "زوج مطابقة مقترح — يحتاج تأكيد",
-                "candidate_or_group_id": g.get("proposed_canonical_org_id", ""),
-                "display_name": g.get("member_names", ""),
-                "match_status": g.get("match_status", ""),
-                "match_reason": g.get("match_reason", ""),
-                "confidence": g.get("confidence", ""),
-                "why_needs_human": g.get("blocking_issue", "") or "PROBABLE_NAME_VARIANT — تطابق محتمل غير مؤكد",
-                "recommended_action": "تأكيد الدمج أو الفصل بقرار بشري",
-                "linked_records": g.get("member_candidate_ids", ""),
-            })
+    # Proposed audit entries (approved but not applied)
+    for a in audit_rows:
+        rows.append({
+            "case_type": "قرار موحد مقترح للتطبيق",
+            "candidate_or_group_id": a.get("proposed_entry_id", ""),
+            "display_name": a.get("canonical_org_name", ""),
+            "match_status": a.get("action_type", ""),
+            "match_reason": a.get("reason_code", ""),
+            "confidence": a.get("similarity_score", ""),
+            "why_needs_human": "تمّت الموافقة بشريًا — بانتظار تنفيذ سجل التدقيق.",
+            "recommended_action": "تطبيق الدمج في participating_orgs + crosswalk_organizations",
+            "linked_records": a.get("member_ids", ""),
+        })
 
-    # 2) LEGACY_ONLY (no Lovable match)
+    # Top cross-cohort candidates
+    for x in xc_rows[:50]:
+        rows.append({
+            "case_type": "مرشح تطابق عبر الدفعات",
+            "candidate_or_group_id": x.get("candidate_pair_id", ""),
+            "display_name": f"{x.get('org_a_name', '')} ↔ {x.get('org_b_name', '')}",
+            "match_status": f"cohort {x.get('org_a_cohorts', '')} vs {x.get('org_b_cohorts', '')}",
+            "match_reason": x.get("similarity_reason", ""),
+            "confidence": f"ratio={x.get('similarity_ratio','')} · jaccard={x.get('jaccard','')}",
+            "why_needs_human": "أسماء متشابهة في دفعات مختلفة — يحتاج قرار بشري (لا دمج تلقائي).",
+            "recommended_action": "تحقق يدوي: هل هي نفس الجهة أم جهتان مختلفتان؟",
+            "linked_records": f"{x.get('org_a_canonical_id','')} ↔ {x.get('org_b_canonical_id','')}",
+        })
+
+    # LEGACY_ONLY without Lovable
     for r in rows175:
         if r.get("organization_crosswalk_status") in ("LEGACY_ONLY", "NO_MATCH_LEGACY_ONLY"):
             rows.append({
@@ -252,108 +217,142 @@ def build_human_decisions(wb, rows175, groups_rows, part_rows):
                 "match_reason": "لا يوجد صف Lovable مطابق",
                 "confidence": r.get("match_confidence", ""),
                 "why_needs_human": "تأكيد ما إذا كانت الجمعية لم تعد نشطة أم تحتاج إنشاء ORG في Lovable",
-                "recommended_action": "إبقاء كـ Legacy فقط، أو ربطها يدويًا بـ ORG لوفابل جديد",
+                "recommended_action": "إبقاء كـ Legacy فقط، أو ربطها يدويًا بـ ORG جديد",
                 "linked_records": r.get("legacy_org_id", ""),
-            })
-
-    # 3) participations that flag review
-    for p in part_rows:
-        if str(p.get("requires_review", "")).lower() == "true":
-            rows.append({
-                "case_type": "مشاركة دفعة — تحتاج مراجعة",
-                "candidate_or_group_id": p.get("participation_id", ""),
-                "display_name": p.get("canonical_org_name", ""),
-                "match_status": p.get("cohort_confidence", ""),
-                "match_reason": p.get("participation_evidence", ""),
-                "confidence": p.get("cohort_confidence", ""),
-                "why_needs_human": "مشاركة دفعة غير مؤكدة أو تحتاج تأكيد",
-                "recommended_action": "تحديد الدفعة الصحيحة يدويًا",
-                "linked_records": p.get("source_record_ids", ""),
-            })
-
-    # 4) seed_did_not_apply_crosswalk_merge (EXACT that stayed as two candidates)
-    for r in rows175:
-        why = r.get("why_separate_candidate", "") or ""
-        if "seed_did_not_apply_crosswalk_merge" in why:
-            rows.append({
-                "case_type": "زوج EXACT لم يُدمج في seed",
-                "candidate_or_group_id": r.get("registry_candidate_id", ""),
-                "display_name": r.get("display_name", ""),
-                "match_status": r.get("organization_crosswalk_status", ""),
-                "match_reason": r.get("match_method", ""),
-                "confidence": r.get("match_confidence", ""),
-                "why_needs_human": "الـcrosswalk يوصي بالدمج لكن الـseed لم يطبّقه — يحتاج قرار: دمج أم إبقاء كصفّين",
-                "recommended_action": "الموافقة على تطبيق EXACT_NORMALIZED بالكامل أو تحديد استثناءات",
-                "linked_records": f"{r.get('legacy_org_id','')} ↔ {r.get('lovable_org_id','')}",
             })
 
     _write_sheet(ws, headers, rows, row_fill=HUMAN_FILL)
 
 
 def main():
-    headers175, rows175 = _read_csv(MEMORY / "PARTICIPATING_ORGANIZATIONS_175_AUDIT.csv")
-    groups_headers, groups_rows = _read_csv(MEMORY / "ORGANIZATION_MATCH_GROUPS.csv")
-    part_headers, part_rows = _read_csv(MEMORY / "ORGANIZATION_COHORT_PARTICIPATIONS.csv")
+    hdr_src, src_rows = _read_csv(MEMORY / "ORGANIZATION_PARTICIPATION_SOURCE_RECORDS.csv")
+    hdr_part_u, part_u_rows = _read_csv(MEMORY / "ORGANIZATION_COHORT_PARTICIPATIONS_UNIFIED.csv")
+    hdr_reg, reg_rows = _read_csv(MEMORY / "ORGANIZATION_UNIFIED_REGISTRY.csv")
+    hdr_xc, xc_rows = _read_csv(MEMORY / "CROSS_COHORT_CANDIDATES.csv")
+    hdr_lovq, lovq_rows = _read_csv(MEMORY / "LOVABLE_57_ORG_QUALITY.csv")
+    hdr_audit, audit_rows = _read_csv(MEMORY / "PROPOSED_AUDIT_LOG_ENTRIES.csv")
+
+    hdr_175, rows_175 = _read_csv(MEMORY / "PARTICIPATING_ORGANIZATIONS_175_AUDIT.csv")
+    hdr_grp, grp_rows = _read_csv(MEMORY / "ORGANIZATION_MATCH_GROUPS.csv")
+    hdr_part, part_rows = _read_csv(MEMORY / "ORGANIZATION_COHORT_PARTICIPATIONS.csv")
+
+    counts = {
+        "source_records": len(src_rows),
+        "unified_orgs": len(reg_rows),
+        "unified_parts": len(part_u_rows),
+        "n_exact": sum(1 for r in reg_rows if r["unification_status"] == "UNIFIED_EXACT"),
+        "n_probable": sum(1 for r in reg_rows if r["unification_status"] == "UNIFIED_PROBABLE_HUMAN_APPROVED"),
+        "n_legacy_only": sum(1 for r in reg_rows if r["unification_status"] == "LEGACY_ONLY"),
+        "n_lovable_only": sum(1 for r in reg_rows if r["unification_status"] == "LOVABLE_ONLY"),
+        "coh1": sum(1 for r in part_u_rows if str(r["cohort"]) == "1"),
+        "coh2": sum(1 for r in part_u_rows if str(r["cohort"]) == "2"),
+        "coh3": sum(1 for r in part_u_rows if str(r["cohort"]) == "3"),
+        "coh4": sum(1 for r in part_u_rows if str(r["cohort"]) == "4"),
+        "xc": len([r for r in xc_rows if r.get("candidate_pair_id") not in ("", "-")]),
+        "lov_q": len(lovq_rows),
+    }
 
     wb = Workbook()
-    # remove default sheet
-    default = wb.active
-    wb.remove(default)
+    wb.remove(wb.active)
 
-    # 1) Summary (added at index 0 inside build_summary)
-    build_summary(wb, headers175, rows175, groups_rows, part_rows)
+    # 1. Summary
+    build_summary(wb, counts)
 
-    # 2) 175 items
-    ws2 = wb.create_sheet("عناصر الـ175")
-    def _color175(row):
-        st = (row.get("organization_crosswalk_status") or "").upper()
-        if st in ("LEGACY_ONLY", "NO_MATCH_LEGACY_ONLY"):
-            return HUMAN_FILL
-        if st == "PROBABLE_NAME_VARIANT":
-            return WARN_FILL
-        if st == "EXACT_NORMALIZED":
+    # 2. Unified registry (118)
+    ws2 = wb.create_sheet("السجل الموحد ١١٨")
+    def _color_reg(row):
+        st = row.get("unification_status", "")
+        if st == "UNIFIED_EXACT":
             return GOOD_FILL
-        return None
-    _write_sheet(ws2, headers175, rows175, row_fill=_color175)
+        if st == "UNIFIED_PROBABLE_HUMAN_APPROVED":
+            return WARN_FILL
+        if st == "LEGACY_ONLY":
+            return HUMAN_FILL
+        return INFO_FILL
+    _write_sheet(ws2, hdr_reg, reg_rows, row_fill=_color_reg)
 
-    # 3) match groups
-    ws3 = wb.create_sheet("مجموعات التطابق")
-    def _colorg(row):
+    # 3. Unified participations (118)
+    ws3 = wb.create_sheet("المشاركات الموحدة ١١٨")
+    def _color_partu(row):
+        if str(row.get("requires_review", "")).lower() == "true":
+            return HUMAN_FILL
+        conf = (row.get("cohort_confidence") or "")
+        if conf.startswith("HIGH"):
+            return GOOD_FILL
+        if conf.startswith("MEDIUM"):
+            return INFO_FILL
+        if conf.startswith("UNKNOWN"):
+            return WARN_FILL
+        return None
+    _write_sheet(ws3, hdr_part_u, part_u_rows, row_fill=_color_partu)
+
+    # 4. Cross-cohort candidates
+    ws4 = wb.create_sheet("مرشحو عبر الدفعات")
+    def _color_xc(row):
+        try:
+            r = float(row.get("similarity_ratio", 0))
+        except (ValueError, TypeError):
+            r = 0
+        if r >= 0.9:
+            return HUMAN_FILL
+        if r >= 0.8:
+            return WARN_FILL
+        return INFO_FILL
+    _write_sheet(ws4, hdr_xc, xc_rows, row_fill=_color_xc)
+
+    # 5. Lovable quality
+    ws5 = wb.create_sheet("جودة Lovable 57")
+    def _color_lovq(row):
+        if row.get("rows_match_expected") == "true":
+            return WARN_FILL  # still not verified content — kept as warning
+        return HUMAN_FILL
+    _write_sheet(ws5, hdr_lovq, lovq_rows, row_fill=_color_lovq)
+
+    # 6. Proposed audit log
+    ws6 = wb.create_sheet("سجل تدقيق مقترح")
+    _write_sheet(ws6, hdr_audit, audit_rows, row_fill=WARN_FILL)
+
+    # 7. Source records (175 evidence)
+    ws7 = wb.create_sheet("صفوف المصادر ١٧٥")
+    def _color_src(row):
+        return GOOD_FILL if row.get("source_side") == "lovable" else INFO_FILL
+    _write_sheet(ws7, hdr_src, src_rows, row_fill=_color_src)
+
+    # 8. Match groups (legacy from Iteration 13.0)
+    ws8 = wb.create_sheet("مجموعات التطابق")
+    def _color_grp(row):
         st = (row.get("match_status") or "").upper()
         if st == "EXACT_SAME_ORGANIZATION":
             return GOOD_FILL
         if st == "PROBABLE_NAME_VARIANT":
             return WARN_FILL
-        if str(row.get("requires_human_review", "")).lower() == "true":
-            return HUMAN_FILL
         return None
-    _write_sheet(ws3, groups_headers, groups_rows, row_fill=_colorg)
+    _write_sheet(ws8, hdr_grp, grp_rows, row_fill=_color_grp)
 
-    # 4) cohort participations
-    ws4 = wb.create_sheet("المشاركات حسب الدفعة")
-    def _colorp(row):
-        if str(row.get("requires_review", "")).lower() == "true":
-            return HUMAN_FILL
-        conf = (row.get("cohort_confidence") or "").upper()
-        if conf == "HIGH":
+    # 9. 175 raw candidates registry (legacy)
+    ws9 = wb.create_sheet("سجل ١٧٥ الخام")
+    def _color_175(row):
+        st = (row.get("organization_crosswalk_status") or "").upper()
+        if st == "EXACT_NORMALIZED":
             return GOOD_FILL
-        if conf in ("LOW", "UNKNOWN"):
+        if st == "PROBABLE_NAME_VARIANT":
             return WARN_FILL
+        if st in ("LEGACY_ONLY", "NO_MATCH_LEGACY_ONLY"):
+            return HUMAN_FILL
         return None
-    _write_sheet(ws4, part_headers, part_rows, row_fill=_colorp)
+    _write_sheet(ws9, hdr_175, rows_175, row_fill=_color_175)
 
-    # 5) multi-cohort
+    # 10. Multi-cohort orgs (should be empty confirming no false claim)
     build_multi_cohort(wb, part_rows)
 
-    # 6) lovable quality
-    build_lovable_quality(wb, rows175)
-
-    # 7) human decisions
-    build_human_decisions(wb, rows175, groups_rows, part_rows)
+    # 11. Human decisions
+    build_human_decisions(wb, rows_175, grp_rows, xc_rows, audit_rows)
 
     wb.save(OUT)
     print(f"Wrote {OUT}")
-    print(f"Sheets: {wb.sheetnames}")
+    for name in wb.sheetnames:
+        ws = wb[name]
+        print(f"  - {name}: {ws.max_row-1} صف بيانات × {ws.max_column} عمود")
 
 
 if __name__ == "__main__":

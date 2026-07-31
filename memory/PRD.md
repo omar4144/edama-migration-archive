@@ -21,10 +21,27 @@ Unified RTL Arabic platform consolidating historical Excel + Lovable data. Role-
 
 ## Prioritized backlog
 
-### P0 — Awaiting ownership decision on 175 audit
-- Confirm which unique-org number to adopt: **119** (EXACT only, safe) vs **118** (EXACT + 1 PROBABLE).
-- Confirm whether participating_orgs seed should be re-run to APPLY the crosswalk (merging 57 pairs), or whether to keep 175 as candidates and add a "resolve to X" review step.
-- Decide the operational meaning of Lovable «مقبول»: does it count as pending verification vs approved?
+### Iteration 13.1 (2026-07-31, current)
+- User confirmed: **118 unified organizations** is the adopted number (56 EXACT + 1 PROBABLE + 61 LEGACY_ONLY).
+- User approved: PROBABLE merge of `LEG-ORG-B4-035` (صندوق الشهداء) ↔ `ORG-A08-02` (صندوق الشهداء والمصابين والأسرى والمفقودين).
+- User classified «مقبول» in Lovable as `LINK_EXISTS_CONTENT_NOT_VERIFIED` — never a graduation claim.
+- Two-tier model established: `source_records` (175 evidence rows) vs `participations_unified` (118 org×cohort rows).
+- New read-only artifacts under `/app/memory/`:
+  - `ORGANIZATION_PARTICIPATION_SOURCE_RECORDS.csv` (175)
+  - `ORGANIZATION_COHORT_PARTICIPATIONS_UNIFIED.csv` (118)
+  - `ORGANIZATION_UNIFIED_REGISTRY.csv` (118)
+  - `CROSS_COHORT_CANDIDATES.csv` (96 cross-cohort review candidates including حوائج vs حفظ النعمة)
+  - `LOVABLE_57_ORG_QUALITY.csv` (57 orgs, all `LINK_EXISTS_CONTENT_NOT_VERIFIED`)
+  - `PROPOSED_AUDIT_LOG_ENTRIES.csv` (1 dry-run entry, شهداء merge)
+  - `PARTICIPATING_ORGANIZATIONS_REVIEW.xlsx` (11-sheet workbook)
+  - `UNIFIED_AUDIT_REPORT.md`
+- Cohort distribution confirmed: 1→24, 2→30, 3→29, 4→35 = **118**.
+- DB counts unchanged: participating_orgs=175, crosswalk=118, canonical_submission_families=3521.
+
+### P0 — Pending user approval before Iteration 12 UI cutover
+- Approve applying `PROPOSED_AUDIT_LOG_ENTRIES.csv` (شهداء merge) to `participating_orgs`/`crosswalk_organizations`.
+- Review 96 cross-cohort candidates (priority: حوائج ↔ حفظ النعمة).
+- Confirm operationalizing the two-tier model in DB (add `organization_participation_source_records` + `organization_cohort_participations_unified` collections).
 
 ### P1 — Deferred (Iteration 12 continuation)
 - Consultant + Evaluator dashboards read from `canonical_submission_families`.
