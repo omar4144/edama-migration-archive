@@ -19,6 +19,7 @@ from routes.exec_scene import router as exec_router
 from routes.directory import router as directory_router
 from routes.models_hub import router as models_hub_router
 from routes.unified_org import router as unified_org_router
+from routes.canonical import router as canonical_router
 
 
 app = FastAPI(title="Edama — Musr'at Idama V8")
@@ -47,6 +48,7 @@ api.include_router(exec_router, prefix="/admin")  # /api/admin/exec/scene
 api.include_router(directory_router, prefix="/admin")  # /api/admin/directory/*
 api.include_router(models_hub_router, prefix="/admin")  # /api/admin/models-hub
 api.include_router(unified_org_router, prefix="/admin/unified")  # /api/admin/unified/organizations
+api.include_router(canonical_router, prefix="/admin")  # /api/admin/canonical/*
 
 app.include_router(api)
 
