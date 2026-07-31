@@ -1,0 +1,219 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-07-31T05:06:09+03:00",
+  "timezone": "Asia/Riyadh",
+  "result": "PASS",
+  "totals": {
+    "records": 2565,
+    "accounts": 8,
+    "organizations": 57,
+    "people": 17,
+    "evaluators": 8,
+    "consultants": 9,
+    "model_definitions": 45,
+    "work_hours": 1662.0,
+    "records_with_notes": 137,
+    "duplicate_link_groups": 129,
+    "cross_account_duplicate_link_groups": 0
+  },
+  "checks": {
+    "source_files_found": true,
+    "headers_consistent": true,
+    "unique_migration_ids": true,
+    "unique_record_hashes": true,
+    "all_records_verified": true,
+    "all_five_checks_pass": true,
+    "all_submitted_dates_parsed": true,
+    "all_modified_dates_parsed": true,
+    "all_verified_dates_parsed": true,
+    "all_records_accepted": true,
+    "no_cross_account_exact_link_duplicates": true,
+    "every_organization_has_45_records": true
+  },
+  "known_gaps": [
+    "ملفات Power BI/Excel الأصلية المغذية للداشبورد غير موجودة في هذه الحزمة.",
+    "البيانات المستخرجة تمثل الحالة الظاهرة الحالية؛ لا تثبت وجود تاريخ مستقل لجولات الرفض أو الإعادة السابقة.",
+    "لا توجد تفاصيل يومية مستقلة لساعات العمل؛ المتاح هو إجمالي الساعات على مستوى السجل.",
+    "الروابط المكررة وُسمت للمراجعة ولم تُحذف أو تُدمج."
+  ],
+  "sources": [
+    {
+      "file_name": "Edama_Account1_Migration_Audit.xlsx",
+      "account_index": 1,
+      "evaluator_name": "بتول الرويلي",
+      "record_count": 225,
+      "size_bytes": 48335,
+      "sha256": "adbdb63a58e4f7d1c884a810c2874cabb443a8477ec7748d58ce23deb2bf1cd6"
+    },
+    {
+      "file_name": "Edama_Account2_Migration_Audit.xlsx",
+      "account_index": 2,
+      "evaluator_name": "خالد القرني",
+      "record_count": 270,
+      "size_bytes": 56698,
+      "sha256": "e57fcde340182c4aed643839ea367a0c476ea93299de4182f81cd933dc0c1a89"
+    },
+    {
+      "file_name": "Edama_Account3_Migration_Audit.xlsx",
+      "account_index": 3,
+      "evaluator_name": "سارة بالخير",
+      "record_count": 225,
+      "size_bytes": 48158,
+      "sha256": "504897b1061c5d379ce03a4235c1e2c9b5930caa1cb251ffc44571a09ec25079"
+    },
+    {
+      "file_name": "Edama_Account4_Migration_Audit.xlsx",
+      "account_index": 4,
+      "evaluator_name": "د. حسن ابو كافته",
+      "record_count": 225,
+      "size_bytes": 49602,
+      "sha256": "199c2d71b2c01f5b035f3c20474c90946cbe1de9d4a5d262ee801a066a610707"
+    },
+    {
+      "file_name": "Edama_Account5_Migration_Audit.xlsx",
+      "account_index": 5,
+      "evaluator_name": "خالد الزهراني",
+      "record_count": 315,
+      "size_bytes": 65603,
+      "sha256": "fbaa6a5a62382b292c2026dea8059116e1e014e71f318cb0a4aafae65b0733b3"
+    },
+    {
+      "file_name": "Edama_Account6_Migration_Audit.xlsx",
+      "account_index": 6,
+      "evaluator_name": "الشيخ بن عبدالسلام",
+      "record_count": 315,
+      "size_bytes": 63895,
+      "sha256": "0db5eb0406bf0c0ce5add07328d114a6207b3e471a5c01be0301762da5b0c7d8"
+    },
+    {
+      "file_name": "Edama_Account7_Migration_Audit.xlsx",
+      "account_index": 7,
+      "evaluator_name": "بندر الحارثي",
+      "record_count": 315,
+      "size_bytes": 63204,
+      "sha256": "dddcddb61a221c33990354a2773622a193f7f004aa38b5b4ef57664b3ff1236e"
+    },
+    {
+      "file_name": "Edama_Account8_Migration_Audit.xlsx",
+      "account_index": 8,
+      "evaluator_name": "محمد العبدالجبار",
+      "record_count": 675,
+      "size_bytes": 124347,
+      "sha256": "5e30f5d8e8f6fd293adc44ae59ae724904eba63c928e3207f82ea6f5ceb5913b"
+    }
+  ],
+  "accounts": [
+    {
+      "source_account_index": 1,
+      "evaluator_person_id": "PERSON-EVAL-001",
+      "evaluator_name": "بتول الرويلي",
+      "source_file": "Edama_Account1_Migration_Audit.xlsx",
+      "record_count": 225,
+      "organization_count": 5,
+      "consultant_count": 1,
+      "work_hours": 136.0,
+      "notes_count": 18,
+      "duplicate_link_groups": 13,
+      "verified_count": 225,
+      "all_checks_pass": true
+    },
+    {
+      "source_account_index": 2,
+      "evaluator_person_id": "PERSON-EVAL-002",
+      "evaluator_name": "خالد القرني",
+      "source_file": "Edama_Account2_Migration_Audit.xlsx",
+      "record_count": 270,
+      "organization_count": 6,
+      "consultant_count": 1,
+      "work_hours": 135.5,
+      "notes_count": 15,
+      "duplicate_link_groups": 8,
+      "verified_count": 270,
+      "all_checks_pass": true
+    },
+    {
+      "source_account_index": 3,
+      "evaluator_person_id": "PERSON-EVAL-003",
+      "evaluator_name": "سارة بالخير",
+      "source_file": "Edama_Account3_Migration_Audit.xlsx",
+      "record_count": 225,
+      "organization_count": 5,
+      "consultant_count": 1,
+      "work_hours": 113.5,
+      "notes_count": 11,
+      "duplicate_link_groups": 14,
+      "verified_count": 225,
+      "all_checks_pass": true
+    },
+    {
+      "source_account_index": 4,
+      "evaluator_person_id": "PERSON-EVAL-004",
+      "evaluator_name": "د. حسن ابو كافته",
+      "source_file": "Edama_Account4_Migration_Audit.xlsx",
+      "record_count": 225,
+      "organization_count": 5,
+      "consultant_count": 1,
+      "work_hours": 142.5,
+      "notes_count": 1,
+      "duplicate_link_groups": 8,
+      "verified_count": 225,
+      "all_checks_pass": true
+    },
+    {
+      "source_account_index": 5,
+      "evaluator_person_id": "PERSON-EVAL-005",
+      "evaluator_name": "خالد الزهراني",
+      "source_file": "Edama_Account5_Migration_Audit.xlsx",
+      "record_count": 315,
+      "organization_count": 7,
+      "consultant_count": 1,
+      "work_hours": 403.0,
+      "notes_count": 1,
+      "duplicate_link_groups": 9,
+      "verified_count": 315,
+      "all_checks_pass": true
+    },
+    {
+      "source_account_index": 6,
+      "evaluator_person_id": "PERSON-EVAL-006",
+      "evaluator_name": "الشيخ بن عبدالسلام",
+      "source_file": "Edama_Account6_Migration_Audit.xlsx",
+      "record_count": 315,
+      "organization_count": 7,
+      "consultant_count": 1,
+      "work_hours": 216.0,
+      "notes_count": 8,
+      "duplicate_link_groups": 15,
+      "verified_count": 315,
+      "all_checks_pass": true
+    },
+    {
+      "source_account_index": 7,
+      "evaluator_person_id": "PERSON-EVAL-007",
+      "evaluator_name": "بندر الحارثي",
+      "source_file": "Edama_Account7_Migration_Audit.xlsx",
+      "record_count": 315,
+      "organization_count": 7,
+      "consultant_count": 1,
+      "work_hours": 158.0,
+      "notes_count": 0,
+      "duplicate_link_groups": 18,
+      "verified_count": 315,
+      "all_checks_pass": true
+    },
+    {
+      "source_account_index": 8,
+      "evaluator_person_id": "PERSON-EVAL-008",
+      "evaluator_name": "محمد العبدالجبار",
+      "source_file": "Edama_Account8_Migration_Audit.xlsx",
+      "record_count": 675,
+      "organization_count": 15,
+      "consultant_count": 2,
+      "work_hours": 357.5,
+      "notes_count": 83,
+      "duplicate_link_groups": 44,
+      "verified_count": 675,
+      "all_checks_pass": true
+    }
+  ]
+}

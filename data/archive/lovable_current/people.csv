@@ -1,0 +1,18 @@
+﻿person_id,person_name,role,role_ar,record_count,organization_count,work_hours
+PERSON-EVAL-001,بتول الرويلي,evaluator,محكّم,225,5,136.0
+PERSON-EVAL-002,خالد القرني,evaluator,محكّم,270,6,135.5
+PERSON-EVAL-003,سارة بالخير,evaluator,محكّم,225,5,113.5
+PERSON-EVAL-004,د. حسن ابو كافته,evaluator,محكّم,225,5,142.5
+PERSON-EVAL-005,خالد الزهراني,evaluator,محكّم,315,7,403.0
+PERSON-EVAL-006,الشيخ بن عبدالسلام,evaluator,محكّم,315,7,216.0
+PERSON-EVAL-007,بندر الحارثي,evaluator,محكّم,315,7,158.0
+PERSON-EVAL-008,محمد العبدالجبار,evaluator,محكّم,675,15,357.5
+PERSON-CONS-001,إسراء باقيس,consultant,مستشار,270,6,
+PERSON-CONS-002,سعيد الغامدي,consultant,مستشار,315,7,
+PERSON-CONS-003,ظافر القرني,consultant,مستشار,225,5,
+PERSON-CONS-004,عبدالرحمن موسى,consultant,مستشار,315,7,
+PERSON-CONS-005,عزيز التوخي,consultant,مستشار,225,5,
+PERSON-CONS-006,فهد ظافر,consultant,مستشار,315,7,
+PERSON-CONS-007,محمد الحليبي,consultant,مستشار,315,7,
+PERSON-CONS-008,نجود السيد,consultant,مستشار,225,5,
+PERSON-CONS-009,وديع الحربي,consultant,مستشار,360,8,

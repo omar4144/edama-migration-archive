@@ -1,0 +1,17 @@
+﻿check,expected,actual,status,notes
+Excel sources accounted for,34,34,PASS,
+Excel sources readable,34,34,PASS,
+Operational organization resolution issues,0,0,PASS,
+Legacy cohort organization rows,118,118,PASS,
+Cohort 1 Afaq and Al-Mimar aliases separated,2,2,PASS,جمعية افق maps to LEG-ORG-B1-004; جمعية معمار للاسكان التنموي maps to LEG-ORG-B1-009.
+Invalid or partial organization dates safely flagged,1,1,PASS,The raw value is preserved; no fabricated ISO date is generated.
+Consultant activity rows,3760,3760,PASS,
+Legacy arbitration rows,3403,3403,PASS,
+Batch plan rows,120,120,PASS,
+Batch KPI snapshots,4,4,PASS,
+Power BI pages,6,6,PASS,
+Lovable organizations exact crosswalk,56,56,PASS,
+Lovable organizations probable variant,1,1,PASS,
+Direct model-name crosswalk,41,41,PASS,
+Legacy review rows with source metadata mismatch flagged,2336,2336,PASS,Raw values remain preserved; normalized assignment fields do not trust stale template metadata.
+Current records with direct historical pair,1517,1517,PASS,

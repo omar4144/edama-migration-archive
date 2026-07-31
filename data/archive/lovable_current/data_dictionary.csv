@@ -1,0 +1,40 @@
+﻿column_name,arabic_label,data_type,required,source,description
+migration_id,معرف الترحيل,string,True,Lovable كما ظهر,قيمة أصلية محفوظة دون تغيير
+record_hash_sha256,بصمة السجل,string,True,مشتق للترحيل,حقل أضيف لتسهيل التتبع والاستيراد دون استبدال القيمة الأصلية
+source_system,نظام المصدر,string,True,Lovable كما ظهر,قيمة أصلية محفوظة دون تغيير
+source_account_index,رقم حساب المصدر,integer,True,مشتق للترحيل,حقل أضيف لتسهيل التتبع والاستيراد دون استبدال القيمة الأصلية
+source_account,حساب المصدر/المحكّم,string,True,Lovable كما ظهر,قيمة أصلية محفوظة دون تغيير
+source_file,ملف المصدر,string,True,مشتق للترحيل,حقل أضيف لتسهيل التتبع والاستيراد دون استبدال القيمة الأصلية
+source_sheet,ورقة المصدر,string,True,مشتق للترحيل,حقل أضيف لتسهيل التتبع والاستيراد دون استبدال القيمة الأصلية
+source_row_number,رقم صف المصدر,integer,True,مشتق للترحيل,حقل أضيف لتسهيل التتبع والاستيراد دون استبدال القيمة الأصلية
+organization_id,معرف الجهة,string,True,مشتق للترحيل,حقل أضيف لتسهيل التتبع والاستيراد دون استبدال القيمة الأصلية
+organization_name,اسم الجهة,string,True,Lovable كما ظهر,قيمة أصلية محفوظة دون تغيير
+evaluator_person_id,معرف المحكّم,string,True,مشتق للترحيل,حقل أضيف لتسهيل التتبع والاستيراد دون استبدال القيمة الأصلية
+consultant_person_id,معرف المستشار,string,True,مشتق للترحيل,حقل أضيف لتسهيل التتبع والاستيراد دون استبدال القيمة الأصلية
+consultant_name,اسم المستشار,string,True,Lovable كما ظهر,قيمة أصلية محفوظة دون تغيير
+model_definition_id,معرف نوع النموذج,string,True,مشتق للترحيل,حقل أضيف لتسهيل التتبع والاستيراد دون استبدال القيمة الأصلية
+category,فئة النموذج,string,True,Lovable كما ظهر,قيمة أصلية محفوظة دون تغيير
+source_order,ترتيب المصدر,integer,True,Lovable كما ظهر,قيمة أصلية محفوظة دون تغيير
+model_name,اسم النموذج,string,True,Lovable كما ظهر,قيمة أصلية محفوظة دون تغيير
+model_url,رابط النموذج,string,True,Lovable كما ظهر,قيمة أصلية محفوظة دون تغيير
+url_domain,نطاق الرابط,string,True,Lovable كما ظهر,قيمة أصلية محفوظة دون تغيير
+status,الحالة,string,True,Lovable كما ظهر,قيمة أصلية محفوظة دون تغيير
+evaluation,التقييم,string,True,Lovable كما ظهر,قيمة أصلية محفوظة دون تغيير
+work_hours,ساعات العمل,decimal,True,Lovable كما ظهر,قيمة أصلية محفوظة دون تغيير
+notes,الملاحظات والتوصيات,string,False,Lovable كما ظهر,قيمة أصلية محفوظة دون تغيير
+submitted_at_raw,تاريخ الإرسال الخام,string,True,Lovable كما ظهر,قيمة أصلية محفوظة دون تغيير
+submitted_at_iso,تاريخ الإرسال ISO,datetime,False,مشتق للترحيل,حقل أضيف لتسهيل التتبع والاستيراد دون استبدال القيمة الأصلية
+modified_at_raw,تاريخ التعديل الخام,string,True,Lovable كما ظهر,قيمة أصلية محفوظة دون تغيير
+modified_at_iso,تاريخ التعديل ISO,datetime,False,مشتق للترحيل,حقل أضيف لتسهيل التتبع والاستيراد دون استبدال القيمة الأصلية
+verification_status,حالة التحقق,string,True,Lovable كما ظهر,قيمة أصلية محفوظة دون تغيير
+field_check,فحص الحقول,string,True,Lovable كما ظهر,قيمة أصلية محفوظة دون تغيير
+url_check,فحص الرابط,string,True,Lovable كما ظهر,قيمة أصلية محفوظة دون تغيير
+status_check,فحص الحالة,string,True,Lovable كما ظهر,قيمة أصلية محفوظة دون تغيير
+hours_check,فحص الساعات,string,True,Lovable كما ظهر,قيمة أصلية محفوظة دون تغيير
+reread_check,فحص إعادة القراءة,string,True,Lovable كما ظهر,قيمة أصلية محفوظة دون تغيير
+verified_at_raw,وقت التحقق الخام,string,True,Lovable كما ظهر,قيمة أصلية محفوظة دون تغيير
+verified_at_iso,وقت التحقق ISO,datetime,False,مشتق للترحيل,حقل أضيف لتسهيل التتبع والاستيراد دون استبدال القيمة الأصلية
+duplicate_link_group_id,معرف مجموعة الرابط المكرر,string,False,مشتق للترحيل,حقل أضيف لتسهيل التتبع والاستيراد دون استبدال القيمة الأصلية
+duplicate_link_use_count,عدد استخدامات الرابط,integer,True,مشتق للترحيل,حقل أضيف لتسهيل التتبع والاستيراد دون استبدال القيمة الأصلية
+duplicate_within_account,تكرار داخل الحساب,boolean,True,مشتق للترحيل,حقل أضيف لتسهيل التتبع والاستيراد دون استبدال القيمة الأصلية
+duplicate_cross_account,تكرار بين الحسابات,boolean,True,مشتق للترحيل,حقل أضيف لتسهيل التتبع والاستيراد دون استبدال القيمة الأصلية

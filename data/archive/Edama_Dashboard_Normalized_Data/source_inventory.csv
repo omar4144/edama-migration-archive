@@ -1,0 +1,109 @@
+﻿bundle,path,extension,size_bytes,sha256,source_role,migration_scope,artifact_tool_import,sheet_count
+1,dashboard_bundle_1/الجهات المشاركة في الدفعة الأولى.xlsx,.xlsx,15604,2258fe4d4e7e73fe4c1ee122e6856715188aefc59ce1de3182c668ca4cebac2a,ORGANIZATION_ROSTER,IN_SCOPE_DATA,PASS,1
+1,dashboard_bundle_1/الدفعة 2/المستشار-سارة أبو الخير .xlsx,.xlsx,45979,19e9d0745e9500458cbd08601fe1058d86dd733d52b4f3e735802c474bee31a9,CONSULTANT_ACTIVITY,IN_SCOPE_DATA,PASS,8
+1,dashboard_bundle_1/الدفعة 2/المستشار-عزيز التوخي.xlsx,.xlsx,48139,14f03d4f809e441fa061446b30544884f29eb764ebca1e17fe2e644ad129a45e,CONSULTANT_ACTIVITY,IN_SCOPE_DATA,PASS,9
+1,dashboard_bundle_1/الدفعة 2/المستشار-فهد النوفل.xlsx,.xlsx,48592,a39b008610d1c4f81694b8e7894b65a68abee2a67f4263469d3f75cc0287a727,CONSULTANT_ACTIVITY,IN_SCOPE_DATA,PASS,9
+1,dashboard_bundle_1/الدفعة 2/المستشار-وديع الحربي.xlsx,.xlsx,44495,8dc789af5e19c3674820a7c62f8dd4d709a3a5c8f40b0f4eeef73df146cb97ed,CONSULTANT_ACTIVITY,IN_SCOPE_DATA,PASS,8
+1,dashboard_bundle_1/الدفعة 2/تقرير أداء الدفعة.xlsx,.xlsx,23247,53e1679ec8967596a8f6e4bd2bb987800770e3f5478c327eaecba3bed220d374,BATCH_KPI,IN_SCOPE_DATA,PASS,2
+1,dashboard_bundle_1/الدفعة 2/خطة الدفعة الثانية من مسرعةإدامة 09-POWER BI.xlsx,.xlsx,23474,4f67222061ed1ebd47597c83d5518431408808cdabf1800ff055806e34dc22e5,BATCH_PLAN,IN_SCOPE_DATA,PASS,3
+1,dashboard_bundle_1/الدفعة 3/المحكم-أحمد خواجي.xlsx,.xlsx,74454,fd4ea2310fb71e9a77ec91bde5f88bea791ae4730ab9fc7e472980858373497f,ARBITRATION,IN_SCOPE_DATA,PASS,7
+1,dashboard_bundle_1/الدفعة 3/المحكم-خالد الزهراني.xlsx,.xlsx,79384,53baf612a55a13ead5555587b5c9129958c2bd74c8113196c7f64be174bf8c91,ARBITRATION,IN_SCOPE_DATA,PASS,8
+1,dashboard_bundle_1/الدفعة 3/المحكم-خالد القرني.xlsx,.xlsx,81903,460aed6c0c6d584af3d8d038e05d2dd99ae162e27664251b295efbc3adde09d2,ARBITRATION,IN_SCOPE_DATA,PASS,8
+1,dashboard_bundle_1/الدفعة 3/المستشار-إســراء بـاقيس.xlsx,.xlsx,48477,e16e2719259938045b3bb36ddb483c91ca0ecd1cb2b73739e7892582926bc1c8,CONSULTANT_ACTIVITY,IN_SCOPE_DATA,PASS,9
+1,dashboard_bundle_1/الدفعة 3/المستشار-ظافر القرني.xlsx,.xlsx,44133,aaf2bcbe1df7361bdbd3b48188bf026b00d8314f22a2ffde7b74284534c2116b,CONSULTANT_ACTIVITY,IN_SCOPE_DATA,PASS,8
+1,dashboard_bundle_1/الدفعة 3/المستشار-عبدالرحمن موسى.xlsx,.xlsx,48304,325dcff76d5b632d3d5f5089aaf0cf4e39c664c78e4f35598efedd02caedb4d7,CONSULTANT_ACTIVITY,IN_SCOPE_DATA,PASS,9
+1,dashboard_bundle_1/الدفعة 3/المستشار-عزيـز التوخـي.xlsx,.xlsx,40374,58afceebd3a855ac76bb8b7f66bfa99989fee7734e413553b225523496c236f6,CONSULTANT_ACTIVITY,IN_SCOPE_DATA,PASS,7
+1,dashboard_bundle_1/الدفعة 3/بيانات الجهات3.xlsx,.xlsx,19012,01858b01d55ab5dd963e47cd7d35c46c63b42116a25efc30b9d2c7e49bc98f61,ORGANIZATION_ROSTER,IN_SCOPE_DATA,PASS,1
+1,dashboard_bundle_1/الدفعة 3/تقرير أداء الدفعة3.xlsx,.xlsx,16940,0203d6d3fe1ccf96096245e599e4ac02528eb6ae0f27d3ec2a51f07b3f567203,BATCH_KPI,IN_SCOPE_DATA,PASS,1
+1,dashboard_bundle_1/الدفعة 3/خطة الدفعة الثالثة.xlsx,.xlsx,19094,fee502fa51966293bbe10fc7b3496c10dd4d0ca4a594369f7412f9cab9a047a8,BATCH_PLAN,IN_SCOPE_DATA,PASS,1
+1,dashboard_bundle_1/الدفعة 4/المحكم-بتول الرويلي.xlsx,.xlsx,66683,0bec6c82921231af5992365350c6296b61e1a8765db3deb366844769ca17bf96,ARBITRATION,IN_SCOPE_DATA,PASS,6
+1,dashboard_bundle_1/الدفعة 4/المحكم-بندر الحارثي.xlsx,.xlsx,74267,3bb1647eaba4d1b6a440fdef7561d1249c27bb1a5973b2dc7087d22d81aa15e1,ARBITRATION,IN_SCOPE_DATA,PASS,7
+1,dashboard_bundle_1/الدفعة 4/المحكم-محمد العبدالجبار.xlsx,.xlsx,74235,d9a65272f470b8c7754edacc165ed0e3826f1d568046fae12487a632350c87f6,ARBITRATION,IN_SCOPE_DATA,PASS,7
+1,dashboard_bundle_1/الدفعة 4/المستشار-سعيد الغامدي.xlsx,.xlsx,43882,826d7a511236e239aea7850bed4643b9c4c00903d89808afe785839c5e3ce228,CONSULTANT_ACTIVITY,IN_SCOPE_DATA,PASS,8
+1,dashboard_bundle_1/الدفعة 4/المستشار-فهد ظافر.xlsx,.xlsx,43735,a189ac87cee31ee677c34fc87b03f35244dc257c6f60f9bbdab3bc71d527678e,CONSULTANT_ACTIVITY,IN_SCOPE_DATA,PASS,8
+1,dashboard_bundle_1/الدفعة 4/المستشار-محمد الحليبي.xlsx,.xlsx,43996,89bd9a858e58c125e6e8be4d3fa3ce31278419461d0c615a01f22c2cb64432fd,CONSULTANT_ACTIVITY,IN_SCOPE_DATA,PASS,8
+1,dashboard_bundle_1/الدفعة 4/المستشار-نجود السيد.xlsx,.xlsx,40526,2b618dd04d8ca4f4ce8ac06809f37e21689c917067532fa30774a2454acbc9ae,CONSULTANT_ACTIVITY,IN_SCOPE_DATA,PASS,7
+1,dashboard_bundle_1/الدفعة 4/المستشار-وديــع الحربي.xlsx,.xlsx,46004,327780679bb8fdcf1476e38bf0fa215e218ed3f21c24603ba673e81b5ec7dd4b,CONSULTANT_ACTIVITY,IN_SCOPE_DATA,PASS,9
+1,dashboard_bundle_1/الدفعة 4/بيانات الجهات4.xlsx,.xlsx,19589,074e8caf7e9f2202aae5d59283da6ba5691331ee305d82f5fe36b6cd225757b9,ORGANIZATION_ROSTER,IN_SCOPE_DATA,PASS,1
+1,dashboard_bundle_1/الدفعة 4/تقرير أداء الدفعة4.xlsx,.xlsx,16942,de10d3e31474b83acf00d58735ff7f21cd6041ef6f689028e0b36a8229dddf09,BATCH_KPI,IN_SCOPE_DATA,PASS,1
+1,dashboard_bundle_1/الدفعة 4/خطة الدفعة الرابعة.xlsx,.xlsx,21353,d38cd226dedb9a2b8aec4dd00e33e4066c5e512392654f73b3dba66b1d3d5fea,BATCH_PLAN,IN_SCOPE_DATA,PASS,2
+1,dashboard_bundle_1/المحكم-أبرار جيلاني.xlsx,.xlsx,97539,3328d6de719eac22547236305b256497cf4ae736910a2a7ead6e08373cf34072,ARBITRATION,IN_SCOPE_DATA,PASS,8
+1,dashboard_bundle_1/المحكم-حسين عواجي.xlsx,.xlsx,90762,dd752425510d061fa42c69742cd4870180128dac0aa85552836e754a579fcbf2,ARBITRATION,IN_SCOPE_DATA,PASS,7
+1,dashboard_bundle_1/المحكم-علي الدوسري.xlsx,.xlsx,90949,b0bf22f4aefd6b82523001f69f60dfc3123524a2323e701301388833bff7ce30,ARBITRATION,IN_SCOPE_DATA,PASS,7
+1,dashboard_bundle_1/المحكم-معلوي ال ناصر.xlsx,.xlsx,102561,94dce7fa8336496b6e34c4f8227b7df4c717f174411fbf828e6e1842f40f0ada,ARBITRATION,IN_SCOPE_DATA,PASS,9
+1,dashboard_bundle_1/مسرعة-دفعة2-ver3.pbix,.pbix,1488682,4a471eec913e74889ab4be1e566b7b61a164027951c7f8ff883b6ba2c7df4c84,POWER_BI_REPORT,IN_SCOPE_DATA,NOT_APPLICABLE,
+1,dashboard_bundle_1/نموذج تحكيم مخرجات تأسيس وحدات العمل التطوعي.xlsx,.xlsx,25388,e338cda2a9530e458df851cf40107b21e5f7490a41e7ce946fe0ce9b211d07aa,ARBITRATION_TEMPLATE,IN_SCOPE_DATA,FALLBACK_OPENXML,0
+2,dashboard_bundle_2/الهوية/00 Corporate Identity/EA CI 121124.pdf,.pdf,1812226,d0a34027c14e8f721cc23cb5a9aa87d7116618b9162fc2bdfea5feab1ce6b0d2,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/B-_patch-1-button.jpg,.jpg,48164,5fcbfa5cbf6972d2e7fda9c2f799a1c169c93ca7d49e40ab74b0d03569f2756b,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/B-_patch-2-button.jpg,.jpg,48628,b50e49a55dd6de27b22a3b6a0f26f893b81f24feb00f5e8c067145027667000a,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/B-_patch-3-button.jpg,.jpg,48331,632e4a5dbaf7cc146a2ef20847093b33987d71a13e70ec41ce361611c2dea32c,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/B-_patch-4-button.jpg,.jpg,48054,5c7b1234794746c3b97a7fc9d70fb8325d8fdc5a0e3a5ae80ea8e9e49770d48d,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Fonts/Fonts.png,.png,306012,3b3a6b12bb1cbe8e41170d7b055a6f3929bcaa24911977b3466b1b4e599989dc,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Fonts/alfont_com_SomarGX 4.ttf,.ttf,212804,95cd94569c7dfcdf92d41961c287d66fa789e3a674a9e31e9d559c6d2b9356f4,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Letterhead/EA Letterhead.png,.png,86278,4d4da4360e1edd290530d8f03fde84615f92bbcf1544469432f259a95762101e,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Letterhead/PDF/EA Letterhead.pdf,.pdf,407669,ec6c7b588211809e0fff357a8e8708acc3a155124022b07d54096223510cd4ee,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Letterhead/Word/EA Letterhead.docx,.docx,59184,43394c0bc2bd6e39b428bf94d2c009e3bd36b8281307e52ebd7c6af877ccc8a5,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Letterhead/Word/EA Letterhead.png,.png,36597,b4854b8515e01f34be56f6d36a15d8cc0c894211092acf84be62ca1d99c2c7f7,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Letterhead/Word/~$ Letterhead.docx,.docx,162,b59a987a133a3cf25a250dc15b112e34a3d366a935f69fc382eed03410bb9d56,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/2x/00 Master@2x-100.jpg,.jpg,150227,c6f7b4b224c70cd65c5cfcd0021457163529ee52b6d117c67de84b396d9d449f,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/2x/02 2nd Color@2x-100.jpg,.jpg,174657,1ecf6eeffd974514075caa4197d79da808b1204a4c069a4148414253ad65c722,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/2x/03 3rd Color@2x-100.jpg,.jpg,160963,e66711930955915f98181741953016995e28bae4c3285abde0769fdaba0f3a3d,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/2x/04 BW-1@2x-100.jpg,.jpg,117903,3629c784dfedcce774362e21766c49e5fc012e8ba21937ea9ea467b4d4b52fea,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/2x/05 BW-2@2x-100.jpg,.jpg,120983,68a34aa852d1f8701c0c2428eb705e84956f416a80932abceef86a0fb851d1a4,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/2x/06 Gray@2x-100.jpg,.jpg,108344,f2fa2cd614e2dacc0eeb43886d4c69e15090be65488261c2366a4bea856f391d,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/4x/00 Master@4x.png,.png,42153,2ed54dff5997de702c28629cce04a417160700416e5e2c57d532084f8b3d2e3a,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/4x/02 2nd Color@4x.png,.png,54781,57720b8b36719a336b6eda49ec9d9912f2f8c83cacfc7937a9abe438f9eb2808,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/4x/03 3rd Color@4x.png,.png,56060,a92ce5a2bcc497bec6344d3c442b5aaad5a1e42c662088f4fb2fae7f39d07f2d,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/4x/04 BW-1@4x.png,.png,41653,d1b88291b14994b69f78ae98d9e24f18f4e5c1defe4b5c73d90e2d8c9930c425,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/4x/05 BW-2@4x.png,.png,55899,edbf8a174cd618a0834129fd9f2096902e0281cd1099aa074d5ffaba65bb213d,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/4x/06 Gray@4x.png,.png,41796,c9a1ed6a846b3e32fe902e9a8ab8792564b6e7f4c745c6bd016577cbfb20efd9,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/PDF/00 Master.pdf,.pdf,72155,996b3ffdb4f43d925ebaebaac5df9295a3cdfd0e5e8619d4d6789ed755d0029c,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/PDF/02 2nd Color.pdf,.pdf,72059,0e582764a39678b4da051515259e6f518f5ee4b94986781dcaab8f122ecde36e,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/PDF/03 3rd Color.pdf,.pdf,72118,063ccf4094ac1a90ec80e602878fb2339965d380e1ac9b9a4473341520d559be,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/PDF/04 BW-1.pdf,.pdf,72072,5902e8323e1e1a28793d4b2d55c0d1e00a38471ffd30f24c11fd69f0e3eea161,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/PDF/05 BW-2.pdf,.pdf,72052,689e2349f256726080e9309b386ce3d55be67791933af9a91beb848b84a4d8b2,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/PDF/06 Gray.pdf,.pdf,72128,c54356a7650c7f938d9fb7057587d43710e595b8f1aead1efe098cb6ace14aeb,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/SVG/00 Master.svg,.svg,11217,893ca13c79b4b44aed9163db045435941bcd57b3ae38447a12f28f3933cdfa2a,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/SVG/02 2nd Color.svg,.svg,11181,7a949d1780678064bb00d5258d5901a5ad791f65fa0fe26544842407d59d570a,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/SVG/03 3rd Color.svg,.svg,11187,d3e67c05bbab88afb21976d78c5e460e70d89c12820dbbf442faed1b5be07aca,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/SVG/04 BW-1.svg,.svg,11150,8ab71e24d86a4ebbd68e0f7afeabc499c7660d94ee1c96fdbece299981c4d2b1,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/SVG/05 BW-2.svg,.svg,11173,013aefc7c2b0afd833b6d34e5865ce915807813aadf5a6fdbd973ccf3693f0b1,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Logo/SVG/06 Gray.svg,.svg,11131,a03718bd5471ffe81758f9eb47e30ca507d2b16ff1353732afafd70a850abf94,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Powerpoint/EA PowerPoint.pptx,.pptx,1330903,6ed75a29e8d96e4e0f181ed9ab41018e8fb9a5ba727410550848206239658f23,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/2x/A1@2x-100.jpg,.jpg,81937,f5555520343a53fa237c67f74e390a0c8bf2668f1dfa16c62f589be15a8cbba5,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/2x/A2@2x-100.jpg,.jpg,86778,48096c3fcc18a4738f5c998371f205059d39aff315d140309c99395024ab9c60,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/2x/A3@2x-100.jpg,.jpg,90465,258f34997cce8b65ae2b66b8727091a67c14e9c6d9baab4ae5c8c9cafb5227a6,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/2x/B1@2x-100.jpg,.jpg,96947,716dc3ef9b68a21fcd14295c9980a1f245615290d5e78af5c41aa31c9655dfde,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/2x/B2@2x-100.jpg,.jpg,93061,d6e4d0c669990e8eff9e4ebae2d2c4c8e19e711e33fb493c3f97a72ac5fb74c6,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/2x/B3@2x-100.jpg,.jpg,88899,7938a1ed18f0f988c7f74f8546aa1df8d8e950c7074352a6acba55bc0882867f,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/2x/C1@2x-100.jpg,.jpg,81646,e6b4cac58ea9cd664d1b058d8b498931cf65acd1bc492b487cfcc75e9e2e55a3,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/2x/C2@2x-100.jpg,.jpg,79812,a026e527bba1bfc510442b3e594ee4ff49ac9f010365c2aaeeedbb32d8891799,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/2x/C3@2x-100.jpg,.jpg,75859,9c52dc7c918eaaf3165c5061a083eed3b93ec72fb998d2449159e32d966dd162,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/4x/A1@4x.png,.png,22096,669ea78905cdde622d910fce9f82d2c6a8f44bcb87c54a30120bb7dc936da829,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/4x/A2@4x.png,.png,20147,10f38647c10142c054e65ce046ae7fd518005606a5f45694bae5bd497d04e873,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/4x/A3@4x.png,.png,19686,49851d33bd01310966cd7f70e15a26571ce822c138287d81eef5cd47030b367e,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/4x/B1@4x.png,.png,20378,5ef27d16e7cea2af912ee4f3bfc50ca1f8b6d61744131849063b7a0ed385acc4,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/4x/B2@4x.png,.png,20314,92a9155db0a97c64084fb1dec3e46ff42eb31c6ee1f2fe02ec6ea6f4cf9b73d8,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/4x/B3@4x.png,.png,22114,606333b6eb093789083e31f366f3af5e4b8d80c8dd2b601a6c47d1efb5930c49,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/4x/C1@4x.png,.png,9752,c42f81ef327c8e1a79726f14884f1559b4c9797572d1b2abf27df89610b90c18,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/4x/C2@4x.png,.png,9530,84a88dd0edcf6385da0eed742cf1bb323810b9f671209537e7d53baab334f1b8,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/4x/C3@4x.png,.png,11533,a96b28c6a60105c112b50624c63bb4ba23f5410a4db2d4f4e24db8ac7c2b7f70,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/PDF/A1.pdf,.pdf,71595,f92e470209607e2b9faac76d1c178bf0fda29725c635a05fc92808306aaeee43,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/PDF/A2.pdf,.pdf,71490,2fc05eb75d87b0fcba02fb49b50e2b5b925f1d24674f5f2b3dc58f01afcc407f,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/PDF/A3.pdf,.pdf,71497,6d524a07de93fad19d0256e83bb7587e2d99c33ee40dd26102798f553529bda6,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/PDF/B1.pdf,.pdf,71748,01d3af7aab14484839c456a84176a7ded19e974440374c55c83b8ad9c602e0c1,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/PDF/B2.pdf,.pdf,71752,df796a698dfa416181569b0a4fd6f6005b9b2d0f5c191fd8caabeaf552a2b1a7,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/PDF/B3.pdf,.pdf,71929,5b210afad93fbafdc4376ab51fdf5ac5595e2a8fea5868faaae6c77bea25d3dd,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/PDF/C1.pdf,.pdf,62950,9a1852b652d27e9318c7ca9fffb538168827a4b65756d780fa8af41c62cea09b,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/PDF/C2.pdf,.pdf,62953,926da10d020ac31fe8e325c378e6a564e5ed9cb1f712e52f46da18b17fc3d1c2,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/PDF/C3.pdf,.pdf,62975,bb3a6ff50de1854473e55efd48a49f246fb6790e634fbad6539c75f926bc7b44,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/SVG/A1.svg,.svg,10193,a4e09826492924e53d711513eacbf07bb71dd54aa0aa1ac47eb98d6f1e72bcf1,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/SVG/A2.svg,.svg,10095,86db6c209bf85054e678cdce072da38aa82a66c68fc7500dbfc20ab0e6df15ed,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/SVG/A3.svg,.svg,10095,282b889be003e3e19b9a91b8e6d277c339b92cee742796f2920deb9d6927fc71,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/SVG/B1.svg,.svg,10469,c73b4163c7b1145be035c3d05880cb6ce1bc7f877eaf41bdd32c58bd31038606,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/SVG/B2.svg,.svg,10476,49fc812f798bc7d2da76a2b459eb136ade5d07b6e37639f44105dcc02ae8c290,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/SVG/B3.svg,.svg,10584,accd70e58bd4c28cd1d02089e88a3c6fe6a66fef7385cd276e12e42811a28b57,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/SVG/C1.svg,.svg,895,a229117f39b4183d62f3f3c34d94a5dca7d0707b0b8b4bfc16f0bb4fc57f7bb7,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/SVG/C2.svg,.svg,895,326f574a13800e9046dc2fe7af3bb5d240ffba9e8eca108f0042d8328dc2b08b,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/الهوية/Profile Photo (Bio)/SVG/C3.svg,.svg,950,48b32c558ed985a2a1ce44e5ad8d9b18906e8dc998bdeb1b54eeafd7effbdb0c,BRAND_ASSET,REFERENCE_ONLY,NOT_APPLICABLE,
+2,dashboard_bundle_2/جمعيات الدفعة الاولى.xlsx,.xlsx,19902,c4753c4382e355cfa1d4bdb05e7596d2b1d9e7c9e23a01f9441cf65657612e41,ORGANIZATION_ROSTER,IN_SCOPE_DATA,PASS,3

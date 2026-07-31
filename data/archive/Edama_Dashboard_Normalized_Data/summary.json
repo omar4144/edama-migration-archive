@@ -1,0 +1,98 @@
+{
+  "generated_at": "2026-07-31T07:51:26+03:00",
+  "source_systems": [
+    "Lovable",
+    "Dashboard Excel/Power BI"
+  ],
+  "source_files_total": 108,
+  "source_excel_files": 34,
+  "source_power_bi_files": 1,
+  "legacy_organizations_by_cohort": {
+    "1": 24,
+    "2": 30,
+    "3": 29,
+    "4": 35
+  },
+  "legacy_organizations_total": 118,
+  "legacy_consultant_activities_by_cohort": {
+    "2": 1200,
+    "3": 1160,
+    "4": 1400
+  },
+  "legacy_consultant_activities_total": 3760,
+  "legacy_arbitration_records_by_cohort": {
+    "2": 1382,
+    "3": 1081,
+    "4": 940
+  },
+  "legacy_arbitration_records_total": 3403,
+  "legacy_arbitration_urls": 789,
+  "legacy_arbitration_unique_canonical_urls": 658,
+  "legacy_duplicate_link_groups": 67,
+  "xlsx_hyperlink_relationships": 775,
+  "xlsx_hyperlink_cell_applications": 789,
+  "legacy_review_metadata_status": {
+    "CONSISTENT": 1067,
+    "STALE_OR_MISMATCHED_TEMPLATE_METADATA": 2336
+  },
+  "consultant_activity_source_name_status": {
+    "CONSISTENT": 2720,
+    "NAME_VARIANT": 960,
+    "ROW_SHEET_MISMATCH": 80
+  },
+  "legacy_evaluation_status_by_cohort": {
+    "2": {
+      "غير مكتمل": 601,
+      "مكتمل": 728,
+      "يحتاج لتطوير": 53
+    },
+    "3": {
+      "غير مكتمل": 1081
+    },
+    "4": {
+      "غير مكتمل": 940
+    }
+  },
+  "batch_plan_rows": 120,
+  "batch_kpi_snapshots": 4,
+  "pbix_pages": 6,
+  "pbix_entities": 6,
+  "pbix_properties": 43,
+  "current_lovable_organizations": 57,
+  "current_lovable_records": 2565,
+  "organization_crosswalk_status": {
+    "EXACT_NORMALIZED": 56,
+    "LEGACY_ONLY": 61,
+    "PROBABLE_NAME_VARIANT": 1
+  },
+  "model_crosswalk_status": {
+    "CANDIDATE_EVOLVED_SCHEMA": 3,
+    "CURRENT_ONLY": 2,
+    "DIRECT_NAME_MATCH": 41,
+    "LEGACY_ONLY": 3
+  },
+  "current_record_crosswalk_status": {
+    "MATCHED_ORG_AND_MODEL": 1517,
+    "NO_DIRECT_MODEL_MATCH": 228,
+    "NO_LEGACY_ARBITRATION_RECORD": 820
+  },
+  "shared_canonical_urls_current_vs_legacy": 0,
+  "shared_canonical_urls": [],
+  "assignment_evaluator_status": {
+    "CHANGED": 5,
+    "NO_LEGACY_ASSIGNMENT": 20,
+    "SAME_NORMALIZED": 32
+  },
+  "assignment_consultant_status": {
+    "SAME_NORMALIZED": 57
+  },
+  "resolution_issues": 0,
+  "migration_policy": {
+    "raw_sources": "PRESERVE",
+    "organization_crosswalk": "ADVISORY_ONLY",
+    "probable_name_variants": "REVIEW_REQUIRED",
+    "evolved_model_candidates": "NO_AUTOMATIC_MERGE",
+    "current_lovable_records": "AUTHORITATIVE_CURRENT_STATE",
+    "dashboard_excel_records": "HISTORICAL_OPERATIONAL_STATE"
+  }
+}

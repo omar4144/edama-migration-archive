@@ -1,0 +1,50 @@
+﻿field_type,name
+entity,All ORG
+entity,last refresh time
+entity,التقرير العام
+entity,بيانات الجهات
+entity,خطة
+entity,خطة الدفعة
+property,آخر تحديث للبيانات
+property,اجمالي محتوى مرئي
+property,اجمالي واتساب
+property,اسم الجمعية
+property,اسم المحكم
+property,اسم المستشار
+property,اعادة تغريد اكس
+property,اعلان
+property,الأنشطة التفصيلية
+property,الانشطة المنجزة
+property,التاريخ
+property,الجهة
+property,القيمة الاقتصادية للساعات
+property,المرحلة
+property,المستشار
+property,المهمة
+property,النطاق الجغرافي 
+property,برومو
+property,تاريخ بداية التنفيذ
+property,تاريخ نهاية التنفيذ
+property,تعليقات اكس
+property,تغريدات اكس
+property,حالة الانجاز
+property,حالة التنفيذ
+property,رسائل واتساب
+property,عدد إدارة المسرعة
+property,عدد الجهات المشاركة
+property,عدد الساعات التطوعية
+property,عدد المحكمين
+property,عدد المخرجات المنجزة
+property,عدد المستشارين
+property,عدد متطوعين مستقطبين
+property,عدد مدراء التطوع
+property,فرص تطوعية معلنة
+property,لايكات اكس
+property,مجال العمل
+property,محادثات واتساب
+property,موشن
+property,نسبة الإنجاز
+property,نسبة الانجاز
+property,نسبة الانشطة المنجزة
+property,نسبة رضا مدراء التطوع
+property,نمط التنفيذ

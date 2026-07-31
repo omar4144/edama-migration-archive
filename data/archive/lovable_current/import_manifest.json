@@ -1,0 +1,126 @@
+{
+  "package_name": "Edama Unified Migration Package",
+  "schema_version": "1.0.0",
+  "generated_at": "2026-07-31T05:06:09+03:00",
+  "timezone": "Asia/Riyadh",
+  "classification": "CONFIDENTIAL_OPERATIONAL_DATA",
+  "record_count": 2565,
+  "files": [
+    {
+      "file_name": "edama_records.csv",
+      "size_bytes": 2085146,
+      "sha256": "49c0f3aeedd8623427d7db02dc2438a13993087489c8ea439a645402081864ac"
+    },
+    {
+      "file_name": "edama_records.json",
+      "size_bytes": 4616586,
+      "sha256": "2e7a698d9ee909994b6f7d97a95a723c5424911115ec67d3483fe05dda753cf9"
+    },
+    {
+      "file_name": "edama_records.jsonl",
+      "size_bytes": 4198488,
+      "sha256": "cb4cb985b055386d4459a6ff7a1a901af967aca2744e8cd4249e58d6ec803f25"
+    },
+    {
+      "file_name": "accounts.csv",
+      "size_bytes": 1077,
+      "sha256": "ed0581e96693cb57ed8766720bf28244e67a0ea68be949fe0bb98c491515eba5"
+    },
+    {
+      "file_name": "organizations.csv",
+      "size_bytes": 14186,
+      "sha256": "e065c7e9034d32898c908cd01ea1259041af6626bad62c752987c9caa0a42a8e"
+    },
+    {
+      "file_name": "people.csv",
+      "size_bytes": 1329,
+      "sha256": "d9180966031262877b09a5e402826cf55367d9b51a6439d52e70d8487cb29adf"
+    },
+    {
+      "file_name": "model_catalog.csv",
+      "size_bytes": 4691,
+      "sha256": "430c2495f92b0d5a6456ce3690044267dcb303df8290373280f5d4df2f75d5a6"
+    },
+    {
+      "file_name": "duplicate_links.csv",
+      "size_bytes": 105978,
+      "sha256": "1fc8ea7dec4b8652e0cf57e58f5460141ec4aca0f572a970755a6b6c6af5dbeb"
+    },
+    {
+      "file_name": "data_dictionary.csv",
+      "size_bytes": 6089,
+      "sha256": "fdddc233f1793b705d233fafacd74a5aa321c748f56d1e19a414f1e19b8fd412"
+    },
+    {
+      "file_name": "quality_report.json",
+      "size_bytes": 7381,
+      "sha256": "a7d2110c5d679c0d825ea917a9d1c5c6cfcca8fed7aeda6e71ae6bb018725058"
+    }
+  ],
+  "sources": [
+    {
+      "file_name": "Edama_Account1_Migration_Audit.xlsx",
+      "account_index": 1,
+      "evaluator_name": "بتول الرويلي",
+      "record_count": 225,
+      "size_bytes": 48335,
+      "sha256": "adbdb63a58e4f7d1c884a810c2874cabb443a8477ec7748d58ce23deb2bf1cd6"
+    },
+    {
+      "file_name": "Edama_Account2_Migration_Audit.xlsx",
+      "account_index": 2,
+      "evaluator_name": "خالد القرني",
+      "record_count": 270,
+      "size_bytes": 56698,
+      "sha256": "e57fcde340182c4aed643839ea367a0c476ea93299de4182f81cd933dc0c1a89"
+    },
+    {
+      "file_name": "Edama_Account3_Migration_Audit.xlsx",
+      "account_index": 3,
+      "evaluator_name": "سارة بالخير",
+      "record_count": 225,
+      "size_bytes": 48158,
+      "sha256": "504897b1061c5d379ce03a4235c1e2c9b5930caa1cb251ffc44571a09ec25079"
+    },
+    {
+      "file_name": "Edama_Account4_Migration_Audit.xlsx",
+      "account_index": 4,
+      "evaluator_name": "د. حسن ابو كافته",
+      "record_count": 225,
+      "size_bytes": 49602,
+      "sha256": "199c2d71b2c01f5b035f3c20474c90946cbe1de9d4a5d262ee801a066a610707"
+    },
+    {
+      "file_name": "Edama_Account5_Migration_Audit.xlsx",
+      "account_index": 5,
+      "evaluator_name": "خالد الزهراني",
+      "record_count": 315,
+      "size_bytes": 65603,
+      "sha256": "fbaa6a5a62382b292c2026dea8059116e1e014e71f318cb0a4aafae65b0733b3"
+    },
+    {
+      "file_name": "Edama_Account6_Migration_Audit.xlsx",
+      "account_index": 6,
+      "evaluator_name": "الشيخ بن عبدالسلام",
+      "record_count": 315,
+      "size_bytes": 63895,
+      "sha256": "0db5eb0406bf0c0ce5add07328d114a6207b3e471a5c01be0301762da5b0c7d8"
+    },
+    {
+      "file_name": "Edama_Account7_Migration_Audit.xlsx",
+      "account_index": 7,
+      "evaluator_name": "بندر الحارثي",
+      "record_count": 315,
+      "size_bytes": 63204,
+      "sha256": "dddcddb61a221c33990354a2773622a193f7f004aa38b5b4ef57664b3ff1236e"
+    },
+    {
+      "file_name": "Edama_Account8_Migration_Audit.xlsx",
+      "account_index": 8,
+      "evaluator_name": "محمد العبدالجبار",
+      "record_count": 675,
+      "size_bytes": 124347,
+      "sha256": "5e30f5d8e8f6fd293adc44ae59ae724904eba63c928e3207f82ea6f5ceb5913b"
+    }
+  ]
+}
