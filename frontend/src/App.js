@@ -6,16 +6,22 @@ import Login from "@/pages/Login";
 import ChangePassword from "@/pages/ChangePassword";
 import ForgotPassword from "@/pages/ForgotPassword";
 import ResetPassword from "@/pages/ResetPassword";
+import ExecutiveScene from "@/pages/admin/ExecutiveScene";
 import Reconciliation from "@/pages/admin/Reconciliation";
 import ReviewQueue from "@/pages/admin/ReviewQueue";
-import Organizations from "@/pages/admin/Organizations";
 import Records from "@/pages/admin/Records";
 import UsersPage from "@/pages/admin/Users";
 import AuditLog from "@/pages/admin/AuditLog";
 import DataQuality from "@/pages/admin/DataQuality";
 import CohortsMap from "@/pages/admin/CohortsMap";
 import CohortDetail from "@/pages/admin/CohortDetail";
-import OrganizationJourney from "@/pages/admin/OrganizationJourney";
+import UnifiedOrganizations from "@/pages/admin/UnifiedOrganizations";
+import UnifiedOrganization from "@/pages/admin/UnifiedOrganization";
+import EvaluatorsDirectory from "@/pages/admin/EvaluatorsDirectory";
+import EvaluatorDetail from "@/pages/admin/EvaluatorDetail";
+import ConsultantsDirectory from "@/pages/admin/ConsultantsDirectory";
+import ConsultantDetail from "@/pages/admin/ConsultantDetail";
+import ModelsHub from "@/pages/admin/ModelsHub";
 import ConsultantSubmissions from "@/pages/consultant/Submissions";
 import ConsultantActivities from "@/pages/consultant/Activities";
 import EvaluatorQueue from "@/pages/evaluator/Queue";
@@ -36,7 +42,6 @@ function RoleGuard({ roles, children }) {
   const { user } = useAuth();
   if (user === null) return <Loading />;
   if (user === false) return <Navigate to="/login" replace />;
-  // Force password change flow before any operational page is reachable
   if (user.must_change_password) return <Navigate to="/change-password" replace />;
   if (roles && !roles.includes(user.role)) return <Navigate to="/" replace />;
   return children;
@@ -47,19 +52,13 @@ function RootRedirect() {
   if (user === null) return <Loading />;
   if (user === false) return <Navigate to="/login" replace />;
   if (user.must_change_password) return <Navigate to="/change-password" replace />;
-  if (user.role === "admin") return <Navigate to="/admin/reconciliation" replace />;
+  if (user.role === "admin") return <Navigate to="/admin" replace />;
   if (user.role === "consultant") return <Navigate to="/consultant/submissions" replace />;
   if (user.role === "evaluator") return <Navigate to="/evaluator/queue" replace />;
   return <Navigate to="/login" replace />;
 }
 
-function Shell() {
-  return (
-    <AppShell>
-      <Outlet />
-    </AppShell>
-  );
-}
+function Shell() { return <AppShell><Outlet /></AppShell>; }
 
 export default function App() {
   return (
@@ -73,16 +72,24 @@ export default function App() {
           <Route path="/" element={<RootRedirect />} />
 
           <Route element={<RoleGuard roles={["admin"]}><Shell /></RoleGuard>}>
-            <Route path="/admin/reconciliation" element={<Reconciliation />} />
-            <Route path="/admin/review-queue" element={<ReviewQueue />} />
+            {/* Primary operational layer */}
+            <Route path="/admin" element={<ExecutiveScene />} />
             <Route path="/admin/cohorts" element={<CohortsMap />} />
             <Route path="/admin/cohorts/:cohort" element={<CohortDetail />} />
-            <Route path="/admin/organizations" element={<Organizations />} />
-            <Route path="/admin/organizations/:orgId/journey" element={<OrganizationJourney />} />
-            <Route path="/admin/records" element={<Records />} />
-            <Route path="/admin/data-quality" element={<DataQuality />} />
-            <Route path="/admin/users" element={<UsersPage />} />
-            <Route path="/admin/audit" element={<AuditLog />} />
+            <Route path="/admin/organizations" element={<UnifiedOrganizations />} />
+            <Route path="/admin/organizations/:orgId" element={<UnifiedOrganization />} />
+            <Route path="/admin/evaluators" element={<EvaluatorsDirectory />} />
+            <Route path="/admin/evaluators/:name" element={<EvaluatorDetail />} />
+            <Route path="/admin/consultants" element={<ConsultantsDirectory />} />
+            <Route path="/admin/consultants/:name" element={<ConsultantDetail />} />
+            <Route path="/admin/models-hub" element={<ModelsHub />} />
+            {/* Data management (secondary) */}
+            <Route path="/admin/data/reconciliation" element={<Reconciliation />} />
+            <Route path="/admin/data/mappings" element={<ReviewQueue />} />
+            <Route path="/admin/data/quality" element={<DataQuality />} />
+            <Route path="/admin/data/records" element={<Records />} />
+            <Route path="/admin/data/users" element={<UsersPage />} />
+            <Route path="/admin/data/audit" element={<AuditLog />} />
           </Route>
 
           <Route element={<RoleGuard roles={["consultant"]}><Shell /></RoleGuard>}>

@@ -15,6 +15,10 @@ from routes.consultant import router as consultant_router
 from routes.evaluator import router as evaluator_router
 from routes.dq import router as dq_router
 from routes.historical import router as historical_router
+from routes.exec_scene import router as exec_router
+from routes.directory import router as directory_router
+from routes.models_hub import router as models_hub_router
+from routes.unified_org import router as unified_org_router
 
 
 app = FastAPI(title="Edama — Musr'at Idama V8")
@@ -39,6 +43,10 @@ api.include_router(dq_router, prefix="/admin")  # /api/admin/dq/*
 api.include_router(historical_router)  # already has /admin/* & /evaluator/* prefixes
 api.include_router(consultant_router)
 api.include_router(evaluator_router)
+api.include_router(exec_router, prefix="/admin")  # /api/admin/exec/scene
+api.include_router(directory_router, prefix="/admin")  # /api/admin/directory/*
+api.include_router(models_hub_router, prefix="/admin")  # /api/admin/models-hub
+api.include_router(unified_org_router, prefix="/admin/unified")  # /api/admin/unified/organizations
 
 app.include_router(api)
 

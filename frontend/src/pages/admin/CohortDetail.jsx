@@ -39,7 +39,11 @@ export default function CohortDetail() {
           <tbody>
             {data.organizations.map((o) => (
               <tr key={o.legacy_org_id}>
-                <td className="text-sm">{o.organization_name}</td>
+                <td className="text-sm">
+                  <Link to={`/admin/organizations/${o.legacy_org_id}`} className="text-navy font-medium hover:text-turquoise">
+                    {o.organization_name}
+                  </Link>
+                </td>
                 <td className="text-sm">{o.consultants || "—"}</td>
                 <td className="text-sm">{o.evaluators || "—"}</td>
                 <td className="num">{o.activity_count}</td>
