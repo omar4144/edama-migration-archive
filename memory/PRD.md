@@ -3,40 +3,39 @@
 ## Original problem statement
 Unified RTL Arabic platform consolidating historical Excel + Lovable data. Role-based (Admin/Consultant/Arbitrator) with strict raw-data protection.
 
-## What's been implemented (through Iteration 11)
-- **Iterations 1-9**: Auth + dedup v4 (families + decisions), brand identity, cutover (Executive Scene / Review Queue / Family Detail / Participating Orgs), Family-view for org/evaluator/models-hub.
-- **Iteration 10 policy (AUTO_APPROVE_WIDE_GAP_IDENTICAL)**: 392 families auto-VERSION_LINKED when everything but the date matches. Review drop: 868 → 476.
-- **Iteration 11 policy (AUTO_LINK_EVALUATOR_REASSIGNMENT, 2026-07-31)** ✅ current:
-  - Evaluator mismatch is no longer a review trigger by itself. Legacy evaluator = المحكم السابق (preserved on that version); Lovable evaluator = المحكم الحالي (drives current assignment/queue).
-  - `_evaluator_reassigned` suffix appears on `version_resubmit` and `close_dates_compatible_decisions` reasons when evaluators differ. `auto_linked_evaluator_reassignment` reason for same-decision cases.
-  - Bulk SYSTEM audit log entry added: `action=AUTO_LINK_EVALUATOR_REASSIGNMENT`, `previous_reason=evaluator_mismatch_cross_source`, `new_status=VERSION_LINKED`.
-  - **Result: 364 families need review** (was 476). Breakdown: 226 `no_direct_model_match_only_org` + 138 `wide_gap_conflicting_decisions`. 12 additional wide_gap_conflicting cases surfaced (they were hidden behind the previous evaluator-mismatch hard gate — now correctly reviewed because their decisions truly conflict).
-  - Version distribution enriched: 346 resubmission_version_resubmit + 30 resubmission_completion_then_result + 392 auto_approved_identical + 75 auto_linked_evaluator_reassignment + 34+3 `_evaluator_reassigned` tagged variants.
-  - Raw data untouched. Every version stays in its family Timeline with its original evaluator.
+## What's been implemented (through Iteration 12)
+- **Iterations 1-11**: Auth + dedup v4 (families + decisions), Edama brand identity, full cutover, participating orgs registry, three progressive bulk policies (AUTO_APPROVE_WIDE_GAP_IDENTICAL 392, AUTO_LINK_EVALUATOR_REASSIGNMENT 112, — 12 surfaced as wide_gap_conflicting).
+- **Iteration 12 (Review Queue Closure, 2026-07-31)** ✅ current — TWO final policies:
+  - **AUTO_ACCEPT_LATEST_LOVABLE_DECISION** (138 families): `wide_gap_conflicting_decisions` → `VERSION_LINKED / latest_lovable_decision_authoritative`. Lovable version is the operational current decision; legacy holds prior context in Timeline. Never overwrites raw.
+  - **AUTO_MAP_LEGACY_MODEL_TO_CURRENT** (226 families): `no_direct_model_match_only_org` → `VERSION_LINKED / legacy_model_mapped_to_current`. Lovable defines the current model/decision/evaluator; legacy remains contextual within the org's timeline.
+  - Both bulk policies logged as SYSTEM entries in `review_audit_log`.
+  - **REVIEW_REQUIRED = 0**. Nav auto-hides «قائمة المراجعة» when count is 0; endpoint + page preserved. AppShell now polls `/admin/canonical/exec-scene` on mount to derive count dynamically.
 
-## Key numbers (2026-07-31 post-policy)
-- 45 model_types · **3,521 journeys** · **5,038 versions** · 3,521 latest_outputs
+## Final numbers (verified 2026-07-31 post all policies)
+- 45 model_types · **3,521 journeys** · **5,038 versions** · **3,521 latest_outputs** — unchanged
 - 2,366 approved · 947 rejected · 35 needs improvement · 138 pending
-- **364 review-required journeys** (dynamic, never hardcoded)
-- Hours: **1,203 per_model (Lovable, primary operational)** · 1,605 per_org_cohort (archival only, collapsed in UI)
+- **0 review-required** ✅
+- VERSION_LINKED breakdown (current-side): 392 auto_approved_identical + 346 resubmission_version_resubmit + 30 completion_then_result + 226 legacy_model_mapped + 138 latest_lovable_authoritative + 75 evaluator_reassignment + 34+3 `_evaluator_reassigned` tagged
+- Hours: **1,203 per_model** (Lovable, primary operational) · 1,605 per_org_cohort (archival, collapsed detail)
+- 175 candidate orgs, 0 confirmed (admin-driven manual)
 
-## Prioritized backlog
+## Prioritized backlog (Iteration 12+)
 
-### P1 — Iteration 10/11 remainder
-- **Consultant + Evaluator role dashboards** read from `canonical_submission_families`.
-- **Family Timeline evaluator display**: label legacy row as «المحكم السابق»; header shows current Lovable evaluator.
-- **RBAC enforcement**: ensure legacy-only evaluators do NOT see the family in their active queue; Lovable evaluator drives assignment.
-- **مشاركة رابط الرحلة**: deep link + return_url button on FamilyDetail.
-- **Full RBAC + Mobile regression via testing_agent** across all admin pages.
+### P1 — Roles and mobile
+- **Consultant + Evaluator dashboards** read from `canonical_submission_families`, with the same Timeline pattern.
+- **Family Timeline evaluator labels**: legacy row shows «المحكم السابق»; family header shows «المحكم الحالي» from Lovable exclusively.
+- **RBAC enforcement**: legacy-only evaluators do NOT see the family in their active work queue; only Lovable evaluator drives assignment.
+- **مشاركة رابط الرحلة**: deep link `/admin/family/FAM-000006` + return_url on FamilyDetail.
+- **RBAC + Mobile regression** via testing_agent.
 
 ### P2 — Backlog (deferred)
-- Live Lovable Sync (pending credentials + enrollment_id availability).
+- Live Lovable Sync (pending credentials + enrollment_id).
 - Reports export.
 - Multi-Program support.
 
 ## Key files
 - Backend: `/app/backend/decisions.py`, `/app/backend/routes/{canonical,participating_orgs}.py`, `/app/backend/migrations/{build_canonical,report_dedup_v4,family_key_audit}.py`
-- Frontend: `/app/frontend/src/pages/admin/{ExecutiveScene,ReviewQueue,FamilyDetail,ParticipatingOrgs,UnifiedOrganization,EvaluatorDetail,ModelsHub}.jsx`
+- Frontend: `/app/frontend/src/pages/admin/{ExecutiveScene,ReviewQueue,FamilyDetail,ParticipatingOrgs,UnifiedOrganization,EvaluatorDetail,ModelsHub}.jsx`, `/app/frontend/src/components/layout/AppShell.jsx` (with dynamic review-count nav)
 - Reports: `/app/memory/{DEDUP_REPORT_V4,FAMILY_KEY_AUDIT}.md`
 
 ## Credentials

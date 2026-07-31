@@ -168,9 +168,10 @@ def _classify_pair(cw: dict, cur: dict, leg: dict) -> tuple[str, str, int, list[
         return ("PROBABLE_CROSS_SOURCE_MATCH", f"close_dates_compatible_decisions{evaluator_tag}", 70, ev, extras)
 
     if diff > 3 and trans == "conflict":
-        # Wide-gap conflicting decisions remain review-worthy — the disagreement
-        # itself is the problem, not the evaluator assignment.
-        return ("REVIEW_REQUIRED", "wide_gap_conflicting_decisions", 40, ev, extras)
+        # Bulk policy AUTO_ACCEPT_LATEST_LOVABLE_DECISION: Lovable version is
+        # the authoritative operational update. Legacy holds the previous
+        # decision but does not veto the current one.
+        return ("VERSION_LINKED", "latest_lovable_decision_authoritative", 80, ev, extras)
     if diff > 3 and trans == "same_decision":
         # Bulk policies applied here:
         #   AUTO_APPROVE_WIDE_GAP_IDENTICAL (same evaluator + same decision)
@@ -328,18 +329,21 @@ async def build():  # noqa: C901
             })
 
         elif status == "NO_DIRECT_MODEL_MATCH":
+            # Bulk policy AUTO_MAP_LEGACY_MODEL_TO_CURRENT: org-level legacy
+            # context exists but no direct model peer. Treat the current
+            # Lovable record as the authoritative model definition. Legacy
+            # rows remain visible only via the org's other families' timelines
+            # (they belong to different model journeys within the same org).
             base.update({
-                "match_status": "REVIEW_REQUIRED",
-                "match_reason": "no_direct_model_match_only_org",
-                "confidence": 40,
+                "match_status": "VERSION_LINKED",
+                "match_reason": "legacy_model_mapped_to_current",
+                "confidence": 80,
             })
-            counters["REVIEW_REQUIRED"] += 1
-            review_reason_counts["no_direct_model_match_only_org"] = \
-                review_reason_counts.get("no_direct_model_match_only_org", 0) + 1
+            counters["VERSION_LINKED"] += 1
             crosswalks.append({
                 "canonical_id": cid, "source": "current", "raw_id": mig,
-                "match_reason": "no_direct_model_match_only_org",
-                "confidence": 40, "evidence": [f"raw_model_name={base['model_name']}"],
+                "match_reason": "legacy_model_mapped_to_current",
+                "confidence": 80, "evidence": [f"raw_model_name={base['model_name']}"],
             })
 
         elif status == "MATCHED_ORG_AND_MODEL" and cw.get("legacy_review_id"):
@@ -787,12 +791,24 @@ async def build():  # noqa: C901
     await coll("review_audit_log").insert_one({
         "at": datetime.now(timezone.utc).isoformat(),
         "kind": "bulk_policy_applied",
-        "action": "AUTO_LINK_EVALUATOR_REASSIGNMENT",
-        "policy_reason": "lovable_evaluator_is_current_assignment — evaluator differing alone is not a review trigger",
-        "previous_reason": "evaluator_mismatch_cross_source",
+        "action": "AUTO_ACCEPT_LATEST_LOVABLE_DECISION",
+        "policy_reason": "lovable_is_latest_operational_update — legacy conflicting decision is prior context, not a veto",
+        "previous_reason": "wide_gap_conflicting_decisions",
         "previous_status": "REVIEW_REQUIRED",
         "new_status": "VERSION_LINKED",
-        "new_reason": "auto_linked_evaluator_reassignment (+ _evaluator_reassigned suffix on version_resubmit/completion_then_result)",
+        "new_reason": "latest_lovable_decision_authoritative",
+        "actor_email": "SYSTEM",
+        "actor_id": None,
+    })
+    await coll("review_audit_log").insert_one({
+        "at": datetime.now(timezone.utc).isoformat(),
+        "kind": "bulk_policy_applied",
+        "action": "AUTO_MAP_LEGACY_MODEL_TO_CURRENT",
+        "policy_reason": "legacy_and_lovable_are_one_model_journey — org matched, current defines model",
+        "previous_reason": "no_direct_model_match_only_org",
+        "previous_status": "REVIEW_REQUIRED",
+        "new_status": "VERSION_LINKED",
+        "new_reason": "legacy_model_mapped_to_current",
         "actor_email": "SYSTEM",
         "actor_id": None,
     })

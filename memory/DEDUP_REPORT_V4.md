@@ -1,6 +1,6 @@
 # تقرير Canonical Deduplication — الإصدار الرابع (v4)
 
-_مُنشأ في: 2026-07-31T21:01:58.914316+00:00 — logic_version: v4_families_and_decisions_
+_مُنشأ في: 2026-07-31T21:16:05.818563+00:00 — logic_version: v4_families_and_decisions_
 
 
 ## 1) الإضافات الجوهرية على v3
@@ -28,7 +28,7 @@ _مُنشأ في: 2026-07-31T21:01:58.914316+00:00 — logic_version: v4_familie
 | Full lifecycle (legacy → current) | 1019 | 28.9% |
 | Current only (لم يسبقها تحكيم تاريخي) | 724 | 20.6% |
 | Legacy only (لا يوجد استلام حالي) | 1778 | 50.5% |
-| Rows including at least one REVIEW_REQUIRED | 364 | 10.3% |
+| Rows including at least one REVIEW_REQUIRED | 0 | 0.0% |
 
 ### توزيع آخر قرار مطبّع (على مستوى الرحلة)
 
@@ -52,8 +52,8 @@ _مُنشأ في: 2026-07-31T21:01:58.914316+00:00 — logic_version: v4_familie
 
 | match_status | v3 (both sides) | v4 (both sides) | التغيير |
 | --- | --- | --- | --- |
-| VERSION_LINKED | 2201 | 2254 | 53 |
-| REVIEW_REQUIRED | 560 | 507 | -53 |
+| VERSION_LINKED | 2201 | 2761 | 560 |
+| REVIEW_REQUIRED | 560 | 0 | -560 |
 | EXACT_CROSS_SOURCE_MATCH | 0 | 0 | 0 |
 | PROBABLE_CROSS_SOURCE_MATCH | 0 | 0 | 0 |
 | CURRENT_ONLY | 499 | 499 | 0 |
@@ -70,9 +70,7 @@ _مُنشأ في: 2026-07-31T21:01:58.914316+00:00 — logic_version: v4_familie
 
 | السبب | العدد | ملاحظة |
 | --- | --- | --- |
-| no_direct_model_match_only_org | 226 | crosswalk = NO_DIRECT_MODEL_MATCH — تطابق جهة فقط |
-| wide_gap_conflicting_decisions | 138 | قراران متعارضان دون نمط نسخة واضح |
-| **الإجمالي (current-side)** | 364 |  |
+| **الإجمالي (current-side)** | 0 |  |
 
 ## 4) الساعات — لا تُجمع أبدًا كرقم واحد
 
@@ -371,11 +369,11 @@ _مُنشأ في: 2026-07-31T21:01:58.914316+00:00 — logic_version: v4_familie
 | آخر قرار مطبّع | APPROVED |
 | آخر حالة اكتمال | COMPLETE |
 | آخر تاريخ | 2026-01-18 |
-| يحتاج مراجعة؟ | نعم |
+| يحتاج مراجعة؟ | لا |
 
 | # | canonical_id | source | التاريخ | raw decision | decision (normalized) | completion | match_status | match_reason |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | CANON-000010 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | no_direct_model_match_only_org |
+| 1 | CANON-000010 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | VERSION_LINKED | legacy_model_mapped_to_current |
 
 ### رحلة 15 — Current only — لا نسخة تاريخية
 
@@ -390,11 +388,11 @@ _مُنشأ في: 2026-07-31T21:01:58.914316+00:00 — logic_version: v4_familie
 | آخر قرار مطبّع | APPROVED |
 | آخر حالة اكتمال | COMPLETE |
 | آخر تاريخ | 2026-01-21 |
-| يحتاج مراجعة؟ | نعم |
+| يحتاج مراجعة؟ | لا |
 
 | # | canonical_id | source | التاريخ | raw decision | decision (normalized) | completion | match_status | match_reason |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | CANON-000014 | current | 2026-01-21 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | no_direct_model_match_only_org |
+| 1 | CANON-000014 | current | 2026-01-21 | مقبول | APPROVED | COMPLETE | VERSION_LINKED | legacy_model_mapped_to_current |
 
 ### رحلة 16 — Legacy only — لا استلام حالي
 
@@ -422,7 +420,7 @@ _مُنشأ في: 2026-07-31T21:01:58.914316+00:00 — logic_version: v4_familie
 - **عدد النسخ (Canonicals):** 5,038
 - **عدد أحدث المخرجات التشغيلية:** 3,521
 - **رحلات كاملة (تاريخية + حالية):** 1,019
-- **رحلات في المراجعة:** 364
+- **رحلات في المراجعة:** 0
 - **الساعات:** 1,203 س Lovable per_model | 1,605 س Legacy per_org_cohort — لا جمع.
 
 **البنود المفتوحة قبل UI Cutover:**

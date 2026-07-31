@@ -21,6 +21,8 @@ REASON_AR = {
     "resubmission_completion_then_result_evaluator_reassigned": "استكمال ثم قرار مع إعادة تكليف محكم",
     "close_dates_compatible_decisions_evaluator_reassigned": "تواريخ متقاربة وقرارات متوافقة مع إعادة تكليف محكم",
     "no_direct_model_match_only_org": "تطابق الجهة فقط دون نموذج مطابق",
+    "legacy_model_mapped_to_current": "معتمد تلقائيًا — نموذج تاريخي رُبط بالنموذج الحالي",
+    "latest_lovable_decision_authoritative": "معتمد تلقائيًا — قرار Lovable الأحدث هو المرجع",
     "missing_date_no_auto_merge": "تاريخ ناقص — لا دمج تلقائي",
     "missing_date_and_uncertain": "تاريخ ناقص وغموض في القرار",
     "unknown_decision_state": "قرار غير معروف",

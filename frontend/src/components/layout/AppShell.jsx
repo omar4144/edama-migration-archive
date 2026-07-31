@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
+import api from "@/lib/api";
 import { Menu, X, ChevronDown } from "lucide-react";
 
-const PRIMARY = [
+const PRIMARY_BASE = [
   { to: "/admin", label: "المشهد التنفيذي", testid: "nav-exec", end: true },
-  { to: "/admin/review-queue", label: "قائمة المراجعة", testid: "nav-review" },
   { to: "/admin/participating-organizations", label: "سجل الجمعيات", testid: "nav-participating" },
   { to: "/admin/organizations", label: "الجهات", testid: "nav-orgs" },
   { to: "/admin/evaluators", label: "المحكمون", testid: "nav-evaluators" },
@@ -40,12 +40,23 @@ export default function AppShell({ children }) {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [dataOpen, setDataOpen] = useState(false);
+  const [reviewCount, setReviewCount] = useState(0);
+
+  useEffect(() => {
+    if (user?.role !== "admin") return;
+    api.get("/admin/canonical/exec-scene")
+       .then((r) => setReviewCount(r.data?.terminology?.review_required_journeys || 0))
+       .catch(() => {});
+  }, [user?.role]);
 
   const handleLogout = async () => { await logout(); navigate("/login", { replace: true }); };
   const closeMenu = () => setMenuOpen(false);
 
   const isAdmin = user?.role === "admin";
   const secondary = isAdmin ? SECONDARY : [];
+  const PRIMARY = isAdmin && reviewCount > 0
+    ? [PRIMARY_BASE[0], { to: "/admin/review-queue", label: `قائمة المراجعة (${reviewCount})`, testid: "nav-review" }, ...PRIMARY_BASE.slice(1)]
+    : PRIMARY_BASE;
   const primary = isAdmin ? PRIMARY : user?.role === "consultant" ? CONSULTANT_NAV : EVALUATOR_NAV;
 
   return (
