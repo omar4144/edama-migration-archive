@@ -162,7 +162,10 @@ def _classify_pair(cw: dict, cur: dict, leg: dict) -> tuple[str, str, int, list[
     if diff > 3 and trans == "conflict":
         return ("REVIEW_REQUIRED", "wide_gap_conflicting_decisions", 40, ev, extras)
     if diff > 3 and trans == "same_decision":
-        return ("REVIEW_REQUIRED", "wide_gap_identical_decision", 50, ev, extras)
+        # Bulk policy AUTO_APPROVE_WIDE_GAP_IDENTICAL: same org + model + evaluator
+        # + normalized decision → one journey across two linked versions. Wide
+        # date gap alone is NOT a review trigger when everything else agrees.
+        return ("VERSION_LINKED", "auto_approved_identical_after_wide_gap", 85, ev, extras)
     if trans == "unknown":
         return ("REVIEW_REQUIRED", "unknown_decision_state", 35, ev, extras)
 
@@ -752,7 +755,22 @@ async def build():  # noqa: C901
     await coll("dedup_reports").insert_one({
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "logic_version": "v4_families_and_decisions",
+        "policy_applied": "AUTO_APPROVE_WIDE_GAP_IDENTICAL",
         "stats": stats,
+    })
+
+    # Bulk-decision audit entry (not attributed to any user — bulk rule)
+    await coll("review_audit_log").insert_one({
+        "at": datetime.now(timezone.utc).isoformat(),
+        "kind": "bulk_policy_applied",
+        "action": "AUTO_APPROVE_WIDE_GAP_IDENTICAL",
+        "policy_reason": "same_org_model_normalized_decision — wide date gap alone is not a review trigger",
+        "previous_reason": "wide_gap_identical_decision",
+        "previous_status": "REVIEW_REQUIRED",
+        "new_status": "VERSION_LINKED",
+        "new_reason": "auto_approved_identical_after_wide_gap",
+        "actor_email": "SYSTEM",
+        "actor_id": None,
     })
     return stats
 

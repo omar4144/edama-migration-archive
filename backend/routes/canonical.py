@@ -13,6 +13,7 @@ router = APIRouter(prefix="/canonical", tags=["canonical"])
 # -- Arabic label maps used by the UI badges --
 REASON_AR = {
     "wide_gap_identical_decision": "قراران متطابقان بفارق زمني كبير — يحتاج مراجعة",
+    "auto_approved_identical_after_wide_gap": "معتمد تلقائيًا — تطابق كامل رغم فارق التاريخ",
     "wide_gap_conflicting_decisions": "قراران متعارضان — يحتاج مراجعة",
     "evaluator_mismatch_cross_source": "اختلاف المحكم بين المصدرين",
     "no_direct_model_match_only_org": "تطابق الجهة فقط دون نموذج مطابق",

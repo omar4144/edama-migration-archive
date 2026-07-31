@@ -1,6 +1,6 @@
 # تقرير Canonical Deduplication — الإصدار الرابع (v4)
 
-_مُنشأ في: 2026-07-31T20:10:35.156318+00:00 — logic_version: v4_families_and_decisions_
+_مُنشأ في: 2026-07-31T20:56:16.206102+00:00 — logic_version: v4_families_and_decisions_
 
 
 ## 1) الإضافات الجوهرية على v3
@@ -28,7 +28,7 @@ _مُنشأ في: 2026-07-31T20:10:35.156318+00:00 — logic_version: v4_familie
 | Full lifecycle (legacy → current) | 1019 | 28.9% |
 | Current only (لم يسبقها تحكيم تاريخي) | 724 | 20.6% |
 | Legacy only (لا يوجد استلام حالي) | 1778 | 50.5% |
-| Rows including at least one REVIEW_REQUIRED | 868 | 24.7% |
+| Rows including at least one REVIEW_REQUIRED | 476 | 13.5% |
 
 ### توزيع آخر قرار مطبّع (على مستوى الرحلة)
 
@@ -52,8 +52,8 @@ _مُنشأ في: 2026-07-31T20:10:35.156318+00:00 — logic_version: v4_familie
 
 | match_status | v3 (both sides) | v4 (both sides) | التغيير |
 | --- | --- | --- | --- |
-| VERSION_LINKED | 2201 | 1137 | -1064 |
-| REVIEW_REQUIRED | 560 | 1624 | 1064 |
+| VERSION_LINKED | 2201 | 1949 | -252 |
+| REVIEW_REQUIRED | 560 | 812 | 252 |
 | EXACT_CROSS_SOURCE_MATCH | 0 | 0 | 0 |
 | PROBABLE_CROSS_SOURCE_MATCH | 0 | 0 | 0 |
 | CURRENT_ONLY | 499 | 499 | 0 |
@@ -70,11 +70,10 @@ _مُنشأ في: 2026-07-31T20:10:35.156318+00:00 — logic_version: v4_familie
 
 | السبب | العدد | ملاحظة |
 | --- | --- | --- |
-| wide_gap_identical_decision | 392 | كلا الطرفين APPROVED لكن التاريخان بعيدان؛ إعادة تحكيم أو خلل مصدر |
 | no_direct_model_match_only_org | 226 | crosswalk = NO_DIRECT_MODEL_MATCH — تطابق جهة فقط |
 | wide_gap_conflicting_decisions | 126 | قراران متعارضان دون نمط نسخة واضح |
 | evaluator_mismatch_cross_source | 124 | اختلاف المحكم بين المصدرين |
-| **الإجمالي (current-side)** | 868 |  |
+| **الإجمالي (current-side)** | 476 |  |
 
 ## 4) الساعات — لا تُجمع أبدًا كرقم واحد
 
@@ -110,12 +109,12 @@ _مُنشأ في: 2026-07-31T20:10:35.156318+00:00 — logic_version: v4_familie
 | آخر قرار مطبّع | APPROVED |
 | آخر حالة اكتمال | COMPLETE |
 | آخر تاريخ | 2026-01-18 |
-| يحتاج مراجعة؟ | نعم |
+| يحتاج مراجعة؟ | لا |
 
 | # | canonical_id | source | التاريخ | raw decision | decision (normalized) | completion | match_status | match_reason |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | CANON-003064 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
-| 2 | CANON-000001 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
+| 1 | CANON-003064 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
+| 2 | CANON-000001 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
 
 ### رحلة 2 — جمعية المشي والجري
 
@@ -130,12 +129,12 @@ _مُنشأ في: 2026-07-31T20:10:35.156318+00:00 — logic_version: v4_familie
 | آخر قرار مطبّع | APPROVED |
 | آخر حالة اكتمال | COMPLETE |
 | آخر تاريخ | 2026-01-18 |
-| يحتاج مراجعة؟ | نعم |
+| يحتاج مراجعة؟ | لا |
 
 | # | canonical_id | source | التاريخ | raw decision | decision (normalized) | completion | match_status | match_reason |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | CANON-003061 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
-| 2 | CANON-000002 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
+| 1 | CANON-003061 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
+| 2 | CANON-000002 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
 
 ### رحلة 3 — جمعية المشي والجري
 
@@ -150,12 +149,12 @@ _مُنشأ في: 2026-07-31T20:10:35.156318+00:00 — logic_version: v4_familie
 | آخر قرار مطبّع | APPROVED |
 | آخر حالة اكتمال | COMPLETE |
 | آخر تاريخ | 2026-01-18 |
-| يحتاج مراجعة؟ | نعم |
+| يحتاج مراجعة؟ | لا |
 
 | # | canonical_id | source | التاريخ | raw decision | decision (normalized) | completion | match_status | match_reason |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | CANON-003062 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
-| 2 | CANON-000003 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
+| 1 | CANON-003062 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
+| 2 | CANON-000003 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
 
 ### رحلة 4 — جمعية المشي والجري
 
@@ -170,12 +169,12 @@ _مُنشأ في: 2026-07-31T20:10:35.156318+00:00 — logic_version: v4_familie
 | آخر قرار مطبّع | APPROVED |
 | آخر حالة اكتمال | COMPLETE |
 | آخر تاريخ | 2026-01-18 |
-| يحتاج مراجعة؟ | نعم |
+| يحتاج مراجعة؟ | لا |
 
 | # | canonical_id | source | التاريخ | raw decision | decision (normalized) | completion | match_status | match_reason |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | CANON-003063 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
-| 2 | CANON-000004 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
+| 1 | CANON-003063 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
+| 2 | CANON-000004 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
 
 ### رحلة 5 — جمعية المشي والجري
 
@@ -190,12 +189,12 @@ _مُنشأ في: 2026-07-31T20:10:35.156318+00:00 — logic_version: v4_familie
 | آخر قرار مطبّع | APPROVED |
 | آخر حالة اكتمال | COMPLETE |
 | آخر تاريخ | 2026-01-18 |
-| يحتاج مراجعة؟ | نعم |
+| يحتاج مراجعة؟ | لا |
 
 | # | canonical_id | source | التاريخ | raw decision | decision (normalized) | completion | match_status | match_reason |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | CANON-003060 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
-| 2 | CANON-000005 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
+| 1 | CANON-003060 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
+| 2 | CANON-000005 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
 
 ### رحلة 6 — مؤسسة الاميرة العنود
 
@@ -210,12 +209,12 @@ _مُنشأ في: 2026-07-31T20:10:35.156318+00:00 — logic_version: v4_familie
 | آخر قرار مطبّع | APPROVED |
 | آخر حالة اكتمال | COMPLETE |
 | آخر تاريخ | 2026-01-18 |
-| يحتاج مراجعة؟ | نعم |
+| يحتاج مراجعة؟ | لا |
 
 | # | canonical_id | source | التاريخ | raw decision | decision (normalized) | completion | match_status | match_reason |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | CANON-002876 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
-| 2 | CANON-000030 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
+| 1 | CANON-002876 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
+| 2 | CANON-000030 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
 
 ### رحلة 7 — مؤسسة الاميرة العنود
 
@@ -230,12 +229,12 @@ _مُنشأ في: 2026-07-31T20:10:35.156318+00:00 — logic_version: v4_familie
 | آخر قرار مطبّع | APPROVED |
 | آخر حالة اكتمال | COMPLETE |
 | آخر تاريخ | 2026-01-18 |
-| يحتاج مراجعة؟ | نعم |
+| يحتاج مراجعة؟ | لا |
 
 | # | canonical_id | source | التاريخ | raw decision | decision (normalized) | completion | match_status | match_reason |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | CANON-002873 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
-| 2 | CANON-000031 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
+| 1 | CANON-002873 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
+| 2 | CANON-000031 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
 
 ### رحلة 8 — مؤسسة الاميرة العنود
 
@@ -250,12 +249,12 @@ _مُنشأ في: 2026-07-31T20:10:35.156318+00:00 — logic_version: v4_familie
 | آخر قرار مطبّع | APPROVED |
 | آخر حالة اكتمال | COMPLETE |
 | آخر تاريخ | 2026-01-18 |
-| يحتاج مراجعة؟ | نعم |
+| يحتاج مراجعة؟ | لا |
 
 | # | canonical_id | source | التاريخ | raw decision | decision (normalized) | completion | match_status | match_reason |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | CANON-002874 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
-| 2 | CANON-000032 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
+| 1 | CANON-002874 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
+| 2 | CANON-000032 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
 
 ### رحلة 9 — مؤسسة الاميرة العنود
 
@@ -270,12 +269,12 @@ _مُنشأ في: 2026-07-31T20:10:35.156318+00:00 — logic_version: v4_familie
 | آخر قرار مطبّع | APPROVED |
 | آخر حالة اكتمال | COMPLETE |
 | آخر تاريخ | 2026-01-18 |
-| يحتاج مراجعة؟ | نعم |
+| يحتاج مراجعة؟ | لا |
 
 | # | canonical_id | source | التاريخ | raw decision | decision (normalized) | completion | match_status | match_reason |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | CANON-002875 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
-| 2 | CANON-000033 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
+| 1 | CANON-002875 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
+| 2 | CANON-000033 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
 
 ### رحلة 10 — مؤسسة الاميرة العنود
 
@@ -290,12 +289,12 @@ _مُنشأ في: 2026-07-31T20:10:35.156318+00:00 — logic_version: v4_familie
 | آخر قرار مطبّع | APPROVED |
 | آخر حالة اكتمال | COMPLETE |
 | آخر تاريخ | 2026-01-18 |
-| يحتاج مراجعة؟ | نعم |
+| يحتاج مراجعة؟ | لا |
 
 | # | canonical_id | source | التاريخ | raw decision | decision (normalized) | completion | match_status | match_reason |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | CANON-002872 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
-| 2 | CANON-000034 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
+| 1 | CANON-002872 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
+| 2 | CANON-000034 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
 
 ### رحلة 11 — رحلة كاملة (REJECTED → APPROVED)
 
@@ -310,12 +309,12 @@ _مُنشأ في: 2026-07-31T20:10:35.156318+00:00 — logic_version: v4_familie
 | آخر قرار مطبّع | APPROVED |
 | آخر حالة اكتمال | COMPLETE |
 | آخر تاريخ | 2026-01-19 |
-| يحتاج مراجعة؟ | نعم |
+| يحتاج مراجعة؟ | لا |
 
 | # | canonical_id | source | التاريخ | raw decision | decision (normalized) | completion | match_status | match_reason |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | CANON-003066 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
-| 2 | CANON-000006 | current | 2026-01-19 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
+| 1 | CANON-003066 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
+| 2 | CANON-000006 | current | 2026-01-19 | مقبول | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
 
 ### رحلة 12 — رحلة كاملة (REJECTED → APPROVED)
 
@@ -330,15 +329,15 @@ _مُنشأ في: 2026-07-31T20:10:35.156318+00:00 — logic_version: v4_familie
 | آخر قرار مطبّع | APPROVED |
 | آخر حالة اكتمال | COMPLETE |
 | آخر تاريخ | 2026-01-18 |
-| يحتاج مراجعة؟ | نعم |
+| يحتاج مراجعة؟ | لا |
 
 | # | canonical_id | source | التاريخ | raw decision | decision (normalized) | completion | match_status | match_reason |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | CANON-002830 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
-| 2 | CANON-002924 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
-| 3 | CANON-003018 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
-| 4 | CANON-003065 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
-| 5 | CANON-000007 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
+| 1 | CANON-002830 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
+| 2 | CANON-002924 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
+| 3 | CANON-003018 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
+| 4 | CANON-003065 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
+| 5 | CANON-000007 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | VERSION_LINKED | auto_approved_identical_after_wide_gap |
 
 ### رحلة 13 — رحلة كاملة (REJECTED → APPROVED)
 
@@ -360,74 +359,14 @@ _مُنشأ في: 2026-07-31T20:10:35.156318+00:00 — logic_version: v4_familie
 | 1 | CANON-003085 | legacy | 2025-08-16 | غير مجاز | REJECTED | COMPLETE | VERSION_LINKED | resubmission_version_resubmit |
 | 2 | CANON-000008 | current | 2026-01-21 | مقبول | APPROVED | COMPLETE | VERSION_LINKED | resubmission_version_resubmit |
 
-### رحلة 14 — مراجعة — wide_gap_identical_decision (كلاهما مجاز)
+### رحلة 14 — مراجعة — evaluator_mismatch_cross_source
 
 | الحقل | قيمة |
 | --- | --- |
-| Family ID | FAM-000016 |
-| الجهة | جمعية المشي والجري |
-| النموذج | دليل المتطوع |
-| Model definition ID | MODEL-016 |
-| عدد النسخ | 2 |
-| الرحلة | legacy + current |
-| آخر قرار مطبّع | APPROVED |
-| آخر حالة اكتمال | COMPLETE |
-| آخر تاريخ | 2026-01-18 |
-| يحتاج مراجعة؟ | نعم |
-
-| # | canonical_id | source | التاريخ | raw decision | decision (normalized) | completion | match_status | match_reason |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | CANON-003076 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
-| 2 | CANON-000016 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
-
-### رحلة 15 — مراجعة — wide_gap_identical_decision (كلاهما مجاز)
-
-| الحقل | قيمة |
-| --- | --- |
-| Family ID | FAM-000036 |
-| الجهة | مؤسسة الاميرة العنود |
-| النموذج | نموذج خطة سد الفجوات |
-| Model definition ID | MODEL-007 |
-| عدد النسخ | 2 |
-| الرحلة | legacy + current |
-| آخر قرار مطبّع | APPROVED |
-| آخر حالة اكتمال | COMPLETE |
-| آخر تاريخ | 2026-01-18 |
-| يحتاج مراجعة؟ | نعم |
-
-| # | canonical_id | source | التاريخ | raw decision | decision (normalized) | completion | match_status | match_reason |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | CANON-002877 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
-| 2 | CANON-000036 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | wide_gap_identical_decision |
-
-### رحلة 16 — مراجعة — evaluator_mismatch_cross_source
-
-| الحقل | قيمة |
-| --- | --- |
-| Family ID | FAM-000480 |
+| Family ID | FAM-000493 |
 | الجهة | جمعية أفق لتطوير العمل الخيري والتطوعي |
-| النموذج | أداة إدارة الفرص التطوعية |
-| Model definition ID | MODEL-008 |
-| عدد النسخ | 2 |
-| الرحلة | legacy + current |
-| آخر قرار مطبّع | APPROVED |
-| آخر حالة اكتمال | COMPLETE |
-| آخر تاريخ | 2026-01-28 |
-| يحتاج مراجعة؟ | نعم |
-
-| # | canonical_id | source | التاريخ | raw decision | decision (normalized) | completion | match_status | match_reason |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | CANON-001957 | legacy | 2025-08-16 | غير مجاز | REJECTED | COMPLETE | REVIEW_REQUIRED | evaluator_mismatch_cross_source |
-| 2 | CANON-000480 | current | 2026-01-28 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | evaluator_mismatch_cross_source |
-
-### رحلة 17 — مراجعة — evaluator_mismatch_cross_source
-
-| الحقل | قيمة |
-| --- | --- |
-| Family ID | FAM-000484 |
-| الجهة | جمعية أفق لتطوير العمل الخيري والتطوعي |
-| النموذج | الميثاق الأخلاقي للمتطوع |
-| Model definition ID | MODEL-012 |
+| النموذج | نموذج المقابلة الشخصية |
+| Model definition ID | MODEL-021 |
 | عدد النسخ | 2 |
 | الرحلة | legacy + current |
 | آخر قرار مطبّع | APPROVED |
@@ -437,10 +376,30 @@ _مُنشأ في: 2026-07-31T20:10:35.156318+00:00 — logic_version: v4_familie
 
 | # | canonical_id | source | التاريخ | raw decision | decision (normalized) | completion | match_status | match_reason |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | CANON-001947 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | REVIEW_REQUIRED | evaluator_mismatch_cross_source |
-| 2 | CANON-000484 | current | 2026-01-26 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | evaluator_mismatch_cross_source |
+| 1 | CANON-001945 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | REVIEW_REQUIRED | evaluator_mismatch_cross_source |
+| 2 | CANON-000493 | current | 2026-01-26 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | evaluator_mismatch_cross_source |
 
-### رحلة 18 — Current only — لا نسخة تاريخية
+### رحلة 15 — مراجعة — evaluator_mismatch_cross_source
+
+| الحقل | قيمة |
+| --- | --- |
+| Family ID | FAM-000487 |
+| الجهة | جمعية أفق لتطوير العمل الخيري والتطوعي |
+| النموذج | دليل السياسات والإجراءات |
+| Model definition ID | MODEL-015 |
+| عدد النسخ | 2 |
+| الرحلة | legacy + current |
+| آخر قرار مطبّع | APPROVED |
+| آخر حالة اكتمال | COMPLETE |
+| آخر تاريخ | 2026-01-26 |
+| يحتاج مراجعة؟ | نعم |
+
+| # | canonical_id | source | التاريخ | raw decision | decision (normalized) | completion | match_status | match_reason |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | CANON-001940 | legacy | 2025-08-16 | مجاز | APPROVED | COMPLETE | REVIEW_REQUIRED | evaluator_mismatch_cross_source |
+| 2 | CANON-000487 | current | 2026-01-26 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | evaluator_mismatch_cross_source |
+
+### رحلة 16 — Current only — لا نسخة تاريخية
 
 | الحقل | قيمة |
 | --- | --- |
@@ -459,7 +418,7 @@ _مُنشأ في: 2026-07-31T20:10:35.156318+00:00 — logic_version: v4_familie
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | CANON-000010 | current | 2026-01-18 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | no_direct_model_match_only_org |
 
-### رحلة 19 — Current only — لا نسخة تاريخية
+### رحلة 17 — Current only — لا نسخة تاريخية
 
 | الحقل | قيمة |
 | --- | --- |
@@ -478,7 +437,7 @@ _مُنشأ في: 2026-07-31T20:10:35.156318+00:00 — logic_version: v4_familie
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | CANON-000014 | current | 2026-01-21 | مقبول | APPROVED | COMPLETE | REVIEW_REQUIRED | no_direct_model_match_only_org |
 
-### رحلة 20 — Legacy only — لا استلام حالي
+### رحلة 18 — Legacy only — لا استلام حالي
 
 | الحقل | قيمة |
 | --- | --- |
@@ -504,7 +463,7 @@ _مُنشأ في: 2026-07-31T20:10:35.156318+00:00 — logic_version: v4_familie
 - **عدد النسخ (Canonicals):** 5,038
 - **عدد أحدث المخرجات التشغيلية:** 3,521
 - **رحلات كاملة (تاريخية + حالية):** 1,019
-- **رحلات في المراجعة:** 868
+- **رحلات في المراجعة:** 476
 - **الساعات:** 1,203 س Lovable per_model | 1,605 س Legacy per_org_cohort — لا جمع.
 
 **البنود المفتوحة قبل UI Cutover:**

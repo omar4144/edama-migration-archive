@@ -56,29 +56,28 @@ export default function ExecutiveScene() {
         </div>
       </div>
 
-      {/* Hours — two separate meters, NEVER summed */}
-      <h2 className="text-lg font-bold mb-3">مؤشرا الساعات (وحدتان مختلفتان — لا تُجمعان)</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8" data-testid="hours-meters">
+      {/* Hours — Primary operational (Lovable) + Secondary archival (Legacy) */}
+      <h2 className="text-lg font-bold mb-3">ساعات التحكيم المسجلة للنماذج</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4" data-testid="hours-meters">
         <div className="border border-turquoise-200 bg-turquoise-50/40 rounded-md p-5">
-          <div className="stat-label">ساعات تحكيم النماذج الحالية</div>
+          <div className="stat-label">المؤشر التشغيلي الأساسي</div>
           <div className="mt-2 flex items-baseline gap-2">
             <div className="text-4xl font-mono font-bold text-turquoise-700">{num(t.hours_current_per_model, 0)}</div>
             <div className="text-sm text-edGray-700">ساعة</div>
           </div>
-          <div className="text-xs text-edGray-700 mt-2" title="كل صف = ساعات محكم واحد على نموذج واحد">
-            الوحدة: <b>لكل نموذج / تحكيم فردي</b> (Lovable بعد إزالة التكرارات الداخلية)
+          <div className="text-xs text-edGray-700 mt-2">
+            الوحدة: <b>لكل نموذج</b> — ساعات محكم فردية مسجّلة في Lovable بعد إزالة التكرارات الداخلية.
           </div>
         </div>
-        <div className="border border-edGreen-200 bg-edGreen-50/40 rounded-md p-5">
-          <div className="stat-label">ساعات العمل التاريخية</div>
-          <div className="mt-2 flex items-baseline gap-2">
-            <div className="text-4xl font-mono font-bold text-edGreen-700">{num(t.hours_legacy_per_org_cohort, 0)}</div>
-            <div className="text-sm text-edGray-700">ساعة</div>
+        <details className="border border-edGray-200 bg-white rounded-md p-5" data-testid="legacy-hours-detail">
+          <summary className="cursor-pointer">
+            <span className="stat-label">ساعات تاريخية تقديرية للجهات</span>
+            <span className="mr-2 num text-lg text-edGray-700">{num(t.hours_legacy_per_org_cohort, 0)} ساعة</span>
+          </summary>
+          <div className="text-xs text-edGray-700 mt-3 leading-relaxed">
+            قيمة أرشيفية مسجلة على مستوى الجهة والدفعة (~15 ساعة لكل جهة × دفعة)، وليست ساعات منفصلة لكل نموذج. <b>لا تُستخدم كمؤشر تشغيلي</b> ولا تُجمع مع ساعات Lovable.
           </div>
-          <div className="text-xs text-edGray-700 mt-2" title="مجموع ساعات الجهة في الدفعة — واحد لكل (جهة × دفعة)">
-            الوحدة: <b>لكل (جهة × دفعة)</b> — قيمة الجهة تُطبع على كل صف نموذج، لذا استخرجت مرة واحدة لكل جهة/دفعة
-          </div>
-        </div>
+        </details>
       </div>
 
       {/* Lifecycle breakdown of the 3,521 journeys */}
