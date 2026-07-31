@@ -1,222 +1,178 @@
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import api from "@/lib/api";
-import { num, resolveUrl, sourceBadge, evaluationTone } from "@/lib/util";
-import { ExternalLink } from "lucide-react";
+import { num } from "@/lib/util";
+
+const DECISION_TONE = {
+  APPROVED: "border-edGreen text-edGreen-700 bg-edGreen-50",
+  REJECTED: "border-edGray-200 text-edGray-700 bg-white",
+  NEEDS_IMPROVEMENT: "border-orange text-orange bg-orange-50",
+  PENDING: "border-orange text-orange bg-white",
+};
 
 export default function ModelsHub() {
-  const [params, setParams] = useSearchParams();
-  const [data, setData] = useState({ items: [], total: 0, total_current: 0, total_legacy: 0 });
-  const [detail, setDetail] = useState(null);
-  const [offset, setOffset] = useState(0);
-  const limit = 50;
-
-  const f = {
-    q: params.get("q") || "",
-    evaluation: params.get("evaluation") || "",
-    category: params.get("category") || "",
-    source: params.get("source") || "",
-    cohort: params.get("cohort") || "",
-    no_url: params.get("no_url") === "true",
-  };
-  const update = (k, v) => {
-    const next = new URLSearchParams(params);
-    if (v) next.set(k, v); else next.delete(k);
-    setOffset(0);
-    setParams(next);
-  };
+  const [sp, setSp] = useSearchParams();
+  const view = sp.get("view") || "latest";  // latest | versions
+  const [data, setData] = useState(null);
+  const limit = 100;
+  const offset = parseInt(sp.get("offset") || "0", 10);
 
   useEffect(() => {
-    const p = new URLSearchParams({ limit, offset });
-    if (f.q) p.append("q", f.q);
-    if (f.evaluation) p.append("evaluation", f.evaluation);
-    if (f.category) p.append("category", f.category);
-    if (f.source) p.append("source", f.source);
-    if (f.cohort) p.append("cohort", f.cohort);
-    if (f.no_url) p.append("no_url", "true");
-    api.get(`/admin/models-hub?${p}`).then((r) => setData(r.data));
-    // eslint-disable-next-line
-  }, [params.toString(), offset]);
+    const p = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+    if (sp.get("latest_decision")) p.set("latest_decision", sp.get("latest_decision"));
+    if (sp.get("has_review") === "true") p.set("has_review", "true");
+    if (sp.get("lifecycle")) p.set("lifecycle", sp.get("lifecycle"));
+    if (sp.get("evaluator")) p.set("evaluator", sp.get("evaluator"));
+    if (sp.get("org_id")) p.set("org_id", sp.get("org_id"));
+    const path = view === "versions"
+      ? `/admin/canonical/submissions?${p}${sp.get("match_status") ? "&match_status=" + sp.get("match_status") : ""}`
+      : `/admin/canonical/families?${p}`;
+    api.get(path).then((r) => setData(r.data));
+  }, [sp.toString(), view]);
 
-  const openDetail = async (id) => {
-    const { data } = await api.get(`/admin/models-hub/${encodeURIComponent(id)}`);
-    setDetail(data);
+  const set = (k, v) => {
+    const n = new URLSearchParams(sp);
+    if (v) n.set(k, v); else n.delete(k);
+    n.delete("offset");
+    setSp(n);
   };
+
+  if (!data) return <div className="text-edGray-700">…جارٍ التحميل</div>;
 
   return (
     <div data-testid="models-hub">
-      <h1 className="text-3xl font-semibold mb-2">النماذج والتحكيمات</h1>
-      <p className="text-navy/70 mb-6">مركز موحّد للبحث. المصدر شارة داخل التفاصيل، وليس فلترًا رئيسيًا.</p>
-
-      <div className="flex gap-2 flex-wrap mb-4" data-testid="filters">
-        <input className="field-input w-64" placeholder="بحث في الجهة أو النموذج…" value={f.q} onChange={(e) => update("q", e.target.value)} data-testid="filter-q" />
-        <select className="field-input w-auto" value={f.evaluation} onChange={(e) => update("evaluation", e.target.value)} data-testid="filter-evaluation">
-          <option value="">كل القرارات</option>
-          <option value="مقبول">مقبول</option>
-          <option value="يحتاج لتطوير">يحتاج لتطوير</option>
-          <option value="غير مكتمل">غير مكتمل</option>
-          <option value="مجاز">مجاز</option>
-        </select>
-        <select className="field-input w-auto" value={f.category} onChange={(e) => update("category", e.target.value)} data-testid="filter-category">
-          <option value="">كل الفئات</option>
-          <option value="نماذج المستشار">نماذج المستشار</option>
-          <option value="نماذج المنظمة">نماذج المنظمة</option>
-          <option value="نماذج المسرعة">نماذج المسرعة</option>
-        </select>
-        <select className="field-input w-auto" value={f.cohort} onChange={(e) => update("cohort", e.target.value)} data-testid="filter-cohort">
-          <option value="">كل الدفعات</option>
-          <option value="1">دفعة 1</option>
-          <option value="2">دفعة 2</option>
-          <option value="3">دفعة 3</option>
-          <option value="4">دفعة 4</option>
-        </select>
-        <select className="field-input w-auto" value={f.source} onChange={(e) => update("source", e.target.value)} data-testid="filter-source">
-          <option value="">حالي وتاريخي</option>
-          <option value="current">حالي فقط</option>
-          <option value="legacy">تاريخي فقط</option>
-        </select>
-        <label className="flex items-center gap-2 text-sm border border-navy/25 px-3">
-          <input type="checkbox" checked={f.no_url} onChange={(e) => update("no_url", e.target.checked ? "true" : "")} data-testid="filter-no-url" />
-          بدون رابط
-        </label>
+      <div className="mb-4">
+        <div className="stat-label mb-2">مركز رحلات النماذج</div>
+        <h1 className="text-3xl font-bold">
+          {view === "versions" ? "جميع النسخ" : "أحدث المخرجات"}
+        </h1>
       </div>
 
-      <div className="text-sm text-navy/60 mb-2 num" data-testid="total-info">
-        {data.total.toLocaleString("en-US")} نتيجة · حالي {data.total_current.toLocaleString("en-US")} · تاريخي {data.total_legacy.toLocaleString("en-US")}
+      {/* View toggle */}
+      <div className="flex flex-wrap gap-2 mb-4" data-testid="view-toggle">
+        <button
+          onClick={() => set("view", "latest")}
+          className={`px-4 py-2 rounded-md text-sm border ${view === "latest" ? "bg-turquoise text-white border-turquoise" : "bg-white text-navy border-edGray-200 hover:border-turquoise"}`}
+          data-testid="view-latest"
+        >
+          أحدث المخرجات <span className="num opacity-70">(3,521)</span>
+        </button>
+        <button
+          onClick={() => set("view", "versions")}
+          className={`px-4 py-2 rounded-md text-sm border ${view === "versions" ? "bg-turquoise text-white border-turquoise" : "bg-white text-navy border-edGray-200 hover:border-turquoise"}`}
+          data-testid="view-versions"
+        >
+          جميع النسخ <span className="num opacity-70">(5,038)</span>
+        </button>
       </div>
 
-      <div className="border border-navy/15 bg-white overflow-x-auto">
-        <table className="tech-table" data-testid="models-table">
+      {/* Filters */}
+      <div className="flex flex-wrap gap-2 mb-4" data-testid="filters">
+        {view === "latest" && (
+          <>
+            <select className="field-input w-auto" value={sp.get("latest_decision") || ""} onChange={(e) => set("latest_decision", e.target.value)} data-testid="filter-decision">
+              <option value="">كل القرارات</option>
+              <option value="APPROVED">معتمد</option>
+              <option value="REJECTED">مرفوض</option>
+              <option value="NEEDS_IMPROVEMENT">يحتاج تطوير</option>
+              <option value="PENDING">معلّق</option>
+            </select>
+            <select className="field-input w-auto" value={sp.get("has_review") || ""} onChange={(e) => set("has_review", e.target.value)} data-testid="filter-review">
+              <option value="">كل حالات المراجعة</option>
+              <option value="true">تحتاج مراجعة فقط</option>
+            </select>
+            <select className="field-input w-auto" value={sp.get("lifecycle") || ""} onChange={(e) => set("lifecycle", e.target.value)} data-testid="filter-lifecycle">
+              <option value="">كل الرحلات</option>
+              <option value="full">كاملة (تاريخي → حالي)</option>
+              <option value="current_only">حالي فقط</option>
+              <option value="legacy_only">تاريخي فقط</option>
+            </select>
+          </>
+        )}
+        {view === "versions" && (
+          <select className="field-input w-auto" value={sp.get("match_status") || ""} onChange={(e) => set("match_status", e.target.value)} data-testid="filter-status">
+            <option value="">كل الحالات</option>
+            <option value="VERSION_LINKED">نسخ مرتبطة</option>
+            <option value="REVIEW_REQUIRED">تحتاج مراجعة</option>
+            <option value="CURRENT_ONLY">حالي فقط</option>
+            <option value="LEGACY_ONLY">تاريخي فقط</option>
+          </select>
+        )}
+      </div>
+
+      <div className="text-sm text-edGray-700 mb-2 num">إجمالي: {num(data.total)}</div>
+
+      <div className="border border-edGray-200 bg-white rounded-md overflow-x-auto">
+        <table className="tech-table">
           <thead>
-            <tr>
-              <th>النموذج</th><th>الجهة</th><th>الدفعة</th><th>المحكم</th><th>المستشار</th><th>القرار</th><th>الحالة</th><th>الساعات</th><th>الرابط</th><th></th>
-            </tr>
+            {view === "latest" ? (
+              <tr>
+                <th>النموذج</th><th>الجهة</th><th>آخر قرار</th><th>عدد النسخ</th>
+                <th>المحكم</th><th>آخر تاريخ</th><th>مراجعة</th><th></th>
+              </tr>
+            ) : (
+              <tr>
+                <th>Canonical</th><th>الجهة</th><th>النموذج</th><th>المصدر</th>
+                <th>القرار</th><th>الحالة</th><th>التاريخ</th><th></th>
+              </tr>
+            )}
           </thead>
           <tbody>
-            {data.items.map((r) => {
-              const url = resolveUrl(r);
-              const src = sourceBadge(r.source);
-              return (
-                <tr key={r.id} className="hover:bg-ivory-100 cursor-pointer" onClick={() => openDetail(r.id)} data-testid={`row-${r.id}`}>
-                  <td className="text-sm">
-                    <span className="text-navy">{r.model_name || "—"}</span>
-                    <div className="text-xs num text-navy/50 flex items-center gap-1">
-                      <span>{r.id}</span>
-                      <span className={`pill border text-[10px] ${src.cls}`}>{src.label}</span>
-                    </div>
-                  </td>
-                  <td className="text-sm">
-                    {r.organization_id ? (
-                      <Link to={`/admin/organizations/${r.organization_id}`} className="hover:text-turquoise" onClick={(e) => e.stopPropagation()}>
-                        {r.organization_name}
-                      </Link>
-                    ) : r.organization_name}
-                  </td>
-                  <td className="num">{r.cohort || "—"}</td>
-                  <td className="text-xs">
-                    {r.evaluator_name ? (
-                      <Link to={`/admin/evaluators/${encodeURIComponent(r.evaluator_name)}`} className="hover:text-turquoise" onClick={(e) => e.stopPropagation()}>
-                        {r.evaluator_name}
-                      </Link>
-                    ) : "—"}
-                  </td>
-                  <td className="text-xs">
-                    {r.consultant_name ? (
-                      <Link to={`/admin/consultants/${encodeURIComponent(r.consultant_name)}`} className="hover:text-turquoise" onClick={(e) => e.stopPropagation()}>
-                        {r.consultant_name}
-                      </Link>
-                    ) : "—"}
-                  </td>
-                  <td className={`text-sm ${evaluationTone(r.evaluation)}`}>{r.evaluation || "—"}</td>
-                  <td className="text-xs">{r.status || "—"}</td>
-                  <td className="num">{r.work_hours ?? "—"}</td>
-                  <td>
-                    {url ? (
-                      <a href={url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="inline-flex items-center gap-1 text-turquoise-600 hover:underline text-sm" data-testid={`open-${r.id}`}>
-                        فتح <ExternalLink size={11} />
-                      </a>
-                    ) : <span className="text-xs text-navy/40">—</span>}
-                  </td>
-                  <td className="text-left"><button className="btn-outline text-xs" onClick={(e) => { e.stopPropagation(); openDetail(r.id); }} data-testid={`detail-${r.id}`}>تفاصيل</button></td>
-                </tr>
-              );
-            })}
-            {data.items.length === 0 && <tr><td colSpan={10} className="text-center text-navy/50 py-6">لا نتائج</td></tr>}
+            {view === "latest" && (data.items || []).map((f) => (
+              <tr key={f.family_id} className="hover:bg-turquoise-50/40" data-testid={`row-${f.family_id}`}>
+                <td className="text-sm">
+                  <div>{f.model_name}</div>
+                  <div className="text-xs num text-edGray-700">{f.family_id}</div>
+                </td>
+                <td>
+                  <Link to={`/admin/organizations/${f.organization_id}`} className="text-navy hover:text-turquoise-700">
+                    {f.organization_name}
+                  </Link>
+                </td>
+                <td><span className={`pill text-xs ${DECISION_TONE[f.latest_decision || "PENDING"]}`}>{f.latest_decision_ar}</span></td>
+                <td className="num">{f.version_count}</td>
+                <td className="text-sm">{f.latest_evaluator_name || "—"}</td>
+                <td className="text-xs num text-edGray-700">{(f.latest_date || "").slice(0, 10) || "—"}</td>
+                <td>{f.has_review_required ? <span className="pill text-xs border-orange text-orange bg-orange-50">مراجعة</span> : "—"}</td>
+                <td><Link to={`/admin/family/${f.family_id}`} className="btn-outline text-xs">فتح</Link></td>
+              </tr>
+            ))}
+            {view === "versions" && (data.items || []).map((c) => (
+              <tr key={c.canonical_id} className="hover:bg-turquoise-50/40" data-testid={`row-${c.canonical_id}`}>
+                <td className="text-xs num text-edGray-700">{c.canonical_id}</td>
+                <td className="text-sm">
+                  <Link to={`/admin/organizations/${c.organization_id}`} className="text-navy hover:text-turquoise-700">
+                    {c.organization_name}
+                  </Link>
+                </td>
+                <td className="text-sm">{c.model_name}</td>
+                <td>
+                  <span className={`pill text-xs ${c.primary_source === "current" ? "border-turquoise-200 text-turquoise-700 bg-turquoise-50" : "border-edGray-200 text-edGray-700 bg-white"}`}>
+                    {c.primary_source === "current" ? "حالي" : "تاريخي"}
+                  </span>
+                </td>
+                <td className="text-xs">{c.raw_evaluation_current || c.raw_evaluation_legacy || "—"}</td>
+                <td className="text-xs">{c.match_status}</td>
+                <td className="text-xs num text-edGray-700">{(c.submitted_at_iso || c.arbitration_date_iso || "").slice(0, 10) || "—"}</td>
+                <td>{c.family_id && <Link to={`/admin/family/${c.family_id}`} className="btn-outline text-xs">فتح الرحلة</Link>}</td>
+              </tr>
+            ))}
+            {(data.items || []).length === 0 && <tr><td colSpan={8} className="text-center text-edGray-700 py-6">لا نتائج</td></tr>}
           </tbody>
         </table>
       </div>
 
       <div className="flex items-center justify-between mt-4 text-sm">
-        <div className="text-navy/60 num">{data.total > 0 ? `${offset + 1}–${Math.min(offset + limit, data.total)} من ${data.total.toLocaleString("en-US")}` : "—"}</div>
+        <div className="text-edGray-700 num">
+          {data.total > 0 ? `${offset + 1}–${Math.min(offset + limit, data.total)} من ${num(data.total)}` : "—"}
+        </div>
         <div className="flex gap-2">
-          <button className="btn-outline text-sm disabled:opacity-40" disabled={offset === 0} onClick={() => setOffset(Math.max(0, offset - limit))} data-testid="prev-page">السابق</button>
-          <button className="btn-outline text-sm disabled:opacity-40" disabled={offset + limit >= data.total} onClick={() => setOffset(offset + limit)} data-testid="next-page">التالي</button>
+          <button className="btn-outline text-sm disabled:opacity-40" disabled={offset === 0}
+                  onClick={() => set("offset", String(Math.max(0, offset - limit)))} data-testid="prev-page">السابق</button>
+          <button className="btn-outline text-sm disabled:opacity-40" disabled={offset + limit >= data.total}
+                  onClick={() => set("offset", String(offset + limit))} data-testid="next-page">التالي</button>
         </div>
       </div>
-
-      {detail && <RecordPanel r={detail} onClose={() => setDetail(null)} />}
-    </div>
-  );
-}
-
-function RecordPanel({ r, onClose }) {
-  const url = resolveUrl(r);
-  const src = sourceBadge(r.source);
-  return (
-    <div className="fixed inset-0 bg-navy/40 flex items-center justify-center p-4 z-50" onClick={onClose} data-testid="record-panel">
-      <div className="bg-white border border-navy/20 max-w-2xl w-full max-h-[85vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-        <div className="px-6 py-4 border-b border-navy/10 flex items-start justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className={`pill border ${src.cls}`}>{src.label}</span>
-              <span className="num text-xs text-navy/50">{r.id}</span>
-            </div>
-            <h3 className="text-lg font-semibold">{r.model_name}</h3>
-            <div className="text-sm text-navy/70">{r.organization_name}</div>
-          </div>
-          <button className="btn-outline text-sm" onClick={onClose} data-testid="detail-close">إغلاق</button>
-        </div>
-        <div className="px-6 py-4 space-y-2 text-sm">
-          <Row k="الفئة" v={r.category} />
-          <Row k="المحكم" v={r.evaluator_name} link={r.evaluator_name ? `/admin/evaluators/${encodeURIComponent(r.evaluator_name)}` : null} />
-          <Row k="المستشار" v={r.consultant_name} link={r.consultant_name ? `/admin/consultants/${encodeURIComponent(r.consultant_name)}` : null} />
-          <Row k="الحالة" v={r.status} />
-          <Row k="القرار" v={r.evaluation} tone={evaluationTone(r.evaluation)} />
-          <Row k="الساعات" v={r.work_hours} mono />
-          <Row k="تاريخ الإرسال" v={(r.submitted_at || "").slice(0,19)} mono />
-          <Row k="تاريخ القرار" v={(r.decided_at || "").slice(0,19)} mono />
-          <Row k="ملاحظات" v={r.notes} />
-          <Row k="الجهة" v={r.organization_name} link={r.organization_id ? `/admin/organizations/${r.organization_id}` : null} />
-          <Row k="الدفعة" v={r.cohort} mono />
-          {r.duplicate_link_group_id && (
-            <Row k="مجموعة تكرار" v={`${r.duplicate_link_group_id} · استخدامات ${r.duplicate_use_count}`} mono />
-          )}
-          <Row k="التحقق الآلي" v={r.verification_status} />
-        </div>
-        <div className="px-6 py-4 border-t border-navy/10 flex items-center justify-between">
-          <div className="text-xs num text-navy/50">
-            {r.raw_source?.file || ""} {r.raw_source?.sheet ? `· ${r.raw_source.sheet}` : ""}
-          </div>
-          {url ? (
-            <a href={url} target="_blank" rel="noopener noreferrer" className="btn-primary text-sm" data-testid="detail-open-url">
-              فتح النموذج ↗
-            </a>
-          ) : <span className="text-xs text-navy/50">الرابط غير متوفر</span>}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Row({ k, v, mono, tone, link }) {
-  if (v == null || v === "") v = "—";
-  const cls = `${tone || ""} ${mono ? "num" : ""}`.trim();
-  return (
-    <div className="flex justify-between border-b border-navy/10 pb-1.5">
-      <span className="text-navy/60">{k}</span>
-      {link && v !== "—"
-        ? <Link to={link} className={`${cls} hover:text-turquoise`}>{v}</Link>
-        : <span className={cls}>{v}</span>}
     </div>
   );
 }

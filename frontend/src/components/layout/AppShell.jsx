@@ -6,7 +6,7 @@ import { Menu, X, ChevronDown } from "lucide-react";
 const PRIMARY = [
   { to: "/admin", label: "المشهد التنفيذي", testid: "nav-exec", end: true },
   { to: "/admin/review-queue", label: "قائمة المراجعة", testid: "nav-review" },
-  { to: "/admin/cohorts", label: "الدفعات", testid: "nav-cohorts" },
+  { to: "/admin/participating-organizations", label: "سجل الجمعيات", testid: "nav-participating" },
   { to: "/admin/organizations", label: "الجهات", testid: "nav-orgs" },
   { to: "/admin/evaluators", label: "المحكمون", testid: "nav-evaluators" },
   { to: "/admin/consultants", label: "المستشارون", testid: "nav-consultants" },

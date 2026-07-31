@@ -23,6 +23,7 @@ import ConsultantsDirectory from "@/pages/admin/ConsultantsDirectory";
 import ConsultantDetail from "@/pages/admin/ConsultantDetail";
 import ModelsHub from "@/pages/admin/ModelsHub";
 import FamilyDetail from "@/pages/admin/FamilyDetail";
+import ParticipatingOrgs from "@/pages/admin/ParticipatingOrgs";
 import ConsultantSubmissions from "@/pages/consultant/Submissions";
 import ConsultantActivities from "@/pages/consultant/Activities";
 import EvaluatorQueue from "@/pages/evaluator/Queue";
@@ -78,6 +79,7 @@ export default function App() {
             <Route path="/admin/cohorts" element={<CohortsMap />} />
             <Route path="/admin/cohorts/:cohort" element={<CohortDetail />} />
             <Route path="/admin/organizations" element={<UnifiedOrganizations />} />
+            <Route path="/admin/participating-organizations" element={<ParticipatingOrgs />} />
             <Route path="/admin/organizations/:orgId" element={<UnifiedOrganization />} />
             <Route path="/admin/evaluators" element={<EvaluatorsDirectory />} />
             <Route path="/admin/evaluators/:name" element={<EvaluatorDetail />} />
