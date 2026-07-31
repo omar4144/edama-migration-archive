@@ -25,8 +25,10 @@ export default function ChangePassword() {
         current_password: current, new_password: next,
       });
       if (data.access_token) localStorage.setItem("edama_access_token", data.access_token);
-      await refresh();
-      navigate("/", { replace: true });
+      // Force a hard reload so ALL subsequent fetches use freshly rotated
+      // cookies and a re-hydrated auth context. Prevents the post-change race
+      // on data pages that fetch on mount.
+      window.location.assign("/");
     } catch (e) {
       setErr(formatApiError(e));
     } finally {

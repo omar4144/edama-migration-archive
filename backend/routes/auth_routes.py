@@ -136,7 +136,15 @@ async def change_password(payload: ChangePasswordIn, response: Response,
         "action": "change_password",
         "created_at": now,
     })
-    return {"ok": True, "access_token": access}
+    return {
+        "ok": True,
+        "access_token": access,
+        "user": {
+            "id": user["id"], "email": user["email"], "name_ar": user.get("name_ar"),
+            "role": user["role"], "person_id": user.get("person_id"),
+            "must_change_password": False,
+        },
+    }
 
 
 @router.post("/forgot-password")

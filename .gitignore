@@ -25,6 +25,10 @@ memory/test_credentials.md
 dev_mail_sink.log
 *.log
 
+# Test reports (may contain preview credentials in narrative)
+test_reports/
+/app/test_reports/
+
 # Editor
 .vscode/
 .idea/

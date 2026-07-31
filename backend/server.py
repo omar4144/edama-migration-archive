@@ -52,6 +52,19 @@ app.add_middleware(
 )
 
 
+async def _cleanup_login_attempts():
+    """Best-effort cleanup of stale brute-force records on startup so lockouts
+    don't persist across restarts of a test environment."""
+    from db import get_db
+    from datetime import datetime, timezone, timedelta
+    cutoff = datetime.now(timezone.utc) - timedelta(hours=24)
+    try:
+        await get_db()["login_attempts"].delete_many({"last_at": {"$lt": cutoff}})
+    except Exception:
+        pass
+
+
 @app.on_event("startup")
 async def _startup():
     await ensure_indexes()
+    await _cleanup_login_attempts()

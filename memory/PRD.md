@@ -1,79 +1,76 @@
-# PRD — Edama · Musr'at Idama V8
+# PRD — Edama · Musr'at Idama V8 · Final Finish
 
 ## Original Problem Statement
-Edama — Musr'at Idama Unified Platform (V8). A unified, experience-led operational web platform for the Sustainability Accelerator (مسرعة إدامة) that consolidates historical Excel/forms data with current Lovable data, and delivers role-based experiences for Admins (إدارة السياق), Consultants (مستشار), and Evaluators / المحكم — fully RTL/Arabic, per the V8 Implementation Contract.
+Edama V8 — منصة تشغيلية موحّدة لمسرعة الاستدامة تدمج الأرشيف التاريخي (Excel/forms) مع بيانات Lovable الحالية، بتجربة V8 (Navy/Turquoise/Ivory/Orange) RTL كاملة لثلاثة أدوار: إدارة السياق، المستشار، المحكّم.
 
-## Non-Negotiable Constraints
-- Real archive data only (omar4144/edama-migration-archive). **No seed/dummy data.**
-- Contract-locked reconciliation counts MUST match exactly.
-- Historical layer is IMMUTABLE. Crosswalks are advisory. Probable matches → REVIEW_REQUIRED queue with human decisions.
-- JWT (bcrypt, access + refresh tokens), RBAC on API, data isolation at API layer.
-- Terminology: `evaluator / المحكّم` (not "arbitrator").
-- No LLM / no AI mapping suggestions / no PDF export in this phase.
-- V8 experience: Navy · Turquoise · Ivory · Orange, RTL, IBM Plex Sans Arabic, no shadows, no glassmorphism, no card carpets.
+## Non-Negotiables
+- بيانات حقيقية فقط من `omar4144/edama-migration-archive` — لا بيانات وهمية.
+- الطبقة التاريخية **immutable على مستوى DB + HTTP + Audit** (defense in depth).
+- JWT + bcrypt + refresh + RBAC + عزل بيانات على API (لا إخفاء واجهة فقط).
+- مصطلح `المحكّم / Evaluator` فقط.
+- لا LLM، لا PDF export، لا merge تلقائي.
+- تجربة V8 كتجربة تشغيلية مترابطة (الدفعة ← الجهة ← المستشار ← النموذج ← التحكيم ← الأثر) — ليس palette فقط.
 
-## Reference Counts (from Edama_Dashboard_Integration_Report + summary.json)
-| Item | Target |
-|---|---:|
-| current_lovable_records | 2,565 |
-| current_lovable_organizations | 57 |
-| people | 17 |
-| model_definitions | 45 |
-| work_hours_total | 1,662.0 |
-| duplicate_link_groups (current) | 129 |
-| legacy_organizations | 118 (24/30/29/35) |
-| legacy_consultant_activities | 3,760 |
-| legacy_arbitration_records | 3,403 |
-| legacy_duplicate_link_groups | 67 |
-| batch_plan_rows | 120 |
-| batch_kpi_snapshots | 4 |
-| REVIEW_REQUIRED queue | 9 (1 org + 3 model + 5 evaluator) |
+## Contract-Locked Counts (verified)
+| Item | Target | Actual |
+|---|---:|---:|
+| Lovable records | 2,565 | ✓ |
+| Lovable orgs | 57 | ✓ |
+| People | 17 | ✓ |
+| Model definitions | 45 | ✓ |
+| Work hours total | 1,662.0 | ✓ |
+| Legacy orgs (24/30/29/35) | 118 | ✓ |
+| Legacy activities (0/1200/1160/1400) | 3,760 | ✓ |
+| Legacy arbitrations (0/1382/1081/940) | 3,403 | ✓ |
+| Legacy duplicate link groups | 67 | ✓ |
+| Batch plan rows | 120 | ✓ |
+| Batch KPI snapshots | 4 | ✓ |
+| REVIEW_REQUIRED mappings | 9 | ✓ |
+| template_metadata_stale | 2,336 | ✓ |
+| activity_name_variant | 960 | ✓ |
+| activity_row_sheet_mismatch | 80 | ✓ |
 
-## User Personas
-- **إدارة السياق (Admin/Owner)** — full oversight, reconciliation dashboard, mapping decisions, users & permissions, audit log.
-- **مستشار (Consultant)** — own submissions list, draft editor (model_url/notes/status), historical activities view.
-- **محكّم (Evaluator)** — review queue for assigned records, decision recorder (تقييم + ساعات + ملاحظات), hours summary.
+## What's Been Implemented
 
-## Architecture
-- **Backend**: FastAPI + Motor (MongoDB async) + PyJWT + bcrypt. Routes under `/api/{auth,reconciliation,admin,consultant,evaluator}`.
-- **Frontend**: React 19 + Tailwind + shadcn/ui primitives + IBM Plex Sans Arabic. RTL `<html dir="rtl" lang="ar">`. AuthProvider + RoleGuard.
-- **DB**: MongoDB collections — `users`, `login_attempts`, `audit_log`, `people`, `model_definitions`, `organizations_current`, `records_current`, `duplicate_links_current`, `historical_*` (immutable), `crosswalk_*`, `assignments`, `mappings` (REVIEW_REQUIRED), `quality_checks`, `source_inventory`, `migration_runs`.
-- **Migration**: `/app/backend/migrations/import_archive.py` — reads CSV/JSON from `/app/data/archive/`, preserves raw fields, verifies counts against contract targets, builds review queue from crosswalks with no auto-merge.
+### Iteration 1 (Foundation)
+- FastAPI + React + MongoDB scaffold, RTL, IBM Plex Sans Arabic, V8 palette
+- JWT (bcrypt, httpOnly cookies + Bearer fallback), RBAC, brute-force lockout
+- Real archive import: 12 CSV/JSON → MongoDB, contract counts verified 10/10
+- Admin: reconciliation dashboard + review queue + records/orgs/users/audit
+- Consultant: submissions + draft edit + historical activities
+- Evaluator: assigned queue + decision recorder + hours summary
+- Testing: 20/20 pytest
 
-## What's Been Implemented (2026-07-31)
-- Foundation: FastAPI + React scaffold, RTL base theme, V8 palette tokens, IBM Plex Sans Arabic.
-- Auth (JWT + bcrypt): login, logout, me, refresh, change-password. httpOnly cookies (secure, SameSite=none) + Bearer fallback. Brute-force lockout (5 failures / 15 min, email-only identifier). RBAC via `require_role()` dependency.
-- Data model + migration: All 12 archive CSVs + JSONL imported. Contract counts VERIFIED PASS 10/10.
-- Reconciliation console: live counts vs targets, cohort table (24/30/29/35 · 0/1200/1160/1400 · 0/1382/1081/940), crosswalk status breakdowns, latest run summary.
-- Review queue: 9 items (1 org probable + 3 model evolved + 5 evaluator changed). Approve/reject with optional note. Every decision → audit_log.
-- Admin: organizations (current + historical tabs), records browser (org + status + pagination), users management with person linking, audit log viewer.
-- Consultant workspace: own submissions (person_id filter), draft editor (model_url/notes/status), historical activities.
-- Evaluator workspace: assigned records queue, decision recorder (evaluation, work_hours, notes), hours summary by organization.
-- Data isolation VERIFIED at API layer (403 on cross-role access) — no UI-only hiding.
-- Testing: 20/20 pytest cases pass; frontend flows verified via testing subagent.
+### Iteration 2 (Final Finish — P0)
+- **Historical write-guard (defense in depth)**: DB-layer `ImmutableCollection` proxy blocks writes on 12 historical/crosswalk/source collections + HTTP-layer PATCH/DELETE endpoints return 405 + every attempt logged as `historical_write_blocked` in `audit_log`.
+- **Force password change**: HTTP 428 on all operational endpoints if `must_change_password=true`. `/auth/me`, `/auth/logout`, `/auth/change-password` remain accessible. Rotates cookies + bumps `pw_version` → old tokens revoked with 401 "Session revoked". Frontend does hard reload after success to eliminate race.
+- **Password reset**: `/auth/forgot-password` (SHA256 tokens, 1h TTL, 3/hour rate-limit, no user enumeration, dev mail sink). `/auth/reset-password` (weak → 422, reuse → 400, expired → 400, invalidates all sessions on success).
+- **Evaluator historical viewer**: `/api/evaluator/historical-arbitrations` — scoped to logged-in person's name (Batool → 282), read-only notice, search/cohort/pagination, isolation verified.
+- **Data Quality Center**: `/api/admin/dq/summary` — 16 static checks + 7 live signals (template_metadata_stale=2336, etc). `/api/admin/dq/affected/{signal_id}` — drill-down to real affected rows.
+- **V8 experience**: Cohort map (خريطة الدفعات) with data-driven progress bars, Cohort world (عالم الدفعة) with KPI snapshot + per-org counts, Organization journey (رحلة الجهة) with Cohort→Org→Consultant→Model→Arbitration→Impact strip + current/legacy panels + assignment-changed banner.
+- **Session revocation via pw_version**: all previously-issued tokens invalidated on any password change/reset.
+- **Password strength**: 8+ chars, letters + digits enforced.
+- **Mobile responsive AppShell**: hamburger drawer, viewport-aware header, tested 390×780.
+- **Security**: `test_credentials.md` excluded via `.gitignore`; secrets only in `.env`.
+- Testing: **33/33 pytest** on iteration 2 (backend) + all P0 frontend flows verified.
 
-## Test Credentials (test env only)
-See `/app/memory/test_credentials.md`.
+## Test Accounts (preview env only — not for production)
+See `/app/memory/test_credentials.md` (gitignored). All non-owner accounts flagged `must_change_password=true`.
 
-## P0 Backlog (deferred by explicit user direction)
-- Password reset flow (forgot-password + reset-password endpoints wired to Resend integration)
-- Historical arbitration record viewer for evaluators (immutable, view-only)
-- Full data quality dashboard page (template metadata status, source inventory drill-down)
-- Immutable-write guard middleware for `historical_*` collections
-- Program/cohort management page (create/edit cohorts)
+## Backlog
 
-## P1 Backlog
-- Consultant/Evaluator hour trends over time (line chart, data-driven only)
+### P1 (post-Final-Finish)
+- Live Lovable API sync (currently: snapshot-based)
+- Consultant/Evaluator time-series trends (data-driven chart)
 - Export reconciliation report as JSON/CSV
-- Password change enforcement flow on first login (must_change_password already flagged on server)
-- Session revocation / active sessions list
-- Deployment build + production URL
+- Session revocation UI (active sessions list + revoke)
+- Program/cohort management (create/edit)
 
-## P2 Backlog
-- Batch KPI cohort dashboard visualisations
+### P2
 - Full accessibility audit + keyboard shortcut layer
-- Lovable API live sync (currently: snapshot-based)
+- dev_mail_sink.log rotation
+- SMTP integration when credentials provided (structure ready — set RESET_URL_BASE + env-based provider)
 
-## Known Notes
-- Console shows a single 401 from initial `/auth/me` bootstrap on the login page — harmless, cosmetic only.
-- Historical collections are protected by convention (only the migration script writes to them). Enforcement via app-level guard is on the P0 backlog.
+## Notes
+- Two P0.2 tests are stateful (each run flips `must_change_password`); serial pytest + restore helper documented in testing agent report.
+- Historical collections are protected at DB-proxy layer; migration script uses `EDAMA_MIGRATION_MODE=1` bypass — the ONLY way to write historical.
