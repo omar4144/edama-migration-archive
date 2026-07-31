@@ -1,63 +1,44 @@
 # Edama — Musr'at Idama Unified Platform (V8)
 
 ## Original problem statement
-Unified operational web platform consolidating historical Excel/forms data with current Lovable data. Delivers role-based experiences for Admins, Consultants, and Arbitrators, fully RTL Arabic.
+Unified RTL Arabic platform consolidating historical Excel + Lovable data. Role-based (Admin/Consultant/Arbitrator) with strict raw-data protection.
 
 ## What's been implemented
-- **Iterations 1-3**: Ingestion + JWT auth + RBAC + DQ + unified frontend shell.
-- **Iteration 4 (v2 dedup)**: Initial canonical layer — auto-merged 1018 pairs into EXACT (shown INCORRECT).
-- **Iteration 5 (v3 strict)**: Composite-path rules. Discovered 0 legitimate EXACT.
-- **Iteration 6 (v4 families + decisions, 2026-07-31)**:
-  - `/app/backend/decisions.py` — correct legacy vocabulary (مجاز=APPROVED, غير مجاز=REJECTED, مجاز مع تحفظ=APPROVED_WITH_RESERVATION) with strict separation between `decision_normalized` and `completion_status`.
-  - Reclassification: 0 EXACT / 0 PROBABLE / **1,137 VERSION_LINKED (both sides)** / **1,624 REVIEW_REQUIRED (both sides)** / 499 CURRENT_ONLY / 1,778 LEGACY_ONLY.
-  - New `canonical_submission_families` collection — grouping (org × model) journeys.
-  - **Three counts**: families=3,521 / versions=5,038 / latest_operational=3,521.
-  - Hours strictly separated: 1,203 Lovable per_model / 1,605 Legacy per_org_cohort.
-  - `/app/memory/DEDUP_REPORT_V4.md` — 20 documented family journeys + full reconciliation.
-- **Iteration 7 (brand identity, 2026-07-31)** ✅ current:
-  - Official **Edama logo** installed at `/app/frontend/public/edama-logo.png` (mark) and `edama-logo-full.png` (with EDAMA ACCELERATOR tagline). Extracted from the corporate PowerPoint.
-  - Exact palette: **Turquoise #30BEBC**, **Green #88C656**, **Gray #939598**, Ivory #FBFAF6.
-  - Font stack: **"Somar Sans" → SOMAR → Tahoma → system-ui** (matches identity guide spec).
-  - Chevron backdrop echoing the logo's arrow motif on auth pages; turquoise+green ribbon under the app header.
-  - Updated AppShell header (white, logo image), Login (two-pane with new stats 3,521/5,038/1,203), ForgotPassword, ChangePassword.
+- **Iterations 1-5**: Ingestion + JWT + RBAC + DQ + shell + strict v3 dedup.
+- **Iteration 6 (v4 families, 2026-07-31)**: correct decision vocabulary (`decisions.py`), `canonical_submission_families` collection, three counts, hours split.
+- **Iteration 7 (brand identity, 2026-07-31)**: official Edama logo installed, palette Turquoise #30BEBC / Green #88C656 / Gray #939598, Somar Sans + Tahoma font stack, chevron ribbon.
+- **Iteration 8 (Family-Key audit + UI Cutover, 2026-07-31)** ✅ current:
+  - **Family-Key audit passed** (`/app/memory/FAMILY_KEY_AUDIT.md`): 0 orgs in multiple cohorts, 0 disconnected journeys → key `organization × model_definition` validated. Future-ready for `enrollment_id`.
+  - Backend `/app/backend/routes/canonical.py` extended: `/exec-scene`, `/families`, `/families/{id}`, `/review-queue`, `/review-queue/{fid}/decision`, `/submissions?family_id=…`. Arabic reason/decision/status labels included.
+  - Frontend Executive Scene rewritten with **exact v4 numbers** (45 / 3,521 / 5,038 / 3,521 / 2,366 / 868 / 35 / 138 / 947), review reason chips, **two separate hour meters** (1,203 per-model + 1,605 per-org-cohort — never summed).
+  - New **Review Queue** page with reason filters (wide_gap_identical, wide_gap_conflict, evaluator_mismatch, no_direct_model).
+  - New **Family Detail** page showing version timeline (legacy → قرار → current → قرار جديد) + 6 review actions (link_as_versions / keep_separate / select_evaluator / select_model / defer / reopen) → audit-logged.
+  - Nav updated: «قائمة المراجعة» primary + «رحلات النماذج» renamed.
 
 ## Key discoveries
-- All 1517 crosswalk-matched pairs have date-gap > 150 days.
-- Legacy `total_arbitration_hours_raw` is at **org×cohort level** (repeated on every model row).
-- Legacy uses «مجاز/غير مجاز» vocabulary; current always «مقبول». APPROVED↔APPROVED wide-gap = 392 REVIEW_REQUIRED (`wide_gap_identical_decision`).
-- Legacy `arbitration_date_iso` often None → fall back to `arbitration_date_source_iso`.
+- All 1517 cross-source pairs have >150-day gap → versions, not duplicates.
+- Legacy hours are per-org-cohort (repeated on rows); current hours are per-model.
+- Legacy uses «مجاز/غير مجاز»; current always «مقبول». APPROVED↔APPROVED wide-gap (392 canonicals inside 812 review scope) is re-arbitration → REVIEW_REQUIRED.
+- Family key `org × model_definition` is safe: no org appears in >1 cohort in this dataset.
 
-## Prioritized backlog
+## Backlog
 
-### P0 — Awaiting ownership approval on V4 report
-- [x] Correct decision dictionary
-- [x] Submission Families
-- [x] Three separate counts
-- [x] Hours displayed separately
-- [x] REVIEW_REQUIRED broken down by reason
-- [x] Brand identity applied (logo, palette, fonts, chevron motif)
-- [ ] Ownership review of `/app/memory/DEDUP_REPORT_V4.md`
-- [ ] Ownership decision on REVIEW_REQUIRED display strategy (Q4)
-- [ ] Ownership decision on terminology (Q5: "عدد النماذج" = families?)
-
-### P1 — UI Cutover (BLOCKED on P0 approval)
-- Executive Scene / Directories consume `families`, `versions`, `latest_operational` from new endpoints.
-- Two hour meters side-by-side (Lovable per_model vs Legacy per_org_cohort).
-- Review queue UI (868 families) with reason grouping.
-- Backend endpoints for families list/detail/review queue.
+### P1 — Polish and full cutover
+- Refactor UnifiedOrganization page to show families (one row per model) instead of Current/Legacy split, with expandable version timeline per family.
+- Refactor EvaluatorDetail: org appears once, families under it.
+- Refactor ModelsHub default view = Latest Outputs (3,521 rows, one per family), with "إظهار جميع النسخ" toggle to show 5,038.
+- Consultant + Evaluator dashboards to use canonical family numbers.
 
 ### P2 — Backlog
-- Live Lovable Sync (pending credentials).
-- Admin action UI for REVIEW_REQUIRED resolution.
+- Live Lovable Sync (pending credentials + enrollment_id availability).
+- Share-link for a family journey.
+- Full RBAC re-test suite + mobile pass.
 
 ## Key files
-- `/app/backend/decisions.py` — decision vocabulary normalizer
-- `/app/backend/migrations/build_canonical.py` — v4 families build
-- `/app/backend/migrations/report_dedup_v4.py` — report generator
-- `/app/frontend/public/edama-logo.png`, `edama-logo-full.png` — official brand assets
-- `/app/frontend/tailwind.config.js`, `/app/frontend/src/index.css` — brand palette + font stack
-- `/app/frontend/src/components/layout/AppShell.jsx` — header with real logo + chevron ribbon
-- `/app/memory/DEDUP_REPORT_V4.md` — current audit report (516 lines, 20 family samples)
+- `/app/backend/decisions.py`, `/app/backend/migrations/build_canonical.py`, `/app/backend/migrations/report_dedup_v4.py`, `/app/backend/migrations/family_key_audit.py`
+- `/app/backend/routes/canonical.py` — all v4 endpoints
+- `/app/frontend/src/pages/admin/ExecutiveScene.jsx`, `ReviewQueue.jsx`, `FamilyDetail.jsx`
+- `/app/memory/DEDUP_REPORT_V4.md`, `/app/memory/FAMILY_KEY_AUDIT.md`
 
 ## Credentials
 Admin: `omarzabarmawi@hotmail.com` — see `/app/memory/test_credentials.md`.

@@ -22,6 +22,7 @@ import EvaluatorDetail from "@/pages/admin/EvaluatorDetail";
 import ConsultantsDirectory from "@/pages/admin/ConsultantsDirectory";
 import ConsultantDetail from "@/pages/admin/ConsultantDetail";
 import ModelsHub from "@/pages/admin/ModelsHub";
+import FamilyDetail from "@/pages/admin/FamilyDetail";
 import ConsultantSubmissions from "@/pages/consultant/Submissions";
 import ConsultantActivities from "@/pages/consultant/Activities";
 import EvaluatorQueue from "@/pages/evaluator/Queue";
@@ -83,6 +84,8 @@ export default function App() {
             <Route path="/admin/consultants" element={<ConsultantsDirectory />} />
             <Route path="/admin/consultants/:name" element={<ConsultantDetail />} />
             <Route path="/admin/models-hub" element={<ModelsHub />} />
+            <Route path="/admin/review-queue" element={<ReviewQueue />} />
+            <Route path="/admin/family/:familyId" element={<FamilyDetail />} />
             {/* Data management (secondary) */}
             <Route path="/admin/data/reconciliation" element={<Reconciliation />} />
             <Route path="/admin/data/mappings" element={<ReviewQueue />} />

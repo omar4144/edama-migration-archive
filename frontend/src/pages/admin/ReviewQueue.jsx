@@ -1,138 +1,89 @@
-import React, { useCallback, useEffect, useState } from "react";
-import api, { formatApiError } from "@/lib/api";
+import React, { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import api from "@/lib/api";
+import { num } from "@/lib/util";
 
-const KIND_LABEL = {
-  organization_probable_match: "جهة — مطابقة اسم مرجّحة",
-  model_evolved_schema: "نموذج — تطوّر مخطط",
-  evaluator_assignment_changed: "تغيّر تكليف المحكّم",
+const REASON_LABELS = {
+  wide_gap_identical_decision: "قراران متطابقان بفارق زمني كبير",
+  wide_gap_conflicting_decisions: "قراران متعارضان",
+  evaluator_mismatch_cross_source: "اختلاف المحكم بين المصدرين",
+  no_direct_model_match_only_org: "تطابق الجهة فقط دون نموذج",
 };
 
 export default function ReviewQueue() {
-  const [status, setStatus] = useState("pending");
-  const [kind, setKind] = useState("");
-  const [items, setItems] = useState([]);
-  const [selected, setSelected] = useState(null);
-  const [note, setNote] = useState("");
-  const [err, setErr] = useState(null);
+  const [sp, setSp] = useSearchParams();
+  const reason = sp.get("reason") || "";
+  const [d, setD] = useState(null);
 
-  const load = useCallback(() => {
-    setErr(null);
-    const params = new URLSearchParams({ status });
-    if (kind) params.append("kind", kind);
-    api.get(`/reconciliation/mappings?${params}`)
-      .then((r) => setItems(r.data))
-      .catch((e) => setErr(formatApiError(e)));
-  }, [status, kind]);
+  useEffect(() => {
+    const q = reason ? `?reason=${encodeURIComponent(reason)}` : "";
+    api.get(`/admin/canonical/review-queue${q}`).then((r) => setD(r.data));
+  }, [reason]);
 
-  useEffect(() => { load(); }, [load]);
-
-  const decide = async (decision) => {
-    if (!selected) return;
-    try {
-      await api.post(`/reconciliation/mappings/${encodeURIComponent(selected.key)}`,
-        { decision, note: note || null });
-      setSelected(null);
-      setNote("");
-      load();
-    } catch (e) {
-      setErr(formatApiError(e));
-    }
-  };
+  if (!d) return <div className="text-edGray-700">…جارٍ التحميل</div>;
 
   return (
     <div data-testid="review-queue-page">
-      <h1 className="text-3xl font-semibold mb-2">قائمة المراجعة</h1>
-      <p className="text-navy/70 mb-6 max-w-2xl leading-relaxed">
-        كل عنصر يحمل حالة REVIEW_REQUIRED ولن يُدمج آلياً. الاعتماد بشري صريح، مع تسجيل كامل في سجل التدقيق.
-      </p>
-
-      <div className="flex gap-3 mb-4" data-testid="filters">
-        <select className="field-input w-auto" value={status} onChange={(e) => setStatus(e.target.value)} data-testid="filter-status">
-          <option value="pending">معلّقة</option>
-          <option value="approved">معتمدة</option>
-          <option value="rejected">مرفوضة</option>
-        </select>
-        <select className="field-input w-auto" value={kind} onChange={(e) => setKind(e.target.value)} data-testid="filter-kind">
-          <option value="">كل الأنواع</option>
-          <option value="organization_probable_match">جهة — مرجّحة</option>
-          <option value="model_evolved_schema">نموذج — تطوّر</option>
-          <option value="evaluator_assignment_changed">تكليف محكّم</option>
-        </select>
+      <div className="mb-6">
+        <div className="stat-label mb-2">إدارة السياق · قائمة المراجعة</div>
+        <h1 className="text-3xl font-bold">رحلات تحتاج مراجعة</h1>
+        <p className="text-edGray-700 mt-2 max-w-3xl">
+          قرارات إدارية على مستوى الرحلة تحدد كيف تُعامَل السجلات المتقاطعة قبل احتسابها كحقيقة نهائية. لا تعديل على البيانات الخام.
+        </p>
       </div>
 
-      {err && <div className="mb-3 border-r-4 border-orange bg-orange-50 px-3 py-2 text-sm">{err}</div>}
-
-      <div className="border border-navy/15 bg-white overflow-x-auto">
-        <table className="tech-table" data-testid="mappings-table">
-          <thead>
-            <tr>
-              <th>النوع</th>
-              <th>الحالي</th>
-              <th>التاريخي</th>
-              <th>سياق</th>
-              <th className="text-left">إجراء</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.length === 0 && (
-              <tr><td colSpan={5} className="text-center text-navy/50 py-6">لا توجد عناصر</td></tr>
-            )}
-            {items.map((it) => (
-              <tr key={it.key} className={status === "pending" ? "review-required" : ""} data-testid={`row-${it.key}`}>
-                <td className="text-sm">{KIND_LABEL[it.kind] || it.kind}</td>
-                <td className="text-sm">
-                  {it.current_name || it.organization_name || it.current_evaluator || "—"}
-                  {it.current_id && <div className="text-xs num text-navy/50">{it.current_id}</div>}
-                </td>
-                <td className="text-sm">
-                  {it.legacy_name || it.legacy_evaluator || "—"}
-                  {it.legacy_id && <div className="text-xs num text-navy/50">{it.legacy_id}</div>}
-                </td>
-                <td className="text-sm text-navy/70">
-                  {it.score != null && <div>درجة: <span className="num">{it.score}</span></div>}
-                  {it.cohort && <div>دفعة: <span className="num">{it.cohort}</span></div>}
-                  {it.relationship && <div>{it.relationship}</div>}
-                </td>
-                <td className="text-left">
-                  {status === "pending" ? (
-                    <button className="btn-outline text-sm" onClick={() => setSelected(it)} data-testid={`decide-${it.key}`}>
-                      قرار
-                    </button>
-                  ) : (
-                    <span className={it.status === "approved" ? "pill-approved" : "pill-rejected"}>
-                      {it.status === "approved" ? "معتمدة" : "مرفوضة"}
-                    </span>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Reason chips */}
+      <div className="flex flex-wrap gap-2 mb-6" data-testid="reason-chips">
+        <button
+          onClick={() => setSp({})}
+          className={`px-3 py-1.5 rounded-full text-sm border ${!reason ? "bg-turquoise text-white border-turquoise" : "bg-white text-navy border-edGray-200 hover:border-turquoise"}`}
+          data-testid="chip-all"
+        >
+          الكل ({num(Object.values(d.counts_by_reason || {}).reduce((a, b) => a + b, 0))})
+        </button>
+        {Object.entries(d.counts_by_reason_ar || {}).map(([k, v]) => (
+          <button
+            key={k}
+            onClick={() => setSp({ reason: k })}
+            className={`px-3 py-1.5 rounded-full text-sm border ${reason === k ? "bg-turquoise text-white border-turquoise" : "bg-white text-navy border-edGray-200 hover:border-turquoise"}`}
+            data-testid={`chip-${k}`}
+          >
+            {v.reason_ar} <span className="num opacity-70">({num(v.count)})</span>
+          </button>
+        ))}
       </div>
 
-      {selected && (
-        <div className="fixed inset-0 bg-navy/40 flex items-center justify-center p-4 z-50" data-testid="decision-modal">
-          <div className="bg-white border border-navy/20 max-w-lg w-full p-6">
-            <h2 className="text-xl font-semibold mb-2">قرار مطابقة</h2>
-            <div className="text-sm text-navy/70 mb-4">{KIND_LABEL[selected.kind]}</div>
-            <div className="border border-navy/15 p-3 mb-3">
-              <div className="text-xs text-navy/50 mb-1">الحالي</div>
-              <div>{selected.current_name || selected.organization_name || selected.current_evaluator}</div>
+      <div className="text-sm text-edGray-700 mb-2 num">إجمالي الرحلات: {num(d.total)}</div>
+
+      {/* Family list */}
+      <div className="space-y-2" data-testid="review-family-list">
+        {(d.items || []).map((f) => (
+          <Link key={f.family_id} to={`/admin/family/${f.family_id}`} className="block bg-white border border-edGray-200 hover:border-orange rounded-md p-4" data-testid={`review-${f.family_id}`}>
+            <div className="flex items-baseline justify-between mb-2 gap-3 flex-wrap">
+              <div>
+                <div className="font-semibold text-navy">{f.organization_name}</div>
+                <div className="text-sm text-edGray-700">{f.model_name}</div>
+              </div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="pill border-orange text-orange bg-orange-50">تحتاج مراجعة</span>
+                <span className="pill border-edGray-200 text-edGray-700 bg-white num">
+                  {f.version_count} نسخة
+                </span>
+                <span className="text-xs num text-edGray-700">{f.family_id}</span>
+              </div>
             </div>
-            <div className="border border-navy/15 p-3 mb-4">
-              <div className="text-xs text-navy/50 mb-1">التاريخي</div>
-              <div>{selected.legacy_name || selected.legacy_evaluator}</div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs text-edGray-700 mt-2">
+              <div><span className="text-edGray-700">آخر قرار: </span><span className="text-navy font-medium">{f.latest_decision_ar}</span></div>
+              <div><span className="text-edGray-700">آخر تاريخ: </span><span className="num text-navy">{(f.latest_date || "").slice(0, 10) || "—"}</span></div>
+              <div><span className="text-edGray-700">المحكم: </span><span className="text-navy">{f.latest_evaluator_name || "—"}</span></div>
+              <div><span className="text-edGray-700">الرحلة: </span><span className="text-navy">{f.has_current_version && f.has_legacy_version ? "كاملة" : f.has_current_version ? "حالي فقط" : "تاريخي فقط"}</span></div>
             </div>
-            <label className="field-label">ملاحظة (اختياري)</label>
-            <textarea rows={3} className="field-input mb-4" value={note} onChange={(e) => setNote(e.target.value)} data-testid="decision-note" />
-            <div className="flex justify-end gap-2">
-              <button className="btn-outline" onClick={() => { setSelected(null); setNote(""); }} data-testid="decision-cancel">إلغاء</button>
-              <button className="btn-danger" onClick={() => decide("rejected")} data-testid="decision-reject">رفض</button>
-              <button className="btn-primary" onClick={() => decide("approved")} data-testid="decision-approve">اعتماد</button>
-            </div>
-          </div>
-        </div>
-      )}
+          </Link>
+        ))}
+        {(!d.items || d.items.length === 0) && (
+          <div className="text-edGray-700 text-sm py-6 text-center">لا توجد رحلات مطابقة للفلتر الحالي.</div>
+        )}
+      </div>
     </div>
   );
 }

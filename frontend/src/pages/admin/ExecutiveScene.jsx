@@ -1,134 +1,131 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import api from "@/lib/api";
 import { num } from "@/lib/util";
 
-const SEV_STYLE = {
-  HIGH: "border-orange text-orange bg-orange-50",
-  MEDIUM: "border-navy/40 text-navy bg-white",
-  LOW: "border-navy/25 text-navy/70 bg-white",
-};
-
 export default function ExecutiveScene() {
   const [d, setD] = useState(null);
-  useEffect(() => { api.get("/admin/exec/scene").then((r) => setD(r.data)); }, []);
-  if (!d) return <div className="text-navy/60">…جارٍ التحميل</div>;
-  const t = d.totals;
+  useEffect(() => { api.get("/admin/canonical/exec-scene").then((r) => setD(r.data)); }, []);
+  if (!d) return <div className="text-edGray-700">…جارٍ التحميل</div>;
+  const t = d.terminology;
 
   return (
     <div data-testid="exec-scene-page">
       <div className="mb-8">
         <div className="stat-label mb-2">المشهد التنفيذي · مسرعة إدامة</div>
-        <h1 className="text-3xl md:text-4xl font-semibold leading-tight">أين وصلت المسرعة اليوم؟</h1>
-        <p className="text-navy/70 mt-3 max-w-3xl leading-relaxed">
-          كل رقم في هذا المشهد يفتح سياقه الكامل. اتبع المسار الطبيعي:
-          <span className="mx-2 num text-navy">البرنامج ← الدفعة ← المحكم/المستشار ← الجهة ← النموذج ← القرار ← الأثر</span>
+        <h1 className="text-3xl md:text-4xl font-bold leading-tight">أين وصلت المسرعة اليوم؟</h1>
+        <p className="text-edGray-700 mt-3 max-w-3xl leading-relaxed">
+          كل رقم هنا يفتح سياقه الكامل. الأرقام على مستوى <b>الرحلة الموحّدة</b>: الجهة × النموذج، مع كامل نسخ الرحلة (تاريخي + حالي) تحت رقم واحد.
         </p>
       </div>
 
-      {/* Journey strip — clickable steps */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2 mb-10" data-testid="journey-strip">
-        <Step to="/admin/cohorts" label="الدفعات" value={t.cohorts} icon="P" />
-        <Arrow />
-        <Step to="/admin/organizations" label="الجهات" value={t.organizations} icon="O" />
-        <Arrow />
-        <Step to="/admin/evaluators" label="المحكمون" value={t.evaluators} icon="M" sub={`${t.evaluators_current} حالي`} />
-        <Step to="/admin/consultants" label="المستشارون" value={t.consultants} icon="C" sub={`${t.consultants_current} حالي`} />
-        <Step to="/admin/models-hub" label="النماذج" value={t.models_defined} icon="F" />
+      {/* Three headline counters */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6" data-testid="counters">
+        <Tile to="/admin/models-hub" label="أنواع النماذج" value={t.model_types} tone="edGray" testid="tile-model-types" />
+        <Tile to="/admin/models-hub?view=journeys" label="رحلات النماذج" value={t.model_journeys} tone="turquoise" testid="tile-journeys" />
+        <Tile to="/admin/models-hub?view=versions" label="النسخ والتسليمات" value={t.versions_submissions} tone="edGray" testid="tile-versions" />
+        <Tile to="/admin/models-hub?view=latest" label="أحدث المخرجات" value={t.latest_outputs} tone="turquoise" testid="tile-latest" />
       </div>
 
-      {/* Decisions & impact — links to filtered models hub */}
-      <h2 className="text-xl font-semibold mb-3">القرارات والأثر</h2>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10">
-        <TileLink to={`/admin/models-hub?evaluation=${encodeURIComponent("مقبول")}`} label="مقبول" value={t.accepted} tone="edGreen" testid="tile-accepted" />
-        <TileLink to={`/admin/models-hub?evaluation=${encodeURIComponent("يحتاج لتطوير")}`} label="يحتاج تطوير" value={t.needs_dev} tone="orange" testid="tile-needs-dev" />
-        <TileLink to={`/admin/models-hub?evaluation=${encodeURIComponent("غير مكتمل")}`} label="غير مكتمل" value={t.incomplete} tone="orange" testid="tile-incomplete" />
-        <TileLink to={`/admin/models-hub?source=legacy`} label="تحكيمات تاريخية" value={t.arbitrations_legacy} testid="tile-legacy-arb" />
+      {/* Latest-decision distribution */}
+      <h2 className="text-lg font-bold mb-3">آخر قرار على مستوى الرحلة</h2>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8" data-testid="latest-decisions">
+        <Tile to="/admin/models-hub?latest_decision=APPROVED" label="معتمد" value={t.approved_journeys} tone="edGreen" testid="tile-approved" />
+        <Tile to="/admin/models-hub?latest_decision=REJECTED" label="مرفوض" value={t.rejected_journeys} tone="edGray" testid="tile-rejected" />
+        <Tile to="/admin/models-hub?latest_decision=NEEDS_IMPROVEMENT" label="يحتاج تطوير" value={t.needs_improvement_journeys} tone="orange" testid="tile-needs-dev" />
+        <Tile to="/admin/models-hub?latest_decision=PENDING" label="معلّق" value={t.pending_journeys} tone="orange" testid="tile-pending" />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-        <TileLink to="/admin/models-hub" label="نماذج مسلّمة (حالي)" value={t.records_current} testid="tile-records-current" />
-        <div className="border border-navy/15 bg-white p-5">
-          <div className="stat-label">ساعات العمل والتحكيم</div>
-          <div className="mt-2 flex items-baseline gap-3">
-            <div className="stat-value">{num(t.hours_total, 1)}</div>
-            <div className="text-xs num text-navy/60">حالي {num(t.hours_current, 1)} · قديم {num(t.hours_legacy, 1)}</div>
+      {/* Review required — with reason breakdown */}
+      <div className="border-r-4 border-orange bg-orange-50 rounded-md p-5 mb-8" data-testid="review-required-block">
+        <div className="flex items-baseline justify-between mb-3 flex-wrap gap-3">
+          <div>
+            <div className="stat-label text-orange">تحتاج مراجعة</div>
+            <div className="text-4xl font-mono font-bold text-orange">{num(t.review_required_journeys)}</div>
+            <div className="text-xs text-edGray-700 mt-1">رحلة تحتوي على سجل واحد على الأقل يحتاج قرار إدارة قبل اعتماد الأرقام.</div>
+          </div>
+          <Link to="/admin/review-queue" className="btn-primary" data-testid="open-review-queue">فتح قائمة المراجعة ↗</Link>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4" data-testid="review-reasons">
+          {Object.entries(d.review_by_reason_ar || {}).map(([reason_ar, count]) => (
+            <div key={reason_ar} className="flex justify-between bg-white border border-orange/40 rounded px-3 py-2 text-sm">
+              <span className="text-navy">{reason_ar}</span>
+              <span className="num font-semibold text-orange">{num(count)}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Hours — two separate meters, NEVER summed */}
+      <h2 className="text-lg font-bold mb-3">مؤشرا الساعات (وحدتان مختلفتان — لا تُجمعان)</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8" data-testid="hours-meters">
+        <div className="border border-turquoise-200 bg-turquoise-50/40 rounded-md p-5">
+          <div className="stat-label">ساعات تحكيم النماذج الحالية</div>
+          <div className="mt-2 flex items-baseline gap-2">
+            <div className="text-4xl font-mono font-bold text-turquoise-700">{num(t.hours_current_per_model, 0)}</div>
+            <div className="text-sm text-edGray-700">ساعة</div>
+          </div>
+          <div className="text-xs text-edGray-700 mt-2" title="كل صف = ساعات محكم واحد على نموذج واحد">
+            الوحدة: <b>لكل نموذج / تحكيم فردي</b> (Lovable بعد إزالة التكرارات الداخلية)
           </div>
         </div>
-        <TileLink to={`/admin/models-hub?source=legacy&evaluation=${encodeURIComponent("غير مكتمل")}`} label="تحكيم مفتوح (تاريخي)" value={t.open_legacy} tone="orange" testid="tile-open-legacy" />
+        <div className="border border-edGreen-200 bg-edGreen-50/40 rounded-md p-5">
+          <div className="stat-label">ساعات العمل التاريخية</div>
+          <div className="mt-2 flex items-baseline gap-2">
+            <div className="text-4xl font-mono font-bold text-edGreen-700">{num(t.hours_legacy_per_org_cohort, 0)}</div>
+            <div className="text-sm text-edGray-700">ساعة</div>
+          </div>
+          <div className="text-xs text-edGray-700 mt-2" title="مجموع ساعات الجهة في الدفعة — واحد لكل (جهة × دفعة)">
+            الوحدة: <b>لكل (جهة × دفعة)</b> — قيمة الجهة تُطبع على كل صف نموذج، لذا استخرجت مرة واحدة لكل جهة/دفعة
+          </div>
+        </div>
       </div>
 
-      {/* Cohorts strip — clickable */}
-      <h2 className="text-xl font-semibold mb-3">الدفعات الأربع</h2>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-10" data-testid="cohorts-mini">
-        {d.cohorts.map((c) => (
-          <Link key={c.cohort} to={`/admin/cohorts/${c.cohort}`} className="block bg-white border border-navy/15 hover:border-turquoise p-4" data-testid={`cohort-${c.cohort}`}>
+      {/* Lifecycle breakdown of the 3,521 journeys */}
+      <h2 className="text-lg font-bold mb-3">توزيع الرحلات</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-10" data-testid="lifecycle">
+        <Tile to="/admin/models-hub?lifecycle=full" label="رحلات كاملة (تاريخي → حالي)" value={d.family_lifecycle.full_lifecycle} tone="turquoise" testid="tile-full" />
+        <Tile to="/admin/models-hub?lifecycle=current_only" label="حالي فقط" value={d.family_lifecycle.current_only} tone="edGray" testid="tile-current-only" />
+        <Tile to="/admin/models-hub?lifecycle=legacy_only" label="تاريخي فقط" value={d.family_lifecycle.legacy_only} tone="edGray" testid="tile-legacy-only" />
+      </div>
+
+      {/* Cohorts strip */}
+      <h2 className="text-lg font-bold mb-3">الدفعات الأربع</h2>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10" data-testid="cohorts-strip">
+        {(d.cohorts || []).map((c) => (
+          <Link key={c.cohort} to={`/admin/cohorts/${c.cohort}`} className="block bg-white border border-edGray-200 hover:border-turquoise rounded-md p-4">
             <div className="flex items-baseline justify-between mb-3">
               <div className="stat-label">دفعة</div>
               <div className="text-3xl font-mono">{c.cohort}</div>
             </div>
-            <div className="grid grid-cols-2 gap-2 text-right text-sm">
-              <MiniRow k="جهات" v={c.organizations} />
-              <MiniRow k="محكمين" v={c.evaluators} />
-              <MiniRow k="مستشارين" v={c.consultants} />
-              <MiniRow k="تحكيمات" v={c.arbitrations} />
+            <div className="text-xs text-edGray-700 flex justify-between">
+              <span>جهات</span><span className="num">{num(c.organizations)}</span>
+            </div>
+            <div className="text-xs text-edGray-700 flex justify-between">
+              <span>تحكيمات تاريخية</span><span className="num">{num(c.arbitrations)}</span>
             </div>
           </Link>
         ))}
       </div>
 
-      {/* Attention list */}
-      {d.attention.length > 0 && (
-        <>
-          <h2 className="text-xl font-semibold mb-3">يحتاج تدخّلاً الآن</h2>
-          <div className="space-y-2" data-testid="attention-list">
-            {d.attention.map((a, i) => (
-              <Link key={i} to={a.target} className={`block border-r-4 p-4 ${SEV_STYLE[a.severity]}`} data-testid={`attention-${i}`}>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">{a.message}</span>
-                  <span className="text-xs num opacity-60">{a.severity}</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
-
-function Step({ to, label, value, icon, sub }) {
-  return (
-    <Link to={to} className="block bg-white border border-navy/15 hover:border-turquoise p-3 text-center" data-testid={`step-${label}`}>
-      <div className="w-8 h-8 mx-auto mb-2 border-2 border-turquoise flex items-center justify-center">
-        <span className="text-turquoise font-mono font-bold">{icon}</span>
+      <div className="text-xs text-edGray-700 border-t border-edGray-200 pt-4">
+        منطق التصنيف: <span className="num">{d.logic_version || "v4"}</span> · الأرقام مطابقة عبر المشهد والجهة والمحكم ومركز النماذج.
       </div>
-      <div className="stat-label mb-1">{label}</div>
-      <div className="text-2xl font-mono text-navy">{num(value)}</div>
-      {sub && <div className="text-[10px] text-navy/50 mt-1 num">{sub}</div>}
-    </Link>
-  );
-}
-
-function Arrow() {
-  return <div className="hidden lg:flex items-center justify-center text-turquoise/40 text-xl">←</div>;
-}
-
-function TileLink({ to, label, value, tone = "navy", testid }) {
-  const cls = tone === "edGreen" ? "text-edGreen" : tone === "orange" ? "text-orange" : "text-navy";
-  return (
-    <Link to={to} className="block border border-navy/15 bg-white hover:border-turquoise p-5" data-testid={testid}>
-      <div className="stat-label">{label}</div>
-      <div className={`mt-2 text-3xl font-mono font-medium ${cls}`}>{num(value)}</div>
-    </Link>
-  );
-}
-
-function MiniRow({ k, v }) {
-  return (
-    <div className="flex justify-between border-b border-navy/10 py-1">
-      <span className="text-navy/60 text-xs">{k}</span>
-      <span className="num">{num(v)}</span>
     </div>
+  );
+}
+
+function Tile({ to, label, value, tone = "edGray", testid }) {
+  const toneCls = {
+    turquoise: "text-turquoise-700 border-turquoise-200 hover:border-turquoise",
+    edGreen: "text-edGreen-700 border-edGreen-200 hover:border-edGreen",
+    orange: "text-orange border-orange/30 hover:border-orange",
+    edGray: "text-navy border-edGray-200 hover:border-turquoise",
+  }[tone];
+  return (
+    <Link to={to} className={`block bg-white border rounded-md p-5 transition-colors ${toneCls}`} data-testid={testid}>
+      <div className="stat-label">{label}</div>
+      <div className={`mt-2 text-3xl font-mono font-bold ${tone === "edGray" ? "text-navy" : ""}`}>{num(value)}</div>
+    </Link>
   );
 }
