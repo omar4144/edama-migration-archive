@@ -19,10 +19,13 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="min-h-screen bg-ivory flex items-center justify-center p-4" data-testid="forgot-page">
-      <div className="w-full max-w-md bg-white border border-navy/15 p-6">
-        <h1 className="text-2xl font-semibold mb-1">استعادة كلمة المرور</h1>
-        <p className="text-sm text-navy/70 mb-6">أدخل بريدك؛ إن كان مسجلاً، سترسل رابط إعادة التعيين خلال دقائق.</p>
+    <div className="min-h-screen bg-ivory edama-chevron-bg flex items-center justify-center p-4" data-testid="forgot-page">
+      <div className="w-full max-w-md bg-white border border-edGray-200 rounded-lg p-6 shadow-sm">
+        <div className="mb-6 flex justify-center">
+          <img src="/edama-logo-full.png" alt="مسرعة إدامة" className="h-14 w-auto" />
+        </div>
+        <h1 className="text-2xl font-bold mb-1 text-navy">استعادة كلمة المرور</h1>
+        <p className="text-sm text-edGray-700 mb-6">أدخل بريدك؛ إن كان مسجلاً، سترسل رابط إعادة التعيين خلال دقائق.</p>
 
         {done ? (
           <div className="border-r-4 border-turquoise bg-white px-3 py-3 text-sm" data-testid="forgot-done">

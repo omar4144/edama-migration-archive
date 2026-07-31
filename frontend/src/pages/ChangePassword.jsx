@@ -39,9 +39,12 @@ export default function ChangePassword() {
   const forced = !!user.must_change_password;
 
   return (
-    <div className="min-h-screen bg-ivory flex items-center justify-center p-4" data-testid="change-password-page">
-      <form onSubmit={submit} className="w-full max-w-md bg-white border border-navy/15 p-6" data-testid="change-password-form">
-        <h1 className="text-2xl font-semibold mb-1">تغيير كلمة المرور</h1>
+    <div className="min-h-screen bg-ivory edama-chevron-bg flex items-center justify-center p-4" data-testid="change-password-page">
+      <form onSubmit={submit} className="w-full max-w-md bg-white border border-edGray-200 rounded-lg p-6 shadow-sm" data-testid="change-password-form">
+        <div className="mb-6 flex justify-center">
+          <img src="/edama-logo-full.png" alt="مسرعة إدامة" className="h-14 w-auto" />
+        </div>
+        <h1 className="text-2xl font-bold mb-1 text-navy">تغيير كلمة المرور</h1>
         {forced && (
           <div className="mb-4 border-r-4 border-orange bg-orange-50 px-3 py-2 text-sm" data-testid="forced-notice">
             هذا حساب اختبار — يجب تغيير كلمة المرور قبل الوصول إلى أي مساحة عمل.

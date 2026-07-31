@@ -26,34 +26,42 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-ivory text-navy flex" data-testid="login-page">
-      <div className="hidden md:flex flex-col justify-between w-1/2 bg-navy text-ivory p-12">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 border-2 border-turquoise flex items-center justify-center">
-            <span className="text-turquoise font-bold text-xl">إ</span>
-          </div>
-          <div>
-            <div className="font-semibold text-xl">مسرعة إدامة</div>
-            <div className="text-sm text-ivory/60 tracking-wider">Musr'at Idama · V8</div>
-          </div>
+      <div className="hidden md:flex flex-col justify-between w-1/2 bg-white p-12 relative overflow-hidden">
+        <div className="absolute inset-0 edama-chevron-bg opacity-70 pointer-events-none" aria-hidden="true" />
+        <div className="absolute inset-x-0 top-0 edama-chevron-strip" aria-hidden="true" />
+        <div className="relative flex items-center gap-4">
+          <img src="/edama-logo-full.png" alt="مسرعة إدامة — Edama Accelerator" className="h-20 w-auto" draggable={false} />
         </div>
-        <div>
-          <h1 className="text-4xl font-semibold leading-tight mb-4">منصة موحّدة لمصالحة السياق</h1>
-          <p className="text-ivory/70 leading-relaxed max-w-md">
+        <div className="relative">
+          <h1 className="text-4xl font-bold leading-tight mb-4 text-navy">منصة موحّدة لمصالحة السياق</h1>
+          <p className="text-edGray-700 leading-relaxed max-w-md">
             دمج البيانات التاريخية والحالية لمسرعة الاستدامة عبر طبقة ترحيل ثابتة ولوحة قرارات مطابقة موثّقة.
           </p>
           <div className="mt-8 grid grid-cols-3 gap-6 text-right">
-            <div><div className="stat-value">2,565</div><div className="stat-label mt-1">سجل حالي</div></div>
-            <div><div className="stat-value">3,403</div><div className="stat-label mt-1">تحكيم تاريخي</div></div>
-            <div><div className="stat-value">118</div><div className="stat-label mt-1">جهة تاريخية</div></div>
+            <div>
+              <div className="stat-value text-turquoise">3,521</div>
+              <div className="stat-label mt-1">رحلة نماذج</div>
+            </div>
+            <div>
+              <div className="stat-value text-edGreen-600">5,038</div>
+              <div className="stat-label mt-1">نسخة موحّدة</div>
+            </div>
+            <div>
+              <div className="stat-value text-navy">1,203<span className="text-sm text-edGray-700"> س</span></div>
+              <div className="stat-label mt-1">تحكيم Lovable</div>
+            </div>
           </div>
         </div>
-        <div className="text-xs text-ivory/40 tracking-wider">© مسرعة إدامة · طبقة V8</div>
+        <div className="relative text-xs text-edGray-700 tracking-[0.18em] font-semibold">© EDAMA ACCELERATOR</div>
       </div>
 
-      <div className="flex-1 flex items-center justify-center px-6">
+      <div className="flex-1 flex items-center justify-center px-6 bg-ivory">
         <form onSubmit={submit} className="w-full max-w-sm" data-testid="login-form">
-          <h2 className="text-2xl font-semibold mb-1">تسجيل الدخول</h2>
-          <p className="text-sm text-navy/60 mb-8">استخدم بريد المؤسسة وكلمة المرور المخصصة.</p>
+          <div className="md:hidden mb-6 flex justify-center">
+            <img src="/edama-logo-full.png" alt="مسرعة إدامة" className="h-16 w-auto" />
+          </div>
+          <h2 className="text-2xl font-bold mb-1 text-navy">تسجيل الدخول</h2>
+          <p className="text-sm text-edGray-700 mb-8">استخدم بريد المؤسسة وكلمة المرور المخصصة.</p>
 
           <label className="field-label" htmlFor="email">البريد الإلكتروني</label>
           <input

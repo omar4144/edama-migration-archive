@@ -4,27 +4,27 @@
 
 @layer base {
   :root {
-    /* Edama V8 — Navy / Turquoise / Ivory / Orange, flat, no shadows */
-    --background: 40 33% 98%;        /* ivory */
-    --foreground: 216 65% 11%;       /* navy */
+    /* Edama official identity — Turquoise #30BEBC, Green #88C656, Gray #939598, Ivory #FBFAF6 */
+    --background: 45 30% 98%;           /* ivory */
+    --foreground: 210 27% 15%;          /* deep ink */
     --card: 0 0% 100%;
-    --card-foreground: 216 65% 11%;
+    --card-foreground: 210 27% 15%;
     --popover: 0 0% 100%;
-    --popover-foreground: 216 65% 11%;
-    --primary: 216 65% 11%;          /* navy */
-    --primary-foreground: 40 33% 98%;
-    --secondary: 40 30% 94%;
-    --secondary-foreground: 216 65% 11%;
-    --muted: 40 30% 94%;
-    --muted-foreground: 216 30% 40%;
-    --accent: 180 53% 47%;           /* turquoise */
+    --popover-foreground: 210 27% 15%;
+    --primary: 179 60% 47%;             /* turquoise #30BEBC */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 40 28% 94%;
+    --secondary-foreground: 210 27% 15%;
+    --muted: 40 28% 94%;
+    --muted-foreground: 214 5% 40%;
+    --accent: 90 47% 55%;               /* edama green #88C656 */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 72% 45%;
     --destructive-foreground: 0 0% 100%;
-    --border: 216 20% 88%;
-    --input: 216 20% 88%;
-    --ring: 180 53% 47%;             /* turquoise focus */
-    --radius: 0.25rem;                /* sharp edges */
+    --border: 214 8% 82%;
+    --input: 214 8% 82%;
+    --ring: 179 60% 47%;
+    --radius: 0.375rem;
   }
 }
 
@@ -33,37 +33,62 @@
   * { @apply border-border; }
   body {
     @apply bg-background text-foreground;
-    font-family: "IBM Plex Sans Arabic", system-ui, sans-serif;
+    /* SOMAR primary, Tahoma explicit fallback per Edama identity guide */
+    font-family: "Somar Sans", SOMAR, Tahoma, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    background-image:
+      radial-gradient(1200px 400px at 100% -10%, rgba(48, 190, 188, 0.06), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(136, 198, 86, 0.06), transparent 60%);
+    background-attachment: fixed;
   }
-  h1, h2, h3, h4 { font-weight: 600; letter-spacing: -0.01em; }
-  /* Numbers/data → mono */
-  .num, .tabular { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; }
-  /* Focus ring — turquoise, 2px offset */
-  :focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring)); border-radius: 2px; }
+  h1, h2, h3, h4 { font-weight: 700; letter-spacing: -0.01em; color: #1C2934; }
+  ::selection { background-color: rgba(48, 190, 188, 0.28); }
+  .num, .tabular { font-family: "IBM Plex Mono", "Somar Sans", Tahoma, monospace; font-variant-numeric: tabular-nums; }
+  :focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px #30BEBC;
+    border-radius: 4px;
+  }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
   }
 }
 
 @layer components {
-  /* Technical grid table skeleton */
+  /* Chevron backdrop lifted from the Edama logo mark — tuned to be subtle */
+  .edama-chevron-bg {
+    background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27160%27%20height%3D%2780%27%20viewBox%3D%270%200%20160%2080%27%3E%3Cg%20fill%3D%27none%27%20stroke-width%3D%272%27%3E%3Cpath%20stroke%3D%27%2330BEBC%27%20stroke-opacity%3D%270.07%27%20d%3D%27M30%2040%20L46%2024%20M30%2040%20L46%2056%27%2F%3E%3Cpath%20stroke%3D%27%2388C656%27%20stroke-opacity%3D%270.08%27%20d%3D%27M62%2040%20L78%2024%20M62%2040%20L78%2056%27%2F%3E%3Cpath%20stroke%3D%27%2330BEBC%27%20stroke-opacity%3D%270.05%27%20d%3D%27M94%2040%20L110%2024%20M94%2040%20L110%2056%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+    background-repeat: repeat;
+  }
+  /* Accent chevron strip — used under the header or as a divider */
+  .edama-chevron-strip {
+    height: 6px;
+    background-image: linear-gradient(90deg,
+      #30BEBC 0%, #30BEBC 20%,
+      transparent 20%, transparent 26%,
+      #88C656 26%, #88C656 46%,
+      transparent 46%, transparent 52%,
+      #30BEBC 52%, #30BEBC 72%,
+      transparent 72%, transparent 78%,
+      #88C656 78%, #88C656 100%);
+  }
+  /* Tables */
   .tech-table { @apply w-full border-collapse; }
-  .tech-table th { @apply text-right text-xs uppercase tracking-wider text-navy/60 font-medium border-b border-navy/15 px-4 py-3 bg-ivory-100; }
-  .tech-table td { @apply text-navy border-b border-navy/10 px-4 py-3 align-top; }
-  .tech-table tbody tr:hover { @apply bg-ivory-100/60; }
-  .divider-strong { @apply border-t border-navy/20; }
-  .stat-label { @apply text-xs uppercase tracking-wider text-navy/60 font-medium; }
+  .tech-table th { @apply text-right text-xs uppercase tracking-wider text-edGray-700 font-semibold border-b border-edGray-200 px-4 py-3 bg-ivory-100; }
+  .tech-table td { @apply text-navy border-b border-edGray-200 px-4 py-3 align-top; }
+  .tech-table tbody tr:hover { @apply bg-turquoise-50/40; }
+  .divider-strong { @apply border-t border-edGray-200; }
+  .stat-label { @apply text-xs uppercase tracking-wider text-edGray-700 font-semibold; }
   .stat-value { @apply text-3xl font-mono font-medium text-navy; }
   .review-required { @apply border-r-4 border-orange bg-orange-50/50; }
-  .pill { @apply inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium border; }
+  .pill { @apply inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium border rounded-full; }
   .pill-pending { @apply pill border-orange text-orange bg-orange-50; }
-  .pill-approved { @apply pill border-edGreen text-edGreen bg-white; }
-  .pill-rejected { @apply pill border-navy/40 text-navy/60 bg-white; }
-  .btn-primary { @apply inline-flex items-center gap-2 bg-turquoise text-white px-4 py-2 font-medium hover:bg-turquoise-600 transition-colors; }
-  .btn-outline { @apply inline-flex items-center gap-2 bg-white text-navy border border-navy/30 px-4 py-2 font-medium hover:border-navy transition-colors; }
-  .btn-danger { @apply inline-flex items-center gap-2 bg-white text-orange border border-orange px-4 py-2 font-medium hover:bg-orange-50 transition-colors; }
+  .pill-approved { @apply pill border-edGreen text-edGreen-700 bg-edGreen-50; }
+  .pill-rejected { @apply pill border-edGray-200 text-edGray-700 bg-white; }
+  .btn-primary { @apply inline-flex items-center gap-2 bg-turquoise text-white px-4 py-2 font-semibold rounded-md hover:bg-turquoise-600 transition-colors; }
+  .btn-outline { @apply inline-flex items-center gap-2 bg-white text-navy border border-edGray-200 px-4 py-2 font-medium rounded-md hover:border-turquoise transition-colors; }
+  .btn-danger { @apply inline-flex items-center gap-2 bg-white text-orange border border-orange px-4 py-2 font-medium rounded-md hover:bg-orange-50 transition-colors; }
   .field-label { @apply block text-sm font-medium text-navy mb-1.5; }
-  .field-input { @apply w-full bg-white border border-navy/25 px-3 py-2 text-navy focus:border-turquoise focus:outline-none; }
+  .field-input { @apply w-full bg-white border border-edGray-200 rounded-md px-3 py-2 text-navy focus:border-turquoise focus:outline-none; }
 }
