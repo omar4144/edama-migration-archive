@@ -414,7 +414,7 @@ async def main():
         s = stats_hours[oid]; s["rows"] += 1
         if r.get("model_url"): s["links"] += 1
         try: s["hours"] += float(r.get("work_hours") or 0)
-        except: pass
+        except Exception: pass
         if r.get("notes"): s["notes"] += 1
         if r.get("first_submitted_at_iso"): s["dates"] += 1
     md.append(f"\nإجمالي جهات Lovable: {len(stats_hours)}\n")
