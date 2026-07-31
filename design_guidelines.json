@@ -1,0 +1,103 @@
+{
+  "theme": "light",
+  "direction": "rtl",
+  "typography": {
+    "font_families": {
+      "primary": "IBM Plex Sans Arabic, sans-serif",
+      "mono": "IBM Plex Mono, monospace"
+    },
+    "hierarchy": {
+      "h1": "text-4xl sm:text-5xl font-bold tracking-tight text-navy",
+      "h2": "text-2xl sm:text-3xl font-semibold text-navy",
+      "h3": "text-xl font-medium text-navy",
+      "body": "text-base leading-relaxed text-navy/80",
+      "small_labels": "text-sm uppercase tracking-wider text-gray font-medium",
+      "data_points": "text-3xl font-mono font-medium text-turquoise"
+    },
+    "rules": [
+      "No generic Inter/Roboto. Arabic-first typography-forward layouts.",
+      "Strict RTL text alignment. Dense, readable lists.",
+      "Use mono fonts for numerical data, counts, and targets to ensure tabular alignment."
+    ]
+  },
+  "colors": {
+    "background": {
+      "ivory": "hsl(40, 33%, 98%)",
+      "white": "hsl(0, 0%, 100%)"
+    },
+    "text": {
+      "navy": "hsl(216, 65%, 11%)",
+      "navy_muted": "hsl(216, 30%, 40%)"
+    },
+    "accents": {
+      "turquoise": "hsl(180, 53%, 47%)",
+      "orange": "hsl(21, 90%, 52%)",
+      "green": "hsl(83, 51%, 51%)",
+      "gray": "hsl(0, 0%, 61%)"
+    },
+    "borders": {
+      "subtle": "hsl(216, 65%, 11%, 0.1)",
+      "focus": "hsl(180, 53%, 47%)"
+    },
+    "forbidden_colors": [
+      "purple",
+      "violet",
+      "gradients on white"
+    ]
+  },
+  "visual_enhancers": {
+    "shadows": "NONE. Flat UI. Use 1px solid borders for separation.",
+    "borders": "Sharp edges (0px to 4px maximum border-radius).",
+    "glassmorphism": "FORBIDDEN.",
+    "surfaces": "Solid flat colors. Ivory app background, White for structural content blocks."
+  },
+  "layouts": {
+    "general": "Context-first, typographic-forward RTL layouts. No card carpets.",
+    "grid": "High density for operational tools. Use The Technical Grid (border-collapse style layout, exposing the skeleton).",
+    "spacing": "Dense but optical. p-4 to p-6 for table cells. p-8 for section padding.",
+    "navigation": "Solid background header (no transparency). RTL orientation (logo on right, user actions on left)."
+  },
+  "component_patterns": {
+    "reconciliation_console": "Edge-to-edge tables. Use bold mono-spaced numbers for Counts vs. Targets. Use Orange background or left-border for REVIEW_REQUIRED queue items.",
+    "workspaces": "Submissions lists as clean table rows. No carousels. Draft editor uses minimal distraction-free layout (Ivory background, strong typographic hierarchy).",
+    "buttons": "Pill-shaped or sharp rectangular. Solid Turquoise for primary actions, Outline Navy for secondary.",
+    "charts": "Minimal, data-driven only. No unnecessary styling. Use Recharts with turquoise and navy data lines."
+  },
+  "motion": {
+    "style": "Quiet, linear, progress-based.",
+    "forbidden": [
+      "Scroll hijack",
+      "Timers",
+      "Arbitrary transitions",
+      "Autoplay",
+      "Bouncy springs"
+    ],
+    "allowed": "Instant state changes or rapid (150ms linear) opacity/transform transitions tied directly to user selection or scroll progress."
+  },
+  "accessibility": {
+    "keyboard_nav": "Full support required.",
+    "focus_rings": "Mandatory. 2px solid Turquoise with 2px offset (ring-2 ring-turquoise ring-offset-2).",
+    "color_independence": "Never rely solely on color. Use icons or text labels alongside Orange/Green states.",
+    "aria": "Strict ARIA labels for all icon buttons and tabular data.",
+    "reduced_motion": "Respect prefers-reduced-motion media query for any enabled transitions."
+  },
+  "media": {
+    "images": "NO STOCK PHOTOS. System is data-driven. Rely on typography and layout. If logos are needed, use exact SVGs.",
+    "dummy_data": "FORBIDDEN. Use realistic Arabic structural placeholder text mimicking actual operational data."
+  },
+  "instructions_to_main_agent": [
+    "Ensure <html dir='rtl' lang='ar'> is set.",
+    "Apply tailwind classes considering RTL (e.g., ms-4 instead of ml-4, pe-4 instead of pr-4).",
+    "Never use generic placeholder text; use realistic Arabic terms like 'مراجعة مطلوبة' (Review Required).",
+    "Build components natively mapping strictly to the styling rules (flat, bordered, no shadows, no glassmorphism)."
+  ],
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": [
+    "All interactive and key informational elements MUST include a `data-testid` attribute (e.g. data-testid='evaluator-review-queue').",
+    "DO NOT apply universal transitions (no 'transition: all').",
+    "DO NOT center align the app container. Respect the natural right-to-left reading flow.",
+    "DO NOT use card carpets; use solid horizontal/vertical divider lines to segment content.",
+    "Never use AI assistant Emojis for icons.",
+    "No transparent backgrounds in headers or overlays.",
+    "Focus purely on building functional, operational, heavily tabular and typographic views."
+  ]
+}
