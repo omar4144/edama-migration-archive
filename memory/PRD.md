@@ -13,6 +13,7 @@ Unified RTL Arabic platform consolidating historical Excel + Lovable data. Role-
     - `PARTICIPATING_ORGANIZATIONS_175_AUDIT.csv` — 1 row per registry candidate (175).
     - `ORGANIZATION_MATCH_GROUPS.csv` — 118 proposed unified organizations (56 EXACT + 1 PROBABLE + 61 LEGACY_ONLY, plus LOVABLE_ONLY).
     - `ORGANIZATION_COHORT_PARTICIPATIONS.csv` — 175 org × cohort participations.
+    - `PARTICIPATING_ORGANIZATIONS_REVIEW.xlsx` — Excel workbook (7 sheets: الملخص، عناصر الـ175، مجموعات التطابق، المشاركات حسب الدفعة، الجمعيات متعددة الدفعات، جودة سجلات Lovable، قرارات بشرية مطلوبة) — color-coded (green=EXACT، أصفر=PROBABLE، برتقالي=يحتاج قرار بشري).
   - Three separate counts distinguished: raw source rows (175), org×cohort participations (175), unique orgs after crosswalk (**119 EXACT-only, 118 EXACT+PROBABLE**).
   - Multi-cohort orgs detected after normalization + crosswalk: **0** — Family-Key `org × model_definition` remains safe. Adding cohort to key would not split any of the 3,521 journeys.
   - Lovable «مقبول» flagged as `LINK_EXISTS_CONTENT_NOT_VERIFIED` — the row/link presence does not verify Google file content.
