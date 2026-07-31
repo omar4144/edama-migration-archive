@@ -1,61 +1,53 @@
-# PRD — Edama · Musr'at Idama V8 · Iteration 3 (Unified Operational Platform)
+# PRD — Edama V8 · Iteration 4 (Canonical Deduplication Layer)
 
-## Original Problem Statement
-Edama V8 — منصة تشغيلية موحّدة لمسرعة الاستدامة تدمج الأرشيف التاريخي مع بيانات Lovable الحالية في تدفّق تشغيلي واحد.
+## Context
+User rejected 5,968 as «إجمالي النماذج والتحكيمات» — that's a naive `2565+3403` sum of raw source rows without cross-source dedup. Iteration 4 builds a canonical layer BEFORE any UI change (per user instruction).
 
-## المبدأ المركزي (Iteration 3)
-**كل رقم يفتح سياقه، وكل نموذج يقود إلى أثره.**
-المسار الطبيعي: `البرنامج ← الدفعة ← المحكم/المستشار ← الجهة ← النموذج ← القرار ← الأثر`
+## Deliverables (backend-only, no UI change yet)
+- `/app/backend/dedup.py` — URL normalization (Google Docs file-id extraction), scoring helper
+- `/app/backend/migrations/build_canonical.py` — canonicalization pass (idempotent)
+- `/app/backend/routes/canonical.py` — `/api/admin/canonical/{report,submissions,submissions/{id}}`
 
-## القرارات المعمارية الحاسمة
-- **لا فصل تشغيلي بين Lovable والتاريخي**: مصدر البيانات شارة داخل التفاصيل، وليس تبويباً أو فلتراً رئيسياً.
-- **الجذر `/admin` = المشهد التنفيذي** (وليس لوحة المصالحة).
-- **جميع العناصر التقنية** (المصالحة، جودة البيانات، المطابقات، السجلات الخام، سجل التدقيق، المستخدمون) تحت `/admin/data/*` كقسم فرعي «إدارة البيانات» في القائمة.
-- **دليل موحّد للأشخاص**: `people` (حاليون) + distinct من `historical_arbitrations.evaluator_name` + `historical_activities.consultant_name` → 13 محكم + 11 مستشار.
-- **الجهة الموحّدة**: header + impact strip + نماذج مجمّعة بالفئة (بدلاً من tabs).
-- **مركز النماذج**: بحث موحّد يجمع `records_current` + `historical_arbitrations` تحت مخطط `unified_record` واحد.
-- **حماية الطبقة التاريخية** (من iteration 2) قائمة بلا تغيير.
+## Method
+Verified: 0 file_id intersection between 2,565 current URLs and 324 legacy URLs (Lovable regenerates file IDs on migration). So URL-only matching cannot work cross-source. Uses the archive's pre-computed `crosswalk_records` (1,517 MATCHED_ORG_AND_MODEL pairs) as EXACT signal. Applies Lovable's `duplicate_link_group_id` (129 groups) and legacy `historical_duplicate_links.resource_id` (67 groups) for internal dedup.
 
-## Iteration 3 — الإضافات
+Raw data NEVER modified. Derived collections: canonical_submissions, record_crosswalks, duplicate_groups, canonical_reviews, dedup_reports.
 
-### Backend
-- `/app/backend/unified.py` — `resolve_url` priority (canonical > hyperlink_target > displayed > model_url) + `unified_record` projection.
-- `/app/backend/routes/exec_scene.py` — `/api/admin/exec/scene`: journey totals + cohorts strip + attention list (data-driven).
-- `/app/backend/routes/directory.py` — دليل المحكمين والمستشارين الموحّد (union of people + historical distinct names). Detail = cohorts + orgs expandable + real model URLs.
-- `/app/backend/routes/models_hub.py` — بحث موحّد مع فلاتر شاملة، URL priority محلولة.
-- `/app/backend/routes/unified_org.py` — الجهة الموحّدة (header + records مجمّعة بالفئة، بلا tabs).
-
-### Frontend
-- `/app/frontend/src/lib/util.js` — `resolveUrl`, `sourceBadge`, `evaluationTone`, `num`.
-- Top-nav horizontal بدلاً من sidebar للأدمن، مع dropdown «إدارة البيانات».
-- Mobile drawer شامل لكل العناصر.
-- صفحات جديدة: `ExecutiveScene`, `EvaluatorsDirectory`, `EvaluatorDetail`, `ConsultantsDirectory`, `ConsultantDetail`, `ModelsHub`, `UnifiedOrganizations`, `UnifiedOrganization`.
-- كل رقم رئيسي = رابط إلى الوجهة المُفلترة.
-- كل نموذج له `model_url*` → زر `فتح النموذج ↗` بـ `target="_blank" rel="noopener noreferrer"`.
-
-## الأرقام الحقيقية بعد التوحيد
+## Real Numbers (Reconciliation Report)
 | Metric | Value |
 |---|---:|
-| Cohorts | 4 |
-| Organizations (unified) | 57 |
-| Evaluators (unified) | 13 (5 current + 8 legacy-only) |
-| Consultants (unified) | 11 (9 current + 2 legacy-only) |
-| Model definitions | 45 |
-| Current records (Lovable) | 2,565 |
-| Legacy arbitrations | 3,403 |
-| Legacy activities | 3,760 |
-| Total hours (current + legacy) | 76,677.0 (1,662 current + 75,015 legacy) |
-| Batool profile | 507 items (225 current + 282 legacy), 11 orgs, cohort 4 |
+| Raw current (Lovable) | 2,565 |
+| Raw legacy (arbitrations) | 3,403 |
+| Naive sum (misleading) | 5,968 |
+| **Canonical total (after dedup)** | **4,020** |
+| ↳ EXACT_CROSS_SOURCE_MATCH | 1,018 |
+| ↳ CURRENT_ONLY | 499 |
+| ↳ REVIEW_REQUIRED | 226 |
+| ↳ LEGACY_ONLY | 2,277 |
+| Internal Lovable dupes folded | 822 |
+| Internal legacy dupes folded | 108 |
+| Duplicate groups | 195 |
+| **Reduction from naive** | **1,948** |
+| Hours (operational, deduped, Lovable-authoritative) | 45,077.5 |
+| Hours raw current | 1,062.5 |
+| Hours raw legacy | 73,395.0 |
 
-## Iteration 1-2 (محفوظة كما هي)
-- JWT + bcrypt + refresh + brute-force + must_change_password + password reset + session revocation.
-- Historical write-guard (DB proxy + HTTP 405 + audit).
-- Data Quality Center + drill-downs.
-- Reconciliation report + mapping decisions.
-- RBAC + API-layer data isolation + 33/33 pytest passing.
+## Sample verification (20 groups reported to user)
+- 5 EXACT matches for جمعية المشي والجري (BATOOL-A1-01…05 ↔ LEG-REV-01317…01321) — بتول الرويلي
+- 5 EXACT matches for بتول الرويلي in مؤسسة الاميرة العنود (BATOOL-A2-01…05 ↔ LEG-REV-01129…01133)
+- 5 CURRENT_ONLY samples (جمعية البر لقرى جنوب مكة — سارة بالخير)
+- 5 LEGACY_ONLY samples (جمعية نبتون للتاهيل الطبي — أحمد خواجي)
 
-## Backlog (post-iteration 3)
-- P1: Program-level (multi-program) support — currently single-program (مسرعة إدامة).
-- P1: Impact evidence per cohort (KPIs + evidence attachments).
-- P1: Reports export.
-- P2: Live Lovable sync via API (currently snapshots).
+## Testing
+- iter4: **25/25 PASS** — endpoint contract, sample content, RBAC, historical-guard regression, reconciliation counts regression, idempotency
+- iter3: 27/27 regression PASS
+- iter2: 30/33 PASS (1 unrelated data drift: pending_mappings 9→8, from an earlier accepted mapping — not caused by this iteration)
+
+## Next Iteration (awaits user approval)
+1. Replace 5,968 in Executive Scene with `stats.canonical_total` (4,020) + tooltip explaining dedup
+2. Drilldown from canonical count → /api/admin/canonical/submissions filtered lists
+3. Per-org unified page: show canonical count + versions + source occurrences (not raw sum)
+4. Evaluator/Consultant pages: collapse to canonical models per org
+5. Hours: use `hours_operational_deduped` (45,077.5) with breakdown
+
+**No UI numbers were changed in iteration 4 per user's explicit instruction.**
