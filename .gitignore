@@ -33,3 +33,8 @@ test_reports/
 .vscode/
 .idea/
 .DS_Store
+*.env
+credentials.json
+*.pem
+*.key
+.credentials
