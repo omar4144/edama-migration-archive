@@ -8,6 +8,10 @@ import sys
 from pathlib import Path
 from datetime import datetime, timezone
 
+# Migration mode: seed script also needs to update users (users is not in the
+# historical set, but keep it consistent for any future protected collections).
+os.environ["EDAMA_MIGRATION_MODE"] = "1"
+
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from dotenv import load_dotenv
 load_dotenv(Path(__file__).resolve().parent.parent / ".env")
@@ -30,6 +34,7 @@ async def upsert_user(email: str, password: str, name_ar: str, role: str,
             "role": role,
             "person_id": person_id,
             "must_change_password": must_change,
+            "pw_version": 0,
             "created_at": now,
             "updated_at": now,
         })

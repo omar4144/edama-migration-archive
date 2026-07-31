@@ -16,6 +16,9 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+# Enable migration mode BEFORE importing db so the immutable guard is bypassed.
+os.environ["EDAMA_MIGRATION_MODE"] = "1"
+
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from dotenv import load_dotenv

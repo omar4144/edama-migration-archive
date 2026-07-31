@@ -93,6 +93,9 @@ export default function Login() {
           >
             {loading ? "…جارٍ التحقق" : "دخول"}
           </button>
+          <div className="mt-4 text-sm text-navy/60 text-center">
+            <a href="/forgot-password" className="hover:underline" data-testid="forgot-link">نسيت كلمة المرور؟</a>
+          </div>
         </form>
       </div>
     </div>

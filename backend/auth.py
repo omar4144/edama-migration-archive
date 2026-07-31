@@ -1,4 +1,4 @@
-"""JWT auth, bcrypt hashing, RBAC guards."""
+"""JWT auth, bcrypt, RBAC guards, session versioning."""
 import os
 import bcrypt
 import jwt
@@ -28,21 +28,17 @@ def _secret() -> str:
     return os.environ["JWT_SECRET"]
 
 
-def create_access_token(user_id: str, email: str, role: str) -> str:
+def create_access_token(user_id: str, email: str, role: str, pv: int) -> str:
     payload = {
-        "sub": user_id,
-        "email": email,
-        "role": role,
-        "type": "access",
+        "sub": user_id, "email": email, "role": role, "pv": pv, "type": "access",
         "exp": datetime.now(timezone.utc) + timedelta(minutes=ACCESS_MINUTES),
     }
     return jwt.encode(payload, _secret(), algorithm=JWT_ALG)
 
 
-def create_refresh_token(user_id: str) -> str:
+def create_refresh_token(user_id: str, pv: int) -> str:
     payload = {
-        "sub": user_id,
-        "type": "refresh",
+        "sub": user_id, "pv": pv, "type": "refresh",
         "exp": datetime.now(timezone.utc) + timedelta(days=REFRESH_DAYS),
     }
     return jwt.encode(payload, _secret(), algorithm=JWT_ALG)
@@ -78,6 +74,10 @@ async def get_current_user(request: Request) -> dict:
     user = await coll("users").find_one({"id": payload["sub"]})
     if not user:
         raise HTTPException(status_code=401, detail="User not found")
+    # Session revocation: bump pw_version on password change/reset invalidates
+    # every previously-issued token.
+    if int(user.get("pw_version", 0)) != int(payload.get("pv", 0)):
+        raise HTTPException(status_code=401, detail="Session revoked")
     user.pop("_id", None)
     user.pop("password_hash", None)
     return user
@@ -87,13 +87,14 @@ def require_role(*roles: str) -> Callable:
     async def _guard(user: dict = Depends(get_current_user)) -> dict:
         if user.get("role") not in roles:
             raise HTTPException(status_code=403, detail="Forbidden: insufficient role")
+        # Force password change before any operational endpoint is reachable.
+        if user.get("must_change_password"):
+            raise HTTPException(status_code=428, detail="PASSWORD_CHANGE_REQUIRED")
         return user
     return _guard
 
 
 def set_auth_cookies(response, access_token: str, refresh_token: str):
-    # SameSite=none requires secure=True. Both frontend and backend live on the
-    # same origin (routed via ingress), so cookies are naturally scoped.
     response.set_cookie(
         key="access_token", value=access_token,
         httponly=True, secure=True, samesite="none",
@@ -115,7 +116,7 @@ def decode_refresh(token: str) -> dict:
     return _decode(token, "refresh")
 
 
-# Brute force ----------------------------------------------------------
+# --- Brute-force / rate-limit -------------------------------------------
 MAX_FAILED = 5
 LOCKOUT_MINUTES = 15
 
@@ -143,3 +144,25 @@ async def record_failed_login(identifier: str):
 
 async def clear_failed_logins(identifier: str):
     await coll("login_attempts").delete_one({"identifier": identifier})
+
+
+# --- Password reset rate-limit ------------------------------------------
+async def check_reset_rate(email: str, *, per_hour: int = 3):
+    key = f"reset::{email}"
+    rec = await coll("login_attempts").find_one({"identifier": key})
+    if not rec:
+        return
+    last = rec.get("last_at")
+    if last and last.tzinfo is None:
+        last = last.replace(tzinfo=timezone.utc)
+    if last and datetime.now(timezone.utc) - last < timedelta(hours=1) and rec.get("count", 0) >= per_hour:
+        raise HTTPException(status_code=429, detail="Too many reset requests. Try again later.")
+
+
+async def record_reset_attempt(email: str):
+    key = f"reset::{email}"
+    await coll("login_attempts").update_one(
+        {"identifier": key},
+        {"$inc": {"count": 1}, "$set": {"last_at": datetime.now(timezone.utc)}},
+        upsert=True,
+    )

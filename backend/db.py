@@ -1,6 +1,8 @@
-"""MongoDB client, collections, and index setup."""
+"""MongoDB client, collections, indexes, and immutable guard."""
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
+
+from immutable import HISTORICAL_COLLECTIONS, ImmutableCollection, _is_migration_mode
 
 _client: AsyncIOMotorClient | None = None
 _db = None
@@ -20,51 +22,29 @@ def get_db():
     return _db
 
 
-# Collection accessors (thin wrappers so tests can override)
 def coll(name: str):
+    """Return collection accessor, wrapped in immutable guard for historical
+    collections outside migration mode."""
+    db = get_db()
+    inner = db[name]
+    if name in HISTORICAL_COLLECTIONS and not _is_migration_mode():
+        return ImmutableCollection(inner, name, db["audit_log"])
+    return inner
+
+
+def raw_coll(name: str):
+    """Escape hatch — direct DB access. USE ONLY IN MIGRATION SCRIPTS."""
     return get_db()[name]
-
-
-COLLECTIONS = {
-    # Auth & audit
-    "users": "users",
-    "login_attempts": "login_attempts",
-    "password_reset_tokens": "password_reset_tokens",
-    "audit_log": "audit_log",
-    # Reference
-    "cohorts": "cohorts",
-    "people": "people",
-    "model_definitions": "model_definitions",
-    "organizations_current": "organizations_current",
-    "assignments": "assignments",
-    # Current authoritative records (Lovable)
-    "records_current": "records_current",
-    "duplicate_links_current": "duplicate_links_current",
-    # Immutable historical
-    "historical_organizations": "historical_organizations",
-    "historical_activities": "historical_activities",
-    "historical_arbitrations": "historical_arbitrations",
-    "historical_duplicate_links": "historical_duplicate_links",
-    "historical_batch_plans": "historical_batch_plans",
-    "historical_batch_kpis": "historical_batch_kpis",
-    # Crosswalks (advisory only)
-    "crosswalk_organizations": "crosswalk_organizations",
-    "crosswalk_models": "crosswalk_models",
-    "crosswalk_records": "crosswalk_records",
-    # Mapping decisions (REVIEW_REQUIRED queue)
-    "mappings": "mappings",
-    # Quality
-    "quality_checks": "quality_checks",
-    "source_inventory": "source_inventory",
-    "migration_runs": "migration_runs",
-}
 
 
 async def ensure_indexes():
     db = get_db()
+    # One-time migration: users created before pw_version existed
+    await db.users.update_many({"pw_version": {"$exists": False}}, {"$set": {"pw_version": 0}})
     await db.users.create_index("email", unique=True)
     await db.login_attempts.create_index("identifier")
     await db.password_reset_tokens.create_index("expires_at", expireAfterSeconds=0)
+    await db.password_reset_tokens.create_index("token_hash", unique=True)
     await db.audit_log.create_index([("created_at", -1)])
     await db.audit_log.create_index([("user_email", 1), ("created_at", -1)])
     await db.records_current.create_index("migration_id", unique=True)
@@ -76,5 +56,7 @@ async def ensure_indexes():
     await db.historical_organizations.create_index("legacy_org_id", unique=True)
     await db.historical_activities.create_index("legacy_activity_id", unique=True)
     await db.historical_arbitrations.create_index("legacy_review_id", unique=True)
+    await db.historical_arbitrations.create_index([("evaluator_name", 1)])
+    await db.historical_arbitrations.create_index([("cohort", 1)])
     await db.mappings.create_index([("kind", 1), ("status", 1)])
     await db.mappings.create_index("key", unique=True)

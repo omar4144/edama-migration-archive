@@ -12,7 +12,9 @@ export function AuthProvider({ children }) {
     try {
       const { data } = await api.get("/auth/me");
       setUser(data);
-    } catch {
+    } catch (e) {
+      // 428 means must_change_password — but /auth/me itself is not gated.
+      // 401 means anonymous.
       setUser(false);
     }
   }, []);
@@ -41,7 +43,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthCtx.Provider value={{ user, error, login, logout, refresh }}>
+    <AuthCtx.Provider value={{ user, error, login, logout, refresh, setUser }}>
       {children}
     </AuthCtx.Provider>
   );

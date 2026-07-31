@@ -54,12 +54,14 @@ export default function Organizations() {
                   <th>المستشار</th>
                   <th>السجلات</th>
                   <th>الساعات</th>
+                  <th></th>
                 </>
               ) : (
                 <>
                   <th>الدفعة</th>
                   <th>المستشار</th>
                   <th>المحكّم</th>
+                  <th></th>
                 </>
               )}
             </tr>
@@ -75,12 +77,16 @@ export default function Organizations() {
                     <td className="text-sm">{Array.isArray(o.consultant_names) ? o.consultant_names.join("، ") : (o.consultant_names || "").replaceAll('"', "").replaceAll("[", "").replaceAll("]", "")}</td>
                     <td className="num">{o.record_count}</td>
                     <td className="num">{o.work_hours}</td>
+                    <td className="text-left">
+                      <a href={`/admin/organizations/${o.organization_id}/journey`} className="btn-outline text-sm" data-testid={`journey-${o.organization_id}`}>رحلة</a>
+                    </td>
                   </>
                 ) : (
                   <>
                     <td className="num">{o.cohort}</td>
                     <td className="text-sm">{o.consultants}</td>
                     <td className="text-sm">{o.evaluators}</td>
+                    <td></td>
                   </>
                 )}
               </tr>

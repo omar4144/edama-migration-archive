@@ -13,6 +13,8 @@ from routes.reconciliation import router as reconciliation_router
 from routes.admin import router as admin_router
 from routes.consultant import router as consultant_router
 from routes.evaluator import router as evaluator_router
+from routes.dq import router as dq_router
+from routes.historical import router as historical_router
 
 
 app = FastAPI(title="Edama — Musr'at Idama V8")
@@ -33,6 +35,8 @@ async def health():
 api.include_router(auth_router)
 api.include_router(reconciliation_router)
 api.include_router(admin_router)
+api.include_router(dq_router, prefix="/admin")  # /api/admin/dq/*
+api.include_router(historical_router)  # already has /admin/* & /evaluator/* prefixes
 api.include_router(consultant_router)
 api.include_router(evaluator_router)
 
