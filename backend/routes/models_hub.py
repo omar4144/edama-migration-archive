@@ -2,6 +2,8 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from typing import Optional
 
+import re
+
 from auth import require_role
 from db import coll
 from unified import unified_record, resolve_url
@@ -26,15 +28,18 @@ async def search(
     limit: int = 50, offset: int = 0,
     user: dict = Depends(require_role("admin")),
 ):
+    # Sanitize free-text against regex injection
+    q_safe = re.escape(q) if q else None
+
     include_current = source != "legacy"
     include_legacy = source != "current"
 
     # -- Current query --
     current_q: dict = {}
-    if q:
+    if q_safe:
         current_q["$or"] = [
-            {"organization_name": {"$regex": q, "$options": "i"}},
-            {"model_name": {"$regex": q, "$options": "i"}},
+            {"organization_name": {"$regex": q_safe, "$options": "i"}},
+            {"model_name": {"$regex": q_safe, "$options": "i"}},
         ]
     if org_id: current_q["organization_id"] = org_id
     if model_id: current_q["model_definition_id"] = model_id
@@ -64,10 +69,10 @@ async def search(
 
     # -- Legacy query --
     legacy_q: dict = {}
-    if q:
+    if q_safe:
         legacy_q["$or"] = [
-            {"organization_name": {"$regex": q, "$options": "i"}},
-            {"model_name": {"$regex": q, "$options": "i"}},
+            {"organization_name": {"$regex": q_safe, "$options": "i"}},
+            {"model_name": {"$regex": q_safe, "$options": "i"}},
         ]
     if org_id:
         # try legacy id direct AND via crosswalk
@@ -88,6 +93,14 @@ async def search(
         legacy_q["$or"] = (legacy_q.get("$or") or []) + [
             {"model_url_canonical": {"$ne": None}}, {"model_url_hyperlink_target": {"$ne": None}},
             {"model_url": {"$ne": None}},
+        ]
+    if no_url:
+        # symmetric predicate for legacy side: none of the URL fields hold a value
+        legacy_q["$nor"] = [
+            {"model_url_canonical": {"$nin": [None, ""]}},
+            {"model_url_hyperlink_target": {"$nin": [None, ""]}},
+            {"model_url_displayed": {"$nin": [None, ""]}},
+            {"model_url": {"$nin": [None, ""]}},
         ]
 
     total_current = await coll("records_current").count_documents(current_q) if include_current else 0

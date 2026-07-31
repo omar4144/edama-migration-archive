@@ -65,7 +65,10 @@ export default function ModelsHub() {
         </select>
         <select className="field-input w-auto" value={f.cohort} onChange={(e) => update("cohort", e.target.value)} data-testid="filter-cohort">
           <option value="">كل الدفعات</option>
-          {["1","2","3","4"].map((c) => <option key={c} value={c}>دفعة {c}</option>)}
+          <option value="1">دفعة 1</option>
+          <option value="2">دفعة 2</option>
+          <option value="3">دفعة 3</option>
+          <option value="4">دفعة 4</option>
         </select>
         <select className="field-input w-auto" value={f.source} onChange={(e) => update("source", e.target.value)} data-testid="filter-source">
           <option value="">حالي وتاريخي</option>
